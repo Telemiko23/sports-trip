@@ -329,7 +329,12 @@ dialog#legalDialog p:last-child{margin-bottom:0}
   // ---------- helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   // analytics events - never throws (an ad-blocker or offline gtag must not break the site)
-  function track(name, params) { try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch (e) { } }
+  function track(name, params) {
+    try {
+      if (typeof gtag === 'function') gtag('event', name, params || {});
+      if (window.console && console.debug) console.debug('[analytics]', name, params || {});
+    } catch (e) { }
+  }
   function fixtureTrackParams(f) {
     var days = Math.round((parseDay(f.dt.slice(0, 10)) - parseDay(isoLocal(new Date()))) / 86400000);
     return { comp: f.comp, country: f.country || '', city: f.city || '', days_until_match: days };
