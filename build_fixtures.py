@@ -109,7 +109,7 @@ CC_TIMEZONE = {
     "tr": "Europe/Istanbul", "gr": "Europe/Athens", "cz": "Europe/Prague", "dk": "Europe/Copenhagen",
     "no": "Europe/Oslo", "se": "Europe/Stockholm", "rs": "Europe/Belgrade", "hr": "Europe/Zagreb",
     "sk": "Europe/Bratislava", "hu": "Europe/Budapest", "ro": "Europe/Bucharest", "bg": "Europe/Sofia",
-    "sct": "Europe/London", "ie": "Europe/Dublin", "cy": "Asia/Nicosia", "il": "Asia/Jerusalem",
+    "sct": "Europe/London", "wls": "Europe/London", "nir": "Europe/London", "ie": "Europe/Dublin", "cy": "Asia/Nicosia", "il": "Asia/Jerusalem",
     "az": "Asia/Baku", "ge": "Asia/Tbilisi", "kz": "Asia/Almaty",
 }
 
@@ -119,7 +119,7 @@ CC_COUNTRY_NAME = {
     "pt": "Portugal", "ua": "Ukraine", "be": "Belgium", "at": "Austria", "ch": "Switzerland",
     "tr": "Turkey", "gr": "Greece", "cz": "Czechia", "dk": "Denmark", "no": "Norway",
     "se": "Sweden", "rs": "Serbia", "hr": "Croatia", "sk": "Slovakia", "hu": "Hungary",
-    "ro": "Romania", "bg": "Bulgaria", "sct": "Scotland", "ie": "Ireland", "cy": "Cyprus",
+    "ro": "Romania", "bg": "Bulgaria", "sct": "Scotland", "wls": "Wales", "nir": "Northern Ireland", "ie": "Ireland", "cy": "Cyprus",
     "il": "Israel", "az": "Azerbaijan", "ge": "Georgia", "kz": "Kazakhstan",
     "am": "Armenia", "ba": "Bosnia and Herzegovina", "lv": "Latvia", "lt": "Lithuania",
     "al": "Albania", "ad": "Andorra", "by": "Belarus", "ee": "Estonia", "fo": "Faroe Islands",
@@ -251,7 +251,19 @@ def geocode_any(city):
     if data:
         d = data[0]
         coords = [round(float(d["lat"]), 4), round(float(d["lon"]), 4)]
-        cc = (d.get("address", {}).get("country_code") or "").lower() or None
+        addr = d.get("address", {})
+        cc = (addr.get("country_code") or "").lower() or None
+        if cc == "gb":
+            # "gb" alone doesn't distinguish England/Scotland/Wales/N.Ireland - Nominatim's
+            # ISO3166-2 subdivision code does (e.g. "GB-SCT" for Scotland), so a Scottish
+            # club doesn't get grouped under "England"
+            subdivision = (addr.get("ISO3166-2-lvl4") or "").lower()
+            if subdivision == "gb-sct":
+                cc = "sct"
+            elif subdivision == "gb-wls":
+                cc = "wls"
+            elif subdivision == "gb-nir":
+                cc = "nir"
         return coords, cc, True
     return None, None, True
 

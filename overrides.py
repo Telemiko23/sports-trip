@@ -27,10 +27,20 @@ TEAM_CITY_OVERRIDE = {
     "Auriense": ("Ourense", "es"),
     "CD San Jose": ("Soria", "es"),
     "Tavernes": ("Tavernes de la Valldigna", "es"),
-    # API-Football gives this fixture's venue.city as "Isilemulino", which isn't a real
-    # place - the venue itself (Stade Jean Bouin) is in Paris, so use that directly.
     "Paris FC": ("Paris", "fr"),
     "Hortaleza": ("Madrid", "es"),
+    "Viking": ("Stavanger", "no"),
+    "Bodo/Glimt": ("Bodø", "no"),
+    "Torreense": ("Torres Vedras", "pt"),
+    "Hapoel Beer Sheva": ("Beer Sheva", "il"),
+    "Union St. Gilloise": ("Brussels", "be"),
+    "Sabah FA": ("Masazir", "az"),
+    "Lille": ("Villeneuve-d'Ascq", "fr"),
+    "Como": ("Como", "it"),
+    "Getafe": ("Madrid", "es"),
+    "Lillestrøm": ("Lillestrøm", "no"),
+    "Lincoln Red Imps FC": ("Gibraltar", "gi"),
+    "Lech Poznan": ("Poznań", "pl"),
 }
 
 VENUE_OVERRIDE = {
@@ -68,6 +78,20 @@ VENUE_OVERRIDE = {
     "Auriense": "Campo Municipal de Oira",
     "CD San Jose": "San Juan",
     "Hortaleza": "Municipal Sporting Hortaleza",
+    "Inter": "San Siro",
+    "Viking": "Viking Stadion",
+    "FC Porto": "Estádio do Dragão",
+    "Slovan Bratislava": "Tehelné pole",
+    "Torreense": "Estádio Manuel Marques",
+    "Union St. Gilloise": "Joseph Marien Stadium",
+    "Marseille": "Stade Vélodrome",
+    "Como": "Stadio Giuseppe Sinigaglia",
+    "Real Madrid": "Bernabéu",
+    "Lillestrøm": "Åråsen Stadion",
+    "Lincoln Red Imps FC": "Victoria Stadium",
+    "AC Milan": "San Siro",
+    "Ferencvarosi TC": "Ferencváros Stadion",
+    "Benfica": "Estádio da Luz",
 }
 
 LOGO_OVERRIDE = {

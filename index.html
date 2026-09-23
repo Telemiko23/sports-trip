@@ -142,7 +142,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 .stub .t .tname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:0 1 auto}
 .stub .t .vs{flex:none;color:var(--muted);font-weight:400}
 .stub .crest{width:18px;height:18px;margin:0 2px;flex:none}
-.stub .s{color:var(--muted);font-size:12.5px;margin-top:3px}
+.stub .s{color:var(--muted);font-size:12.5px;margin-top:5px;display:flex;align-items:center;flex-wrap:wrap;gap:5px 0}
 .stub .rm{position:absolute;inset-block-start:6px;inset-inline-end:8px;background:none;border:0;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;padding:0 2px;border-radius:6px}
 .stub .rm:hover{color:var(--warn);background:var(--warn-soft)}
 .stub .t{padding-inline-end:22px}
@@ -190,7 +190,10 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       </div>
     </fieldset>
     <fieldset><legend>ימים בשבוע</legend><div id="days" class="chips"></div></fieldset>
-    <details id="compsBox" open><summary>תחרויות</summary><div id="comps"></div></details>
+    <details id="compsBox" open><summary>תחרויות</summary>
+      <button type="button" class="linkbtn" id="allComps">הכל / כלום (כל התחרויות)</button>
+      <div id="comps"></div>
+    </details>
   </aside>
 
   <main id="results" aria-live="polite">
@@ -234,7 +237,8 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     Albania: 'אלבניה', Andorra: 'אנדורה', Belarus: 'בלארוס', Estonia: 'אסטוניה', 'Faroe Islands': 'איי פרו',
     Finland: 'פינלנד', Gibraltar: 'גיברלטר', Iceland: 'איסלנד', Kosovo: 'קוסובו', Liechtenstein: 'ליכטנשטיין',
     Luxembourg: 'לוקסמבורג', Malta: 'מלטה', Moldova: 'מולדובה', Monaco: 'מונקו', Montenegro: 'מונטנגרו',
-    'North Macedonia': 'צפון מקדוניה', Russia: 'רוסיה', 'San Marino': 'סן מרינו', Slovenia: 'סלובניה'
+    'North Macedonia': 'צפון מקדוניה', Russia: 'רוסיה', 'San Marino': 'סן מרינו', Slovenia: 'סלובניה',
+    Wales: 'ויילס', 'Northern Ireland': 'צפון אירלנד'
   };
   var COUNTRY_COLOR = {
     England: '#2F6FBD', Spain: '#C0392B', Germany: '#6B6B6B', France: '#7A4FBF', Netherlands: '#D9782D', Italy: '#1E9E8C', Poland: '#B23A6B',
@@ -407,6 +411,12 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = !!S.comps[i.getAttribute('data-comp')]; });
     update();
   });
+  $('#allComps').addEventListener('click', function () {
+    var allOn = comps.every(function (c) { return S.comps[c.id]; });
+    comps.forEach(function (c) { S.comps[c.id] = !allOn; });
+    document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = !!S.comps[i.getAttribute('data-comp')]; });
+    update();
+  });
 
   // ---------- results ----------
   function filtered() {
@@ -532,18 +542,20 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       body.innerHTML = '<p class="empty">עוד אין משחקים בטיול. לחץ על "הוסף לטיול" ליד משחק, והוא יופיע כאן עם המרחקים בין המשחקים.</p>';
       return;
     }
-    var days = {}, html = '';
-    list.forEach(function (f) { days[dayOf(f)] = 1; });
-    html += '<p class="tripsum"><strong>' + list.length + '</strong> משחקים · <strong>' + Object.keys(days).length + '</strong> ימי משחק</p>';
+    var html = '';
+    var span = Math.round((parseDay(dayOf(list[list.length - 1])) - parseDay(dayOf(list[0]))) / 86400000) + 2;
+    html += '<p class="tripsum"><strong>' + list.length + '</strong> אירועים ב-<strong>' + span + '</strong> ימים</p>';
     list.forEach(function (f, i) {
       if (i > 0) { var h = hopInfo(list[i - 1], f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + '</div>'; }
       var d = parseDay(dayOf(f));
       var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
       var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
+      var stubCtryColor = COUNTRY_COLOR[f.country] || '#999';
+      var stubTag = '<span class="tag" style="--ctry-color:' + stubCtryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
       html += '<div class="stub"><div class="date"><span class="num">' + d.getDate() + '</span><span class="mon">' + esc(d.toLocaleDateString('he-IL', { month: 'short' })) + '</span><span class="wd">' + HE_DAYS_FULL[d.getDay()] + '</span></div>' +
         '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
         '<div class="t">' + homeLogo + '<bdi dir="rtl" class="tname">' + esc(f.home_he || f.home) + '</bdi><span class="vs">–</span><bdi dir="rtl" class="tname">' + esc(f.away_he || f.away) + '</bdi>' + awayLogo + '</div>' +
-        '<div class="s">' + (f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi> · <bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi>' + (f.venue ? ' · <bdi dir="rtl">' + esc(f.venue) + '</bdi>' : '') + '</div></div></div>';
+        '<div class="s">' + stubTag + (f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · <bdi dir="rtl">' + esc(f.venue) + '</bdi>' : '') + '</div></div></div>';
     });
     var links = bookingLinks(list);
     html += '<div class="tools">' +

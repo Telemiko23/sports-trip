@@ -5,21 +5,25 @@ touching the football API:
   - Hebrew display fields (home_he, away_he, city_he, comp_he), from he_names.py
   - manual corrections from overrides.py: a team's city (geocoded through Nominatim if
     it's new - the only network call this script makes), venue name, and crest
+  - for a UEFA competition fixture (Champions/Europa/Conference League) without an
+    override, re-verifies its city/country the same way build_fixtures.py's UEFA block
+    does (reusing a cached city|country_code first, only calling Nominatim for a city we
+    haven't seen under any country yet) - so a fix to that resolution logic (e.g. telling
+    Scotland apart from England) is picked up here too, not just on the next full pull.
 
 Safe to re-run any time after editing he_names.py or overrides.py.
 """
 import json
 import os
-import time
-import urllib.error
-import urllib.parse
-import urllib.request
 
 from he_names import he_team, he_city, he_comp
 from overrides import TEAM_CITY_OVERRIDE, VENUE_OVERRIDE, LOGO_OVERRIDE
 from download_logos import download_comp_logos
+from build_fixtures import geocode, geocode_any, CC_TO_OUR_COUNTRY, CC_COUNTRY_NAME, UEFA_COMPETITIONS
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+UEFA_LABELS = {label for _, _, label in UEFA_COMPETITIONS}
 
 COUNTRY_CC = {
     "England": "gb", "Spain": "es", "Germany": "de", "France": "fr",
@@ -38,24 +42,6 @@ def load_json(name, default):
 def save_json(name, obj):
     with open(os.path.join(HERE, name), "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=1, sort_keys=True)
-
-
-def geocode(city, cc):
-    q = urllib.parse.urlencode({"q": city, "format": "json", "limit": 1, "countrycodes": cc})
-    req = urllib.request.Request(
-        "https://nominatim.openstreetmap.org/search?" + q,
-        headers={"User-Agent": "sports-trip-planner/1.0 (personal hobby project)"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            data = json.load(r)
-    except Exception as e:
-        print(f"  geocode error for {city}: {e}")
-        return None
-    time.sleep(1.1)
-    if data:
-        return [round(float(data[0]["lat"]), 4), round(float(data[0]["lon"]), 4)]
-    return None
 
 
 def main():
@@ -79,23 +65,49 @@ def main():
         if LOGO_OVERRIDE.get(r["away"]):
             r["away_logo"] = LOGO_OVERRIDE[r["away"]]
 
-        if home in TEAM_CITY_OVERRIDE:
+        overridden = home in TEAM_CITY_OVERRIDE
+        is_uefa = r["comp"] in UEFA_LABELS
+        if overridden:
             r["city"], cc = TEAM_CITY_OVERRIDE[home]
+        elif is_uefa:
+            cc = None  # not a fixed domestic country - resolve/reuse below
         else:
             cc = COUNTRY_CC.get(r.get("country"))
 
-        # (re)resolve coordinates whenever we have a city and a country code to geocode
-        # it with, whether that's a fresh override or an existing row still missing lat/lng
-        if r.get("city") and cc and (r.get("lat") is None or r.get("lng") is None):
-            key = f"{r['city']}|{cc}"
-            coords = manual.get(key) or cache.get(key)
-            if coords is None and key not in cache:
-                print(f"Geocoding {r['city']} ({cc}) for {home}...")
-                coords = geocode(r["city"], cc)
-                cache[key] = coords
-                cache_dirty = True
+        # an override always re-resolves (it may replace an already-geocoded but wrong
+        # city); a plain domestic row only needs it if it's not geocoded yet; a UEFA row
+        # without an override always re-resolves too, cheaply, via cache reuse - so a fix
+        # to geocode_any() (e.g. Scotland vs England) gets picked up on old data as well
+        needs_resolve = r.get("city") and (
+            overridden or is_uefa or r.get("lat") is None or r.get("lng") is None
+        )
+        if needs_resolve:
+            coords = None
+            if cc:
+                key = f"{r['city']}|{cc}"
+                coords = manual.get(key) or cache.get(key)
+                if coords is None and key not in cache:
+                    print(f"Geocoding {r['city']} ({cc}) for {home}...")
+                    coords, ok = geocode(r["city"], cc)
+                    if ok:
+                        cache[key] = coords
+                        cache_dirty = True
+            else:
+                key_guess = next((k for k in cache if k.startswith(f"{r['city']}|")), None) or \
+                            next((k for k in manual if k.startswith(f"{r['city']}|")), None)
+                if key_guess:
+                    cc = key_guess.split("|", 1)[1]
+                    coords = manual.get(key_guess) or cache.get(key_guess)
+                else:
+                    print(f"Geocoding {r['city']} (unknown country) for {home}...")
+                    coords, cc, ok = geocode_any(r["city"])
+                    if ok and coords and cc:
+                        cache[f"{r['city']}|{cc}"] = coords
+                        cache_dirty = True
             if coords:
                 r["lat"], r["lng"] = coords[0], coords[1]
+            if cc:
+                r["country"] = CC_TO_OUR_COUNTRY.get(cc) or CC_COUNTRY_NAME.get(cc) or cc
 
         r["home_he"] = he_team(r["home"])
         r["away_he"] = he_team(r["away"])
