@@ -3,3 +3,6 @@
 airports.csv
 
 __pycache__/
+
+# local dev-server config for browser testing, not part of the deployed site
+.claude/

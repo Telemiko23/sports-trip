@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
   --paper:#F1EFE6; --card:#FFFFFF; --ink:#132420; --muted:#5E6E64; --line:#DDD8C8;
@@ -102,6 +103,24 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 
 #summary{margin:0 0 14px;color:var(--muted);font-size:15px}
 #summary strong{color:var(--ink);font-family:var(--serif);font-size:18px;font-weight:700}
+.viewToggle{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin:0 0 14px;box-shadow:var(--shadow)}
+.vtab{border:0;background:none;padding:8px 18px;border-radius:999px;cursor:pointer;font-weight:700;color:var(--muted);transition:background .15s,color .15s}
+.vtab[aria-pressed=true]{background:var(--turf);color:#fff}
+#mapWrap{margin:0 0 14px}
+#map{height:min(65vh,560px);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);background:var(--paper)}
+.leaflet-popup-content-wrapper{background:var(--card);color:var(--ink);border-radius:var(--radius-sm)}
+.leaflet-popup-tip{background:var(--card)}
+.leaflet-popup-content{margin:12px 14px;direction:rtl}
+.map-popup-in h4{margin:0 0 8px;font:700 15px/1.2 var(--serif)}
+.map-match{padding:8px 0;border-top:1px solid var(--line)}
+.map-match:first-of-type{border-top:0;padding-top:0}
+.map-match-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;font-size:12px;color:var(--muted)}
+.map-match .teams{font-size:14.5px;margin-bottom:4px}
+.map-match .map-venue{color:var(--muted);font-size:12.5px;margin-bottom:6px}
+.map-match .add{width:100%;padding:6px 10px;min-width:0}
+.map-pin{width:28px;height:28px;border-radius:50% 50% 50% 0;background:var(--turf);transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);border:2px solid #fff}
+.map-pin span{transform:rotate(45deg);color:#fff;font-weight:900;font-size:12px}
+.map-pin.base{background:var(--gold-deep)}
 .notice{background:var(--gold-soft);color:var(--gold-deep);border-radius:var(--radius-sm);padding:10px 14px;margin:0 0 14px;font-size:14px;font-weight:500;border:1px solid color-mix(in srgb, var(--gold) 30%, transparent)}
 .day h3{font:700 18px/1.2 var(--serif);margin:28px 0 10px;padding-bottom:0;border-bottom:0;display:flex;align-items:center;gap:10px;color:var(--pitch)}
 @media (prefers-color-scheme:dark){ .day h3{color:var(--turf)} }
@@ -197,8 +216,16 @@ input[type=range]{width:100%;accent-color:var(--turf)}
   </aside>
 
   <main id="results" aria-live="polite">
+    <div class="viewToggle" id="viewToggle" role="tablist">
+      <button type="button" class="vtab" data-view="list" aria-pressed="true">📋 רשימה</button>
+      <button type="button" class="vtab" data-view="map" aria-pressed="false">🗺️ מפה</button>
+    </div>
     <p id="summary"></p>
     <div id="list"></div>
+    <div id="mapWrap" style="display:none">
+      <div id="map"></div>
+      <p class="hint">לחצו על עיר במפה כדי לראות את המשחקים בה ולהוסיף לטיול.</p>
+    </div>
   </main>
 
   <aside id="trip" aria-label="הטיול שלי">
@@ -217,6 +244,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 
 <script src="fixtures.js"></script>
 <script src="airports.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function () {
   var DATA = window.TRIP_DATA;
@@ -331,7 +359,8 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     from: isoLocal(today), to: addDays(isoLocal(today), 45),
     days: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1},
     comps: {},
-    trip: [], origin: 'Ben Gurion International Airport – Tel Aviv, ישראל (TLV)'
+    trip: [], origin: 'Ben Gurion International Airport – Tel Aviv, ישראל (TLV)',
+    view: 'list'
   };
   comps.forEach(function (c) { S.comps[c.id] = true; });
   try {
@@ -476,6 +505,79 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     toggleTrip(Number(b.getAttribute('data-id')));
   });
 
+  // ---------- map view (Leaflet + OpenStreetMap tiles) ----------
+  var mapState = { map: null, markers: null, circle: null };
+  function initMap() {
+    if (mapState.map || typeof L === 'undefined') return;
+    mapState.map = L.map('map', { scrollWheelZoom: true }).setView([48, 12], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+    }).addTo(mapState.map);
+    mapState.markers = L.layerGroup().addTo(mapState.map);
+    mapState.map.on('popupopen', function (e) {
+      var el = e.popup.getElement();
+      if (!el) return;
+      el.querySelectorAll('button.add').forEach(function (b) {
+        b.addEventListener('click', function () {
+          toggleTrip(Number(b.getAttribute('data-id')));
+          mapState.map.closePopup();
+        });
+      });
+    });
+  }
+  function mapPopupHtml(city) {
+    var rows = city.list.slice().sort(function (a, b) { return a.dt < b.dt ? -1 : 1; }).map(function (f) {
+      var picked = S.trip.indexOf(f.id) !== -1;
+      var ctryColor = COUNTRY_COLOR[f.country] || '#999';
+      return '<div class="map-match">' +
+        '<div class="map-match-top"><span class="tag" style="--ctry-color:' + ctryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span><span><bdi dir="rtl">' + esc(fmtLong(dayOf(f))) + '</bdi>' + (f.status === 'TBD' ? '' : ' · ' + esc(f.dt.slice(11, 16))) + '</span></div>' +
+        '<div class="teams"><bdi dir="rtl">' + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + '</bdi></div>' +
+        (f.venue ? '<div class="map-venue"><bdi dir="rtl">' + esc(f.venue) + '</bdi></div>' : '') +
+        '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></div>';
+    }).join('');
+    return '<div class="map-popup-in"><h4><bdi dir="rtl">' + esc(city.cityHe) + '</bdi></h4>' + rows + '</div>';
+  }
+  function renderMap() {
+    if (!mapState.map) return;
+    mapState.markers.clearLayers();
+    if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
+    var list = filtered().list;
+    var byCity = {};
+    list.forEach(function (f) {
+      if (!hasPos(f)) return;
+      var key = f.lat + ',' + f.lng;
+      if (!byCity[key]) byCity[key] = { cityHe: cityHe(f), lat: f.lat, lng: f.lng, list: [] };
+      byCity[key].list.push(f);
+    });
+    var groups = Object.keys(byCity).map(function (k) { return byCity[k]; });
+    groups.forEach(function (g) {
+      var icon = L.divIcon({
+        className: '', html: '<div class="map-pin"><span>' + g.list.length + '</span></div>',
+        iconSize: [28, 28], iconAnchor: [14, 26], popupAnchor: [0, -26]
+      });
+      L.marker([g.lat, g.lng], { icon: icon }).bindPopup(mapPopupHtml(g), { maxWidth: 300 }).addTo(mapState.markers);
+    });
+    if (S.base) {
+      mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#B8862E', weight: 1.5, fillOpacity: .08 }).addTo(mapState.map);
+      mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
+    } else if (groups.length) {
+      mapState.map.fitBounds(groups.map(function (g) { return [g.lat, g.lng]; }), { padding: [30, 30], maxZoom: 6 });
+    }
+  }
+  $('#viewToggle').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button.vtab') : null;
+    if (!b) return;
+    S.view = b.getAttribute('data-view');
+    document.querySelectorAll('#viewToggle .vtab').forEach(function (v) { v.setAttribute('aria-pressed', v === b ? 'true' : 'false'); });
+    $('#list').style.display = S.view === 'list' ? '' : 'none';
+    $('#mapWrap').style.display = S.view === 'map' ? '' : 'none';
+    if (S.view === 'map') {
+      initMap();
+      requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); });
+    }
+  });
+
   // ---------- trip ----------
   function toggleTrip(id) {
     var i = S.trip.indexOf(id);
@@ -591,7 +693,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     try { document.execCommand('copy'); } catch (e) { }
     document.body.removeChild(ta);
   }
-  function update() { renderResults(); renderTrip(); }
+  function update() { renderResults(); renderTrip(); if (S.view === 'map') renderMap(); }
 
   // ---------- freshness ----------
   (function () {
