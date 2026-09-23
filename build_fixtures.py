@@ -121,7 +121,22 @@ CC_COUNTRY_NAME = {
     "se": "Sweden", "rs": "Serbia", "hr": "Croatia", "sk": "Slovakia", "hu": "Hungary",
     "ro": "Romania", "bg": "Bulgaria", "sct": "Scotland", "ie": "Ireland", "cy": "Cyprus",
     "il": "Israel", "az": "Azerbaijan", "ge": "Georgia", "kz": "Kazakhstan",
+    "am": "Armenia", "ba": "Bosnia and Herzegovina", "lv": "Latvia", "lt": "Lithuania",
+    "al": "Albania", "ad": "Andorra", "by": "Belarus", "ee": "Estonia", "fo": "Faroe Islands",
+    "fi": "Finland", "gi": "Gibraltar", "is": "Iceland", "xk": "Kosovo", "li": "Liechtenstein",
+    "lu": "Luxembourg", "mt": "Malta", "md": "Moldova", "mc": "Monaco", "me": "Montenegro",
+    "mk": "North Macedonia", "ru": "Russia", "sm": "San Marino", "si": "Slovenia",
 }
+
+# UEFA member associations' country codes (roughly - England/Scotland/Wales/N.Ireland all
+# share "gb" in OSM). Used to bias an unrestricted geocode toward the right same-named city
+# (e.g. "Athens" without this would as easily match Athens, Georgia, USA).
+UEFA_CC = ",".join([
+    "al", "ad", "am", "at", "az", "by", "be", "ba", "bg", "hr", "cy", "cz", "dk", "gb", "ee",
+    "fo", "fi", "fr", "ge", "de", "gi", "gr", "hu", "is", "il", "it", "kz", "xk", "lv", "li",
+    "lt", "lu", "mt", "md", "mc", "me", "nl", "mk", "no", "pl", "pt", "ie", "ro", "ru", "sm",
+    "rs", "sk", "si", "es", "se", "ch", "tr", "ua",
+])
 
 
 def call(path, **params):
@@ -202,10 +217,11 @@ def resolve_uefa_id(search_term, accepted_names):
     return None
 
 
-def geocode_any(city):
-    """Like geocode(), but without a country restriction - for a venue whose country isn't
-    known yet. Returns (coords_or_None, country_code_or_None, ok)."""
-    q = urllib.parse.urlencode({"q": city, "format": "json", "limit": 1, "addressdetails": 1})
+def _nominatim_search(city, countrycodes=None):
+    params = {"q": city, "format": "json", "limit": 1, "addressdetails": 1}
+    if countrycodes:
+        params["countrycodes"] = countrycodes
+    q = urllib.parse.urlencode(params)
     req = urllib.request.Request(
         "https://nominatim.openstreetmap.org/search?" + q,
         headers={"User-Agent": "sports-trip-planner/1.0 (personal hobby project)"},
@@ -216,8 +232,22 @@ def geocode_any(city):
     except Exception as e:
         print(f"  geocode error for {city}: {e}")
         time.sleep(2)
-        return None, None, False
+        return None, False
     time.sleep(1.1)
+    return data, True
+
+
+def geocode_any(city):
+    """Like geocode(), but the country isn't known yet - for a European club competition
+    venue. First tries biased to UEFA member countries (a plain unrestricted search for a
+    common name like "Athens" is just as likely to match Athens, Georgia, USA); only falls
+    back to a fully unrestricted search if that finds nothing, for the rare genuine case of
+    a match hosted outside Europe. Returns (coords_or_None, country_code_or_None, ok)."""
+    data, ok = _nominatim_search(city, UEFA_CC)
+    if ok and not data:
+        data, ok = _nominatim_search(city)
+    if not ok:
+        return None, None, False
     if data:
         d = data[0]
         coords = [round(float(d["lat"]), 4), round(float(d["lon"]), 4)]
