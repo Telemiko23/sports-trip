@@ -17,6 +17,8 @@ Files in the same folder:
   cities_cache.json   coordinates found for each city, so every city is looked up only once
   cities_manual.json  optional, yours: overrides / fixes, e.g. {"Cardiff|gb": [51.4816, -3.1791]}
                       (key = "CityName|countrycode"; you can also fix a wrong entry in the cache file)
+  venues_cache.json   coordinates found for each stadium, same idea as cities_cache.json - lets
+                      the site link a match's venue name straight to Google Maps
   he_names.py         Hebrew names for competitions/cities/teams - edit this to fix a translation
   logos/              team crests, downloaded automatically at the end of every run (see download_logos.py)
 
@@ -440,6 +442,25 @@ def main():
     if todo:
         save_json("cities_cache.json", cache)
 
+    # ---- geocode every distinct stadium once, so the "venue" name can link straight to
+    # its exact spot on Google Maps instead of just the city centre. Best-effort: a venue
+    # whose country is unknown (city never resolved) or that Nominatim can't find by name
+    # is simply left without a pin - the site already falls back gracefully everywhere else. ----
+    vcache = load_json("venues_cache.json", {})
+    vtodo = sorted({(r["venue"], r["city"], r["cc"]) for r in rows
+                     if r["venue"] and r["city"] and r["cc"] and f"{r['venue']}|{r['city']}" not in vcache})
+    if vtodo:
+        print(f"\nGeocoding {len(vtodo)} new stadiums (about {len(vtodo) * 1.3 / 60:.0f} min)...")
+    for n, (venue, city, cc) in enumerate(vtodo, 1):
+        coords, ok = geocode(f"{venue}, {city}", cc)
+        if ok:
+            vcache[f"{venue}|{city}"] = coords
+        if n % 25 == 0:
+            print(f"  {n}/{len(vtodo)}")
+            save_json("venues_cache.json", vcache)
+    if vtodo:
+        save_json("venues_cache.json", vcache)
+
     unresolved = set()
     for r in rows:
         key = f"{r['city']}|{r['cc']}" if r["city"] else None
@@ -448,6 +469,8 @@ def main():
         r["city_he"] = he_city(r["city"], r["country"])
         if r["city"] and not c:
             unresolved.add(key)
+        vc = vcache.get(f"{r['venue']}|{r['city']}") if r["venue"] and r["city"] else None
+        r["venue_lat"], r["venue_lng"] = (vc[0], vc[1]) if vc else (None, None)
         del r["cc"]
 
     for c in comps_meta:
@@ -464,7 +487,9 @@ def main():
         f.write("window.TRIP_DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
 
     located = sum(1 for r in rows if r["lat"] is not None)
-    print(f"\nWrote fixtures.js: {len(rows)} fixtures, {located} with a known location.")
+    venue_located = sum(1 for r in rows if r["venue_lat"] is not None)
+    print(f"\nWrote fixtures.js: {len(rows)} fixtures, {located} with a known city location, "
+          f"{venue_located} with an exact stadium location.")
 
     download_logos()
     download_comp_logos()

@@ -139,6 +139,9 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 .tag{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding-block:4px;padding-inline:4px 14px;margin-inline-end:6px;font-size:12px;font-weight:700;color:#fff;background:var(--ctry-color, var(--muted))}
 .tag img{width:16px;height:16px;object-fit:contain;border-radius:50%;background:#fff;padding:1px;flex:none}
 .comp-logo{width:18px;height:18px;object-fit:contain;flex:none;vertical-align:middle;margin-inline-end:2px}
+.venue-link{color:inherit;text-decoration:none;border-bottom:1px dashed var(--muted)}
+.venue-link:hover{color:var(--turf-deep);border-bottom-color:var(--turf-deep)}
+@media (prefers-color-scheme:dark){ .venue-link:hover{color:var(--turf)} }
 .dist{color:var(--turf-deep);font-weight:700}
 @media (prefers-color-scheme:dark){ .dist{color:var(--turf)} }
 .add{grid-column:3;grid-row:1 / span 2;border:1.5px solid var(--turf);color:var(--turf-deep);background:transparent;border-radius:var(--radius-sm);padding:8px 14px;cursor:pointer;font-weight:700;min-width:92px;transition:background .15s,color .15s}
@@ -304,6 +307,17 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
   }
   function hasPos(f) { return f.lat != null && f.lng != null; }
+  function venueMapsUrl(f) {
+    if (!f.venue) return null;
+    if (f.venue_lat != null && f.venue_lng != null) return 'https://www.google.com/maps/search/?api=1&query=' + f.venue_lat + ',' + f.venue_lng;
+    if (f.city) return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(f.venue + ', ' + f.city);
+    return null;
+  }
+  function venueHtml(f) {
+    if (!f.venue) return '';
+    var url = venueMapsUrl(f);
+    return url ? '<a class="venue-link" target="_blank" rel="noopener" href="' + esc(url) + '"><bdi dir="rtl">' + esc(f.venue) + '</bdi></a>' : '<bdi dir="rtl">' + esc(f.venue) + '</bdi>';
+  }
   function fmtLong(s) { return parseDay(s).toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' }); }
 
   // ---------- custom combobox (styled dropdown, replaces native <datalist>) ----------
@@ -494,7 +508,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       var ctryColor = COUNTRY_COLOR[f.country] || '#999';
       html += '<li class="match' + (picked ? ' picked' : '') + '" style="--ctry-color:' + ctryColor + '">' + time +
         '<div class="teams"><bdi dir="rtl">' + homeLogo + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + awayLogo + '</bdi></div>' +
-        '<div class="meta"><span class="tag" style="--ctry-color:' + ctryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>' + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · <bdi dir="rtl">' + esc(f.venue) + '</bdi>' : '') + dist + '</div>' +
+        '<div class="meta"><span class="tag" style="--ctry-color:' + ctryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>' + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + '</div>' +
         '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
     });
     if (open) html += '</ul></section>';
@@ -549,7 +563,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       return '<div class="map-match">' +
         '<div class="map-match-top"><span class="tag" style="--ctry-color:' + ctryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span><span><bdi dir="rtl">' + esc(fmtLong(dayOf(f))) + '</bdi>' + (f.status === 'TBD' ? '' : ' · ' + esc(f.dt.slice(11, 16))) + '</span></div>' +
         '<div class="teams"><bdi dir="rtl">' + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + '</bdi></div>' +
-        (f.venue ? '<div class="map-venue"><bdi dir="rtl">' + esc(f.venue) + '</bdi></div>' : '') +
+        (f.venue ? '<div class="map-venue">' + venueHtml(f) + '</div>' : '') +
         '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></div>';
     }).join('');
     return '<div class="map-popup-in"><h4><bdi dir="rtl">' + esc(city.cityHe) + '</bdi></h4>' + rows + '</div>';
@@ -641,11 +655,15 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     var cities = [], seen = {};
     list.forEach(function (f) {
       if (!f.city) return;
-      if (!seen[f.city]) { seen[f.city] = { city: f.city, cityHe: f.city_he || f.city, a: dayOf(f), b: dayOf(f) }; cities.push(seen[f.city]); }
-      else seen[f.city].b = dayOf(f);
+      if (!seen[f.city]) { seen[f.city] = { city: f.city, cityHe: f.city_he || f.city, a: dayOf(f), b: dayOf(f), lat: f.venue_lat, lng: f.venue_lng }; cities.push(seen[f.city]); }
+      else { seen[f.city].b = dayOf(f); if (seen[f.city].lat == null && f.venue_lat != null) { seen[f.city].lat = f.venue_lat; seen[f.city].lng = f.venue_lng; } }
     });
+    // when we know a stadium's exact spot, centre the hotel search there (< 3km) instead of
+    // just searching the city name - closer results for the actual match, not just downtown
     var hotels = cities.map(function (c) {
-      return { city: c.cityHe, url: 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(c.city) + '&checkin=' + c.a + '&checkout=' + addDays(c.b, 1) };
+      var url = 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(c.city) + '&checkin=' + c.a + '&checkout=' + addDays(c.b, 1);
+      if (c.lat != null && c.lng != null) url += '&latitude=' + c.lat + '&longitude=' + c.lng + '&distance=3000';
+      return { city: c.cityHe, url: url };
     });
     return { flights: flights, hotels: hotels };
   }
@@ -676,7 +694,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       html += '<div class="stub"><div class="date"><span class="num">' + d.getDate() + '</span><span class="mon">' + esc(d.toLocaleDateString('he-IL', { month: 'short' })) + '</span><span class="wd">' + HE_DAYS_FULL[d.getDay()] + '</span></div>' +
         '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
         '<div class="t">' + homeLogo + '<bdi dir="rtl" class="tname">' + esc(f.home_he || f.home) + '</bdi><span class="vs">–</span><bdi dir="rtl" class="tname">' + esc(f.away_he || f.away) + '</bdi>' + awayLogo + '</div>' +
-        '<div class="s">' + stubTag + (f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · <bdi dir="rtl">' + esc(f.venue) + '</bdi>' : '') + '</div></div></div>';
+        '<div class="s">' + stubTag + (f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · ' + venueHtml(f) : '') + '</div></div></div>';
     });
     var links = bookingLinks(list);
     html += '<div class="tools">' +
@@ -685,7 +703,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       links.hotels.map(function (h) { return '<a class="btn" target="_blank" rel="noopener" href="' + esc(h.url) + '">חיפוש לינה: <bdi dir="rtl">' + esc(h.city) + '</bdi></a>'; }).join('') +
       '<button type="button" class="btn" id="copyTrip">העתק את הטיול כטקסט</button>' +
       '<button type="button" class="btn" id="clearTrip">נקה את הטיול</button>' +
-      '</div><p class="tripnote">קישורי הטיסה והלינה פותחים חיפוש כללי לפי התאריכים של המשחקים. כשהעיר הראשונה והאחרונה בטיול שונות, מוצגות שתי טיסות חד-כיווניות (הלוך לעיר הראשונה, חזור מהעיר האחרונה) במקום טיסת הלוך-חזור רגילה - ותאריכי הטיסה כדאי להתאים ידנית.</p>';
+      '</div><p class="tripnote">קישורי הטיסה והלינה פותחים חיפוש כללי לפי התאריכים של המשחקים (חיפוש הלינה ממוקד סביב האצטדיון עצמו כשהמיקום המדויק שלו ידוע, לא רק מרכז העיר). כשהעיר הראשונה והאחרונה בטיול שונות, מוצגות שתי טיסות חד-כיווניות (הלוך לעיר הראשונה, חזור מהעיר האחרונה) במקום טיסת הלוך-חזור רגילה - ותאריכי הטיסה כדאי להתאים ידנית.</p>';
     body.innerHTML = html;
     combobox($('#origin'), $('#originMenu'), airportItems, {
       onSelect: function (it) { S.origin = it.label; renderTrip(); }

@@ -10,6 +10,9 @@ touching the football API:
     does (reusing a cached city|country_code first, only calling Nominatim for a city we
     haven't seen under any country yet) - so a fix to that resolution logic (e.g. telling
     Scotland apart from England) is picked up here too, not just on the next full pull.
+  - the exact stadium location (venue_lat/venue_lng), cached in venues_cache.json the same
+    way cities_cache.json caches city coordinates - lets the venue name link straight to
+    Google Maps instead of just the city centre.
 
 Safe to re-run any time after editing he_names.py or overrides.py.
 """
@@ -52,7 +55,8 @@ def main():
 
     cache = load_json("cities_cache.json", {})
     manual = load_json("cities_manual.json", {})
-    cache_dirty = False
+    vcache = load_json("venues_cache.json", {})
+    cache_dirty = vcache_dirty = False
 
     for r in payload["fixtures"]:
         home = r["home"]
@@ -109,6 +113,21 @@ def main():
             if cc:
                 r["country"] = CC_TO_OUR_COUNTRY.get(cc) or CC_COUNTRY_NAME.get(cc) or cc
 
+        # exact stadium location, so the venue name can link straight to Google Maps -
+        # re-keyed on (venue, city) so a new VENUE_OVERRIDE name gets geocoded fresh too
+        if r.get("venue") and r.get("city") and cc:
+            vkey = f"{r['venue']}|{r['city']}"
+            vcoords = vcache.get(vkey)
+            if vcoords is None and vkey not in vcache:
+                print(f"Geocoding stadium {r['venue']} ({r['city']})...")
+                vcoords, ok = geocode(f"{r['venue']}, {r['city']}", cc)
+                if ok:
+                    vcache[vkey] = vcoords
+                    vcache_dirty = True
+            r["venue_lat"], r["venue_lng"] = (vcoords[0], vcoords[1]) if vcoords else (None, None)
+        else:
+            r["venue_lat"], r["venue_lng"] = None, None
+
         r["home_he"] = he_team(r["home"])
         r["away_he"] = he_team(r["away"])
         r["city_he"] = he_city(r["city"], r["country"])
@@ -121,6 +140,8 @@ def main():
 
     if cache_dirty:
         save_json("cities_cache.json", cache)
+    if vcache_dirty:
+        save_json("venues_cache.json", vcache)
 
     with open(path, "w", encoding="utf-8") as f:
         f.write("window.TRIP_DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")

@@ -92,6 +92,7 @@ VENUE_OVERRIDE = {
     "AC Milan": "San Siro",
     "Ferencvarosi TC": "Ferencváros Stadion",
     "Benfica": "Estádio da Luz",
+    "Hapoel Beer Sheva": "Turner Stadium",
 }
 
 LOGO_OVERRIDE = {
