@@ -3,11 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.tile.openstreetmap.org https://media.api-sports.io; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>מסלול משחקים</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <style>
 :root{
   --paper:#F1EFE6; --card:#FFFFFF; --ink:#132420; --muted:#5E6E64; --line:#DDD8C8;
@@ -244,7 +246,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 
 <script src="fixtures.js"></script>
 <script src="airports.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
 <script>
 (function () {
   var DATA = window.TRIP_DATA;
@@ -506,7 +508,13 @@ input[type=range]{width:100%;accent-color:var(--turf)}
   });
 
   // ---------- map view (Leaflet + OpenStreetMap tiles) ----------
-  var mapState = { map: null, markers: null, circle: null };
+  // lastMapKey captures everything that changes which cities/markers should show (filters,
+  // base city, radius) but deliberately excludes S.trip - adding/removing a trip match must
+  // never move or rebuild the map, or the user loses their place after every click.
+  var mapState = { map: null, markers: null, circle: null, lastKey: null };
+  function mapFilterKey() {
+    return JSON.stringify([S.base ? [S.base.lat, S.base.lng] : null, S.radius, S.from, S.to, S.days, S.comps]);
+  }
   function initMap() {
     if (mapState.map || typeof L === 'undefined') return;
     mapState.map = L.map('map', { scrollWheelZoom: true }).setView([48, 12], 4);
@@ -515,13 +523,21 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
     }).addTo(mapState.map);
     mapState.markers = L.layerGroup().addTo(mapState.map);
+    // handled directly here (not via toggleTrip -> update -> renderMap) so adding a match
+    // from the map never rebuilds markers, closes the popup, or moves the view
     mapState.map.on('popupopen', function (e) {
       var el = e.popup.getElement();
       if (!el) return;
       el.querySelectorAll('button.add').forEach(function (b) {
         b.addEventListener('click', function () {
-          toggleTrip(Number(b.getAttribute('data-id')));
-          mapState.map.closePopup();
+          var id = Number(b.getAttribute('data-id'));
+          var i = S.trip.indexOf(id);
+          if (i === -1) S.trip.push(id); else S.trip.splice(i, 1);
+          saveTrip();
+          renderTrip();
+          var picked = S.trip.indexOf(id) !== -1;
+          b.setAttribute('aria-pressed', String(picked));
+          b.textContent = picked ? 'בטיול ✓' : 'הוסף לטיול';
         });
       });
     });
@@ -540,6 +556,9 @@ input[type=range]{width:100%;accent-color:var(--turf)}
   }
   function renderMap() {
     if (!mapState.map) return;
+    var key = mapFilterKey();
+    var keyChanged = key !== mapState.lastKey;
+    mapState.lastKey = key;
     mapState.markers.clearLayers();
     if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
     var list = filtered().list;
@@ -556,12 +575,12 @@ input[type=range]{width:100%;accent-color:var(--turf)}
         className: '', html: '<div class="map-pin"><span>' + g.list.length + '</span></div>',
         iconSize: [28, 28], iconAnchor: [14, 26], popupAnchor: [0, -26]
       });
-      L.marker([g.lat, g.lng], { icon: icon }).bindPopup(mapPopupHtml(g), { maxWidth: 300 }).addTo(mapState.markers);
+      L.marker([g.lat, g.lng], { icon: icon }).bindPopup(mapPopupHtml(g), { maxWidth: 300, maxHeight: 300 }).addTo(mapState.markers);
     });
     if (S.base) {
       mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#B8862E', weight: 1.5, fillOpacity: .08 }).addTo(mapState.map);
-      mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
-    } else if (groups.length) {
+      if (keyChanged) mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
+    } else if (groups.length && keyChanged) {
       mapState.map.fitBounds(groups.map(function (g) { return [g.lat, g.lng]; }), { padding: [30, 30], maxZoom: 6 });
     }
   }
