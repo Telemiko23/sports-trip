@@ -1,7 +1,9 @@
 # Football Trip Planner - README
 
 A guide to every file in this folder: what it does, when to run it, and in what order.
-For the project plan (what's done, what's planned) see [ROADMAP.md](ROADMAP.md).
+For the project plan (what's done, what's planned) see [ROADMAP.md](ROADMAP.md). For
+current live status (deployment, affiliate signup progress, the ToS review) see
+[STATUS.md](STATUS.md) (in Hebrew).
 
 ## The big picture
 
@@ -81,6 +83,7 @@ Spanish clubs the API didn't have a crest for).
 | File | What it is |
 |---|---|
 | `ROADMAP.md` | What was defined at the start, what's been done (by work round), and what's planned next. |
+| `STATUS.md` | Current state, not a log: live deployment info, affiliate signup progress, the ToS legal review. |
 | `README.md` | This file. |
 
 ## Common scenarios
