@@ -93,6 +93,10 @@ VENUE_OVERRIDE = {
     "Ferencvarosi TC": "Ferencváros Stadion",
     "Benfica": "Estádio da Luz",
     "Hapoel Beer Sheva": "Turner Stadium",
+    # API returns two different names for the same physical stadium across fixtures - a
+    # leftover sponsor name ("zondacrypto Arena") the city itself dropped in April 2026,
+    # reverting to the official one
+    "Raków Częstochowa": "Miejski Stadion Pilkarski Rakow",
 }
 
 LOGO_OVERRIDE = {

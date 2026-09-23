@@ -55,7 +55,10 @@
   43.3023,
   -1.9748
  ],
- "Arena Garibaldi - Stadio Romeo Anconetani|Pisa": null,
+ "Arena Garibaldi - Stadio Romeo Anconetani|Pisa": [
+  43.7255,
+  10.4007
+ ],
  "Ashton Gate Stadium|Bristol": [
   51.4399,
   -2.6203
@@ -92,7 +95,10 @@
   52.5655,
   -1.9905
  ],
- "Besiktas Park|Istanbul": null,
+ "Besiktas Park|Istanbul": [
+  41.0391,
+  28.995
+ ],
  "Bet365 Stadium|Stoke on Trent": [
   52.9883,
   -2.1756
@@ -137,13 +143,22 @@
   41.3808,
   2.1156
  ],
- "Campo Municipal de Fútbol José Martínez Pirri|Ceuta": null,
- "Campo Municipal de Oira|Ourense": null,
+ "Campo Municipal de Fútbol José Martínez Pirri|Ceuta": [
+  35.8918,
+  -5.2988
+ ],
+ "Campo Municipal de Oira|Ourense": [
+  42.3546,
+  -7.8533
+ ],
  "Campo de Futbol de Vallecas|Madrid": [
   40.3918,
   -3.6587
  ],
- "Campo de Oreyana|Ribadesella": null,
+ "Campo de Oreyana|Ribadesella": [
+  43.4581,
+  -5.0471
+ ],
  "Cardiff City Stadium|Cardiff": [
   51.4728,
   -3.203
@@ -160,7 +175,10 @@
   56.4661,
   10.0102
  ],
- "Chobani Stadium Fenerbahce Sukru Saracoglu|Istanbul": null,
+ "Chobani Stadium Fenerbahce Sukru Saracoglu|Istanbul": [
+  40.9879,
+  29.0373
+ ],
  "Chorten Arena|Bialystok": [
   53.106,
   23.1493
@@ -177,7 +195,10 @@
   37.2157,
   -3.6255
  ],
- "Ciudad Deportiva|Talayuela": null,
+ "Ciudad Deportiva|Talayuela": [
+  39.9905,
+  -5.6172
+ ],
  "Colchester Community Stadium|Colchester": [
   51.9234,
   0.8976
@@ -206,7 +227,10 @@
   52.2604,
   6.1727
  ],
- "De Ebbenhorst|Nijkerk": null,
+ "De Ebbenhorst|Nijkerk": [
+  52.2237,
+  5.499
+ ],
  "De Grolsch Veste|Enschede": [
   52.2364,
   6.8378
@@ -251,8 +275,14 @@
   41.9612,
   2.829
  ],
- "Estadi de la FAF|Encamp": null,
- "Estadi de la Nova Creu Alta|Sabadell": null,
+ "Estadi de la FAF|Encamp": [
+  42.5337,
+  1.5768
+ ],
+ "Estadi de la Nova Creu Alta|Sabadell": [
+  41.5549,
+  2.0918
+ ],
  "Estadio Carlos Belmonte|Albacete": [
   38.9811,
   -1.8521
@@ -301,7 +331,10 @@
   39.9961,
   -0.0386
  ],
- "Estadio Municipal de Ipurua|Eibar": null,
+ "Estadio Municipal de Ipurua|Eibar": [
+  43.1819,
+  -2.4756
+ ],
  "Estadio Municipal de Montilivi|Girona": [
   41.9612,
   2.829
@@ -310,8 +343,14 @@
   43.3687,
   -8.4175
  ],
- "Estadio Municipal|Alcázar de San Juan": null,
- "Estadio Nuevo Carlos Tartiere|Oviedo": null,
+ "Estadio Municipal|Alcázar de San Juan": [
+  39.3875,
+  -3.2221
+ ],
+ "Estadio Nuevo Carlos Tartiere|Oviedo": [
+  43.3609,
+  -5.8697
+ ],
  "Estadio Nuevo Los Cármenes|Granada": [
   37.1529,
   -3.5959
@@ -320,7 +359,10 @@
   38.4675,
   -0.7961
  ],
- "Estadio San Miguel|Navarrete": null,
+ "Estadio San Miguel|Navarrete": [
+  42.426,
+  -2.5535
+ ],
  "Estadio de Balaídos|Vigo": [
   42.2128,
   -8.7393
@@ -333,7 +375,10 @@
   37.4172,
   -6.0046
  ],
- "Estadio de Mestalla|Valencia": null,
+ "Estadio de Mestalla|Valencia": [
+  39.4748,
+  -0.3577
+ ],
  "Estadio de la Ceramica|Villarreal": [
   39.9442,
   -0.1034
@@ -370,7 +415,10 @@
   50.8615,
   20.6247
  ],
- "Ferencváros Stadion|Budapest": null,
+ "Ferencváros Stadion|Budapest": [
+  47.4755,
+  19.0955
+ ],
  "Fortuna Arena|Prague": [
   50.0676,
   14.4715
@@ -447,7 +495,10 @@
   50.6855,
   17.8739
  ],
- "JP Financial Estadio|Cadiz": null,
+ "JP Financial Estadio|Cadiz": [
+  36.5027,
+  -6.2726
+ ],
  "Jan Breydel Stadion|Brugge": [
   51.1933,
   3.1806
@@ -500,7 +551,10 @@
   53.2183,
   -0.5409
  ],
- "La Caseta|Noja": null,
+ "La Caseta|Noja": [
+  43.4752,
+  -3.512
+ ],
  "La Espiguera|Melilla": [
   35.2835,
   -2.9448
@@ -565,7 +619,10 @@
   49.9839,
   8.2232
  ],
- "Miejski Stadion Pilkarski Rakow|Częstochowa": null,
+ "Miejski Stadion Pilkarski Rakow|Częstochowa": [
+  50.7768,
+  19.1593
+ ],
  "Mikheil Meskhi Stadium|Tbilisi": [
   41.7098,
   44.7463
@@ -578,8 +635,14 @@
   52.5903,
   -2.1304
  ],
- "Motor Lublin Arena|Lublin": null,
- "Municipal Sporting Hortaleza|Madrid": null,
+ "Motor Lublin Arena|Lublin": [
+  51.2329,
+  22.5583
+ ],
+ "Municipal Sporting Hortaleza|Madrid": [
+  40.4778,
+  -3.6564
+ ],
  "Municipal de Lebrija|Lebrija": [
   36.9359,
   -6.0595
@@ -592,7 +655,10 @@
   39.0781,
   -0.2566
  ],
- "National Stadium Vasil Levski|Sofia": null,
+ "National Stadium Vasil Levski|Sofia": [
+  42.6883,
+  23.3351
+ ],
  "New Balance Arena|Bergamo": [
   45.7092,
   9.6808
@@ -645,12 +711,18 @@
   45.9169,
   6.1192
  ],
- "Peninsula Stadium|Salford": null,
+ "Peninsula Stadium|Salford": [
+  53.5137,
+  -2.2763
+ ],
  "Philips Stadion|Eindhoven": [
   51.4417,
   5.4674
  ],
- "Pirelli Stadium|Burton upon Trent": null,
+ "Pirelli Stadium|Burton upon Trent": [
+  52.8221,
+  -1.6266
+ ],
  "Polsat Plus Arena|Gdansk": [
   54.39,
   18.6403
@@ -731,7 +803,10 @@
   49.2381,
   8.8876
  ],
- "SPORTA Arena|Stevenage": null,
+ "SPORTA Arena|Stevenage": [
+  51.8898,
+  -0.1937
+ ],
  "Sagnier|El Prat de Llobregat": [
   41.3218,
   2.083
@@ -772,7 +847,10 @@
   50.6264,
   -3.4125
  ],
- "Sparta Stadion Het Kasteel|Rotterdam": null,
+ "Sparta Stadion Het Kasteel|Rotterdam": [
+  51.9201,
+  4.4337
+ ],
  "Sportpark De Westmaat|Spakenburg": [
   52.2579,
   5.3779
@@ -785,7 +863,10 @@
   52.0008,
   4.4737
  ],
- "Sportpark Noord|Groesbeek": null,
+ "Sportpark Noord|Groesbeek": [
+  51.7913,
+  5.9112
+ ],
  "Sportpark Ronhof Thomas Sommer|Fürth": [
   49.4871,
   10.9989
@@ -822,7 +903,10 @@
   49.2471,
   4.0248
  ],
- "Stade Bauer|Paris - Saint-Ouen": null,
+ "Stade Bauer|Paris - Saint-Ouen": [
+  48.9062,
+  2.3415
+ ],
  "Stade Bollaert-Delelis|Lens": [
   50.4328,
   2.815
@@ -847,7 +931,10 @@
   48.8433,
   2.253
  ],
- "Stade Louis II|Monaco": null,
+ "Stade Louis II|Monaco": [
+  43.7277,
+  7.416
+ ],
  "Stade Marcel Picot|Nancy": [
   48.6957,
   6.2105
@@ -884,7 +971,10 @@
   48.566,
   -3.1645
  ],
- "Stade de l'Abbé-Deschamps|Auxerre": null,
+ "Stade de l'Abbé-Deschamps|Auxerre": [
+  47.7869,
+  3.5892
+ ],
  "Stade de l'Aube|Troyes": [
   48.3075,
   4.0985
@@ -969,7 +1059,10 @@
   44.4165,
   8.9525
  ],
- "Stadio Marco Druso|Bolzano": null,
+ "Stadio Marco Druso|Bolzano": [
+  46.4921,
+  11.3466
+ ],
  "Stadio Nicola Ceravolo|Catanzaro": [
   38.9197,
   16.5878
@@ -986,7 +1079,10 @@
   40.927,
   14.7926
  ],
- "Stadio Pierluigi Penzo|Venice": null,
+ "Stadio Pierluigi Penzo|Venice": [
+  45.4279,
+  12.3643
+ ],
  "Stadio Renzo Barbera|Palermo": [
   38.1528,
   13.342
@@ -1007,7 +1103,10 @@
   44.0653,
   10.0766
  ],
- "Stadion Chrobrego|Głogów": null,
+ "Stadion Chrobrego|Głogów": [
+  51.656,
+  16.0971
+ ],
  "Stadion Cracovii im. Jozefa Pilsudskiego|Kraków": [
   50.0579,
   19.9215
@@ -1016,7 +1115,10 @@
   52.0784,
   5.1459
  ],
- "Stadion MZOS Znicz|Pruszków": null,
+ "Stadion MZOS Znicz|Pruszków": [
+  52.1691,
+  20.8134
+ ],
  "Stadion Maksimir|Zagreb": [
   45.8187,
   16.0179
@@ -1037,7 +1139,10 @@
   43.5195,
   16.4319
  ],
- "Stadion Polonii|Warsaw": null,
+ "Stadion Polonii|Warsaw": [
+  52.2552,
+  21.0007
+ ],
  "Stadion Poznan|Poznań": [
   52.3977,
   16.8581
@@ -1062,7 +1167,10 @@
   50.2963,
   18.7683
  ],
- "Stadion miejski w Katowicach|Katowice": null,
+ "Stadion miejski w Katowicach|Katowice": [
+  50.2511,
+  18.9734
+ ],
  "Stadionul Ion Oblemenco|Craiova": [
   44.314,
   23.7843
@@ -1071,7 +1179,10 @@
   52.0096,
   -0.7335
  ],
- "Stadium Municipal|Toulouse": null,
+ "Stadium Municipal|Toulouse": [
+  43.5835,
+  1.4345
+ ],
  "Stadium of Light|Sunderland": [
   54.9144,
   -1.3883
@@ -1085,8 +1196,14 @@
   51.6428,
   -3.9347
  ],
- "Synerise Arena - Stadion Miejski im. Henryka Reymana|Kraków": null,
- "Synerise Arena - Stadion Miejski im. Henryka Reymana|Sosnowiec": null,
+ "Synerise Arena - Stadion Miejski im. Henryka Reymana|Kraków": [
+  50.0638,
+  19.9127
+ ],
+ "Synerise Arena - Stadion Miejski im. Henryka Reymana|Sosnowiec": [
+  50.0638,
+  19.9127
+ ],
  "Tarczynski Arena|Wrocław": [
   51.1412,
   16.9438
@@ -1103,12 +1220,18 @@
   53.5477,
   -2.654
  ],
- "The Broadfield Stadium|Crawley": null,
+ "The Broadfield Stadium|Crawley": [
+  51.0999,
+  -0.1944
+ ],
  "The Cherry Red Records Stadium|London": [
   51.4051,
   -0.282
  ],
- "The Croud Meadow|Shrewsbury": null,
+ "The Croud Meadow|Shrewsbury": [
+  52.6887,
+  -2.7488
+ ],
  "The Den|London": [
   51.486,
   -0.0509
@@ -1125,7 +1248,10 @@
   51.4864,
   0.0362
  ],
- "The Wham Stadium|Accrington": null,
+ "The Wham Stadium|Accrington": [
+  53.7655,
+  -2.3708
+ ],
  "Tottenham Hotspur Stadium|London": [
   51.6042,
   -0.0663
@@ -1242,7 +1368,10 @@
   53.9843,
   -1.0527
  ],
- "Zwaluwenlaan Sports Park|Vlaardingen": null,
+ "Zwaluwenlaan Sports Park|Vlaardingen": [
+  51.9317,
+  4.3607
+ ],
  "epet ARENA|Prague": [
   50.0997,
   14.4159
