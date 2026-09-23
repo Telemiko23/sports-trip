@@ -38,7 +38,7 @@ TEAM_CITY_OVERRIDE = {
     "Lille": ("Villeneuve-d'Ascq", "fr"),
     "Como": ("Como", "it"),
     "Getafe": ("Madrid", "es"),
-    "Lillestrøm": ("Lillestrøm", "no"),
+    "Lillestrom": ("Lillestrøm", "no"),
     "Lincoln Red Imps FC": ("Gibraltar", "gi"),
     "Lech Poznan": ("Poznań", "pl"),
 }
@@ -87,7 +87,7 @@ VENUE_OVERRIDE = {
     "Marseille": "Stade Vélodrome",
     "Como": "Stadio Giuseppe Sinigaglia",
     "Real Madrid": "Bernabéu",
-    "Lillestrøm": "Åråsen Stadion",
+    "Lillestrom": "Åråsen Stadion",
     "Lincoln Red Imps FC": "Victoria Stadium",
     "AC Milan": "San Siro",
     "Ferencvarosi TC": "Ferencváros Stadion",
