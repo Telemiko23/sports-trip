@@ -84,6 +84,7 @@ Spanish clubs the API didn't have a crest for).
 |---|---|
 | `ROADMAP.md` | What was defined at the start, what's been done (by work round), and what's planned next. |
 | `STATUS.md` | Current state, not a log: live deployment info, affiliate signup progress, the ToS legal review. |
+| `ANALYTICS.md` | Every Google Analytics 4 custom event the site fires: name, params, trigger, and what it's for. |
 | `README.md` | This file. |
 
 ## Common scenarios
