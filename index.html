@@ -3,13 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.tile.openstreetmap.org https://media.api-sports.io; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.tile.openstreetmap.org https://media.api-sports.io; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>מסלול משחקים</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BKHDQGMC8T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-BKHDQGMC8T');
+</script>
 <style>
 :root{
   --paper:#F1EFE6; --card:#FFFFFF; --ink:#132420; --muted:#5E6E64; --line:#DDD8C8;
@@ -185,6 +192,16 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 .credits{max-width:1400px;margin:0 auto;padding:18px 20px 36px;color:var(--muted);font-size:12px;line-height:1.7;border-top:1px solid var(--line)}
 .credits a{color:var(--turf-deep)}
 @media (prefers-color-scheme:dark){ .credits a{color:var(--turf)} }
+.credits-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;gap:10px;flex-wrap:wrap}
+.credits .linkbtn{font-size:12px;padding:0}
+.version{color:var(--muted);font-size:11px}
+dialog#legalDialog{max-width:min(520px,90vw);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;background:var(--card);color:var(--ink);box-shadow:var(--shadow-hover)}
+dialog#legalDialog::backdrop{background:rgba(6,18,12,.55)}
+dialog#legalDialog h3{font:700 18px/1.2 var(--serif);margin:0 0 12px}
+dialog#legalDialog p{font-size:13.5px;line-height:1.6;color:var(--muted);margin:0 0 10px}
+dialog#legalDialog p:last-child{margin-bottom:0}
+.dialog-close{position:absolute;top:12px;left:12px;background:none;border:0;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:6px}
+.dialog-close:hover{color:var(--warn);background:var(--warn-soft)}
 </style>
 </head>
 <body>
@@ -240,18 +257,36 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 </div>
 
 <footer class="credits">
-  אתר אישי לתכנון טיולים, ללא כל זיקה למועדונים, לליגות או לגופי שידור.<br>
   נתוני משחקים: <a href="https://www.api-football.com" target="_blank" rel="noopener">API-Football</a> ·
   מיקומים: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">משתתפי OpenStreetMap</a> ·
-  שדות תעופה: <a href="https://ourairports.com/data/" target="_blank" rel="noopener">OurAirports</a><br>
-  סמלי הקבוצות והתחרויות המוצגים מיועדים לזיהוי בלבד; כל הזכויות בהם שייכות לבעליהן (המועדונים, הליגות וגופי השידור), ואין בהצגתם כדי לרמז על מתן חסות, אישור או שיתוף פעולה כלשהו.
+  שדות תעופה: <a href="https://ourairports.com/data/" target="_blank" rel="noopener">OurAirports</a>
+  <div class="credits-row">
+    <button type="button" class="linkbtn" id="legalBtn">מידע משפטי ופרטיות</button>
+    <span class="version">גרסה <span id="appVersion"></span></span>
+  </div>
 </footer>
+
+<dialog id="legalDialog">
+  <button type="button" class="dialog-close" id="legalClose" aria-label="סגור">×</button>
+  <h3>מידע משפטי ופרטיות</h3>
+  <p>אתר אישי לתכנון טיולים, ללא כל זיקה למועדונים, לליגות או לגופי שידור.</p>
+  <p>סמלי הקבוצות והתחרויות המוצגים מיועדים לזיהוי בלבד; כל הזכויות בהם שייכות לבעליהן
+    (המועדונים, הליגות וגופי השידור), ואין בהצגתם כדי לרמז על מתן חסות, אישור או שיתוף
+    פעולה כלשהו.</p>
+  <p>האתר משתמש ב-Google Analytics כדי להבין אילו תכונות שימושיות ולשפר את האתר. זה
+    כרוך בשמירת עוגייה (cookie) בדפדפן ובשליחת נתוני שימוש אנונימיים (לא מזהים אישית)
+    ל-Google.</p>
+  <p>קישורי החיפוש לטיסות פותחים חיפוש רגיל ב-Google Flights, בלי מעורבות של האתר.
+    קישורי הלינה מיועדים בעתיד לכלול קישור שותפים (affiliate) של Booking.com - אם וכשזה
+    יופעל, הזמנה דרכם עשויה לזכות את האתר בעמלה, בלי שינוי במחיר שאתם משלמים.</p>
+</dialog>
 
 <script src="fixtures.js"></script>
 <script src="airports.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
 <script>
 (function () {
+  var APP_VERSION = '1.1.0';
   var DATA = window.TRIP_DATA;
   var app = document.getElementById('app');
   if (!DATA || !Array.isArray(DATA.fixtures)) {
@@ -293,6 +328,21 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 
   // ---------- helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  // analytics events - never throws (an ad-blocker or offline gtag must not break the site)
+  function track(name, params) { try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch (e) { } }
+  function fixtureTrackParams(f) {
+    var days = Math.round((parseDay(f.dt.slice(0, 10)) - parseDay(isoLocal(new Date()))) / 86400000);
+    return { comp: f.comp, country: f.country || '', city: f.city || '', days_until_match: days };
+  }
+  // delegated on document since venue links render inside #list, #trip and map popups alike
+  document.addEventListener('click', function (e) {
+    var v = e.target.closest ? e.target.closest('a.venue-link') : null;
+    if (v) { track('venue_maps_click', { venue: v.textContent }); return; }
+    var fl = e.target.closest ? e.target.closest('.tools a.btn.primary') : null;
+    if (fl) { track('flight_link_click', {}); return; }
+    var hl = e.target.closest ? e.target.closest('.tools a.btn:not(.primary)') : null;
+    if (hl) { track('hotel_link_click', { city: hl.textContent.replace('חיפוש לינה: ', '') }); }
+  });
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function isoLocal(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function parseDay(s) { var p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); }
@@ -439,14 +489,22 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     update();
   }
   combobox($('#base'), $('#baseMenu'), cityItems, {
-    onSelect: function (it) { setBase(it.place, it.label); },
+    onSelect: function (it) { setBase(it.place, it.label); track('base_city_set', { city: it.place ? it.place.city : it.label }); },
     onInput: function (text) { setBase(findBase(text), text); }
   });
   $('#radius').addEventListener('input', function (e) { S.radius = Number(e.target.value); $('#radiusOut').textContent = S.radius; update(); });
-  $('#from').addEventListener('change', function (e) { S.from = e.target.value; update(); });
-  $('#to').addEventListener('change', function (e) { S.to = e.target.value; update(); });
+  $('#radius').addEventListener('change', function (e) { track('radius_change', { radius_km: Number(e.target.value) }); });
+  $('#from').addEventListener('change', function (e) { S.from = e.target.value; update(); track('date_range_change', { field: 'from', value: S.from }); });
+  $('#to').addEventListener('change', function (e) { S.to = e.target.value; update(); track('date_range_change', { field: 'to', value: S.to }); });
   $('#days').addEventListener('change', function (e) { var d = e.target.getAttribute('data-day'); if (d != null) { S.days[d] = e.target.checked ? 1 : 0; update(); } });
-  $('#comps').addEventListener('change', function (e) { var id = e.target.getAttribute('data-comp'); if (id != null) { S.comps[id] = e.target.checked; update(); } });
+  $('#comps').addEventListener('change', function (e) {
+    var id = e.target.getAttribute('data-comp');
+    if (id == null) return;
+    S.comps[id] = e.target.checked;
+    update();
+    var c = comps.filter(function (x) { return String(x.id) === id; })[0];
+    track('competition_toggle', { comp: c ? c.label : id, checked: e.target.checked });
+  });
   $('#comps').addEventListener('click', function (e) {
     var ct = e.target.getAttribute('data-ctry');
     if (!ct) return;
@@ -455,12 +513,14 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     list.forEach(function (c) { S.comps[c.id] = !allOn; });
     document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = !!S.comps[i.getAttribute('data-comp')]; });
     update();
+    track('competition_country_toggle', { country: ct, checked: !allOn });
   });
   $('#allComps').addEventListener('click', function () {
     var allOn = comps.every(function (c) { return S.comps[c.id]; });
     comps.forEach(function (c) { S.comps[c.id] = !allOn; });
     document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = !!S.comps[i.getAttribute('data-comp')]; });
     update();
+    track('competition_all_toggle', { checked: !allOn });
   });
 
   // ---------- results ----------
@@ -518,7 +578,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
   $('#list').addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('button.add') : null;
     if (!b) return;
-    toggleTrip(Number(b.getAttribute('data-id')));
+    toggleTrip(Number(b.getAttribute('data-id')), 'list');
   });
 
   // ---------- map view (Leaflet + OpenStreetMap tiles) ----------
@@ -546,12 +606,15 @@ input[type=range]{width:100%;accent-color:var(--turf)}
         b.addEventListener('click', function () {
           var id = Number(b.getAttribute('data-id'));
           var i = S.trip.indexOf(id);
-          if (i === -1) S.trip.push(id); else S.trip.splice(i, 1);
+          var added = i === -1;
+          if (added) S.trip.push(id); else S.trip.splice(i, 1);
           saveTrip();
           renderTrip();
           var picked = S.trip.indexOf(id) !== -1;
           b.setAttribute('aria-pressed', String(picked));
           b.textContent = picked ? 'בטיול ✓' : 'הוסף לטיול';
+          var f = byId[id];
+          if (f) { var p = fixtureTrackParams(f); p.source = 'map'; track(added ? 'add_to_trip' : 'remove_from_trip', p); }
         });
       });
     });
@@ -566,7 +629,8 @@ input[type=range]{width:100%;accent-color:var(--turf)}
         (f.venue ? '<div class="map-venue">' + venueHtml(f) + '</div>' : '') +
         '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></div>';
     }).join('');
-    return '<div class="map-popup-in"><h4><bdi dir="rtl">' + esc(city.cityHe) + '</bdi></h4>' + rows + '</div>';
+    var title = city.venue ? city.venue + ' · ' + city.cityHe : city.cityHe;
+    return '<div class="map-popup-in"><h4><bdi dir="rtl">' + esc(title) + '</bdi></h4>' + rows + '</div>';
   }
   function renderMap() {
     if (!mapState.map) return;
@@ -577,10 +641,16 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
     var list = filtered().list;
     var byCity = {};
+    // pin by the exact stadium when we know it (so e.g. Real Madrid's Bernabéu and
+    // Atlético's Metropolitano get separate pins, not one shared city dot), falling back
+    // to the city-level position - and possibly a shared pin with other such fixtures -
+    // for a fixture whose stadium wasn't successfully geocoded
     list.forEach(function (f) {
-      if (!hasPos(f)) return;
-      var key = f.lat + ',' + f.lng;
-      if (!byCity[key]) byCity[key] = { cityHe: cityHe(f), lat: f.lat, lng: f.lng, list: [] };
+      var precise = f.venue_lat != null && f.venue_lng != null;
+      var lat = precise ? f.venue_lat : f.lat, lng = precise ? f.venue_lng : f.lng;
+      if (lat == null || lng == null) return;
+      var key = lat + ',' + lng;
+      if (!byCity[key]) byCity[key] = { cityHe: cityHe(f), venue: precise ? f.venue : null, lat: lat, lng: lng, list: [] };
       byCity[key].list.push(f);
     });
     var groups = Object.keys(byCity).map(function (k) { return byCity[k]; });
@@ -589,7 +659,9 @@ input[type=range]{width:100%;accent-color:var(--turf)}
         className: '', html: '<div class="map-pin"><span>' + g.list.length + '</span></div>',
         iconSize: [28, 28], iconAnchor: [14, 26], popupAnchor: [0, -26]
       });
-      L.marker([g.lat, g.lng], { icon: icon }).bindPopup(mapPopupHtml(g), { maxWidth: 300, maxHeight: 300 }).addTo(mapState.markers);
+      L.marker([g.lat, g.lng], { icon: icon }).bindPopup(mapPopupHtml(g), { maxWidth: 300, maxHeight: 300 })
+        .on('click', function () { track('map_marker_click', { city: g.cityHe, venue: g.venue || '', match_count: g.list.length }); })
+        .addTo(mapState.markers);
     });
     if (S.base) {
       mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#B8862E', weight: 1.5, fillOpacity: .08 }).addTo(mapState.map);
@@ -609,13 +681,17 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       initMap();
       requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); });
     }
+    track('view_toggle', { view: S.view });
   });
 
   // ---------- trip ----------
-  function toggleTrip(id) {
+  function toggleTrip(id, source) {
     var i = S.trip.indexOf(id);
-    if (i === -1) S.trip.push(id); else S.trip.splice(i, 1);
+    var added = i === -1;
+    if (added) S.trip.push(id); else S.trip.splice(i, 1);
     saveTrip(); update();
+    var f = byId[id];
+    if (f) { var p = fixtureTrackParams(f); p.source = source || 'unknown'; track(added ? 'add_to_trip' : 'remove_from_trip', p); }
   }
 
   function tripSorted() { return S.trip.map(function (id) { return byId[id]; }).sort(function (a, b) { return a.dt < b.dt ? -1 : 1; }); }
@@ -706,7 +782,7 @@ input[type=range]{width:100%;accent-color:var(--turf)}
       '</div><p class="tripnote">קישורי הטיסה והלינה פותחים חיפוש כללי לפי התאריכים של המשחקים (חיפוש הלינה ממוקד סביב האצטדיון עצמו כשהמיקום המדויק שלו ידוע, לא רק מרכז העיר). כשהעיר הראשונה והאחרונה בטיול שונות, מוצגות שתי טיסות חד-כיווניות (הלוך לעיר הראשונה, חזור מהעיר האחרונה) במקום טיסת הלוך-חזור רגילה - ותאריכי הטיסה כדאי להתאים ידנית.</p>';
     body.innerHTML = html;
     combobox($('#origin'), $('#originMenu'), airportItems, {
-      onSelect: function (it) { S.origin = it.label; renderTrip(); }
+      onSelect: function (it) { S.origin = it.label; renderTrip(); track('origin_airport_selected', { airport: it.label }); }
     });
     $('#origin').addEventListener('blur', function (e) {
       var v = e.target.value.trim() || 'Ben Gurion International Airport – Tel Aviv, ישראל (TLV)';
@@ -716,9 +792,10 @@ input[type=range]{width:100%;accent-color:var(--turf)}
 
   $('#tripBody').addEventListener('click', function (e) {
     var t = e.target;
-    if (t.getAttribute('data-rm')) { toggleTrip(Number(t.getAttribute('data-rm'))); return; }
-    if (t.id === 'clearTrip') { S.trip = []; saveTrip(); update(); return; }
+    if (t.getAttribute('data-rm')) { toggleTrip(Number(t.getAttribute('data-rm')), 'trip_panel'); return; }
+    if (t.id === 'clearTrip') { track('clear_trip', { trip_size: S.trip.length }); S.trip = []; saveTrip(); update(); return; }
     if (t.id === 'copyTrip') {
+      track('copy_trip', { trip_size: S.trip.length });
       var txt = tripText(tripSorted());
       var done = function () { t.textContent = 'הועתק ✓'; };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt); done(); });
@@ -731,6 +808,13 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     document.body.removeChild(ta);
   }
   function update() { renderResults(); renderTrip(); if (S.view === 'map') renderMap(); }
+
+  // ---------- legal dialog + version ----------
+  $('#appVersion').textContent = APP_VERSION;
+  var legalDialog = $('#legalDialog');
+  $('#legalBtn').addEventListener('click', function () { legalDialog.showModal(); track('legal_dialog_open', {}); });
+  $('#legalClose').addEventListener('click', function () { legalDialog.close(); });
+  legalDialog.addEventListener('click', function (e) { if (e.target === legalDialog) legalDialog.close(); });
 
   // ---------- freshness ----------
   (function () {
