@@ -1,8 +1,5 @@
-# Data pipeline working files - not needed by the published site, keep them local only
-*.py
-*.csv
-*.json
-!package.json
-ROADMAP.md
-README.md
+# Raw OurAirports export - 12MB, not needed at runtime (airports.js is already built
+# from it and committed). Re-download from https://ourairports.com/data/ locally if needed.
+airports.csv
+
 __pycache__/

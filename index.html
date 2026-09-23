@@ -223,8 +223,18 @@ input[type=range]{width:100%;accent-color:var(--turf)}
     return;
   }
   var $ = function (s) { return document.querySelector(s); };
-  var HE_COUNTRY = { England: 'אנגליה', Spain: 'ספרד', Germany: 'גרמניה', France: 'צרפת', Netherlands: 'הולנד', Italy: 'איטליה', Poland: 'פולין' };
-  var COUNTRY_COLOR = { England: '#2F6FBD', Spain: '#C0392B', Germany: '#6B6B6B', France: '#7A4FBF', Netherlands: '#D9782D', Italy: '#1E9E8C', Poland: '#B23A6B' };
+  var HE_COUNTRY = {
+    England: 'אנגליה', Spain: 'ספרד', Germany: 'גרמניה', France: 'צרפת', Netherlands: 'הולנד', Italy: 'איטליה', Poland: 'פולין',
+    Europe: 'אירופה (בין־לאומי)', Portugal: 'פורטוגל', Ukraine: 'אוקראינה', Belgium: 'בלגיה', Austria: 'אוסטריה',
+    Switzerland: 'שוויץ', Turkey: 'טורקיה', Greece: 'יוון', Czechia: "צ'כיה", Denmark: 'דנמרק', Norway: 'נורווגיה',
+    Sweden: 'שוודיה', Serbia: 'סרביה', Croatia: 'קרואטיה', Slovakia: 'סלובקיה', Hungary: 'הונגריה', Romania: 'רומניה',
+    Bulgaria: 'בולגריה', Scotland: 'סקוטלנד', Ireland: 'אירלנד', Cyprus: 'קפריסין', Israel: 'ישראל',
+    Azerbaijan: "אזרבייג'ן", Georgia: 'גאורגיה', Kazakhstan: 'קזחסטן'
+  };
+  var COUNTRY_COLOR = {
+    England: '#2F6FBD', Spain: '#C0392B', Germany: '#6B6B6B', France: '#7A4FBF', Netherlands: '#D9782D', Italy: '#1E9E8C', Poland: '#B23A6B',
+    Europe: '#8C6420'
+  };
   var HE_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
   var HE_DAYS_FULL = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
 

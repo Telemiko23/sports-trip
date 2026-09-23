@@ -1,0 +1,1376 @@
+{
+ "Accrington|gb": [
+  53.7541,
+  -2.3655
+ ],
+ "Albacete|es": [
+  38.9951,
+  -1.8559
+ ],
+ "Alcázar de San Juan|es": [
+  39.39,
+  -3.2101
+ ],
+ "Alkmaar|nl": [
+  52.6009,
+  4.8171
+ ],
+ "Almería|es": [
+  36.8686,
+  -2.312
+ ],
+ "Amsterdam|nl": [
+  52.3731,
+  4.8925
+ ],
+ "Angers|fr": [
+  47.474,
+  -0.5516
+ ],
+ "Annecy|fr": [
+  45.8992,
+  6.1289
+ ],
+ "Arezzo|it": [
+  43.5171,
+  11.7639
+ ],
+ "Ascoli Piceno|it": [
+  42.8834,
+  13.5396
+ ],
+ "Aspach|de": [
+  48.9836,
+  9.3881
+ ],
+ "Assen|nl": [
+  52.9952,
+  6.5605
+ ],
+ "Augsburg|de": [
+  48.369,
+  10.898
+ ],
+ "Auxerre|fr": [
+  47.7961,
+  3.5706
+ ],
+ "Avellino|it": [
+  40.9965,
+  15.1406
+ ],
+ "Azkoitia|es": [
+  43.1782,
+  -2.3115
+ ],
+ "Barcelona|es": [
+  41.3826,
+  2.1771
+ ],
+ "Barnsley|gb": [
+  53.5528,
+  -1.4828
+ ],
+ "Barton-upon-Humber, Lincolnshire|gb": [
+  53.6858,
+  -0.4395
+ ],
+ "Benevento|it": [
+  41.2476,
+  14.7057
+ ],
+ "Bergamo|it": [
+  45.7567,
+  9.7542
+ ],
+ "Berkel en Rodenrijs|nl": [
+  51.9914,
+  4.4739
+ ],
+ "Berlin|de": [
+  52.5174,
+  13.3951
+ ],
+ "Bialystok|pl": [
+  53.1324,
+  23.1592
+ ],
+ "Bielefeld|de": [
+  52.0191,
+  8.531
+ ],
+ "Bilbao|es": [
+  43.263,
+  -2.935
+ ],
+ "Birkenhead|gb": [
+  53.3895,
+  -3.0248
+ ],
+ "Birmingham|gb": [
+  52.4949,
+  -1.8518
+ ],
+ "Blackburn|gb": [
+  53.7493,
+  -2.4841
+ ],
+ "Blackpool|gb": [
+  53.8179,
+  -3.051
+ ],
+ "Bochum|de": [
+  51.4818,
+  7.2197
+ ],
+ "Bologna|it": [
+  44.4938,
+  11.3426
+ ],
+ "Bolton|gb": [
+  53.5783,
+  -2.43
+ ],
+ "Bolzano|it": [
+  46.6559,
+  11.2302
+ ],
+ "Boulogne-sur-Mer|fr": [
+  50.726,
+  1.6119
+ ],
+ "Bournemouth|gb": [
+  50.7447,
+  -1.858
+ ],
+ "Brackley, Northamptonshire|gb": [
+  52.0279,
+  -1.1485
+ ],
+ "Bradford|gb": [
+  53.7944,
+  -1.7519
+ ],
+ "Braintree, Essex|gb": [
+  51.878,
+  0.5537
+ ],
+ "Braunschweig|de": [
+  52.2647,
+  10.5236
+ ],
+ "Bremen|de": [
+  53.0758,
+  8.8072
+ ],
+ "Brest|fr": [
+  48.3905,
+  -4.486
+ ],
+ "Brighton|gb": [
+  50.8215,
+  -0.1401
+ ],
+ "Bristol|gb": [
+  51.443,
+  -2.5817
+ ],
+ "Bromley|gb": [
+  51.4028,
+  0.0148
+ ],
+ "Bunschoten|nl": [
+  52.2467,
+  5.3572
+ ],
+ "Burgos|es": [
+  42.3448,
+  -3.6812
+ ],
+ "Burnley|gb": [
+  53.7907,
+  -2.2439
+ ],
+ "Burton upon Trent|gb": [
+  52.8027,
+  -1.6299
+ ],
+ "Bury St Edmunds, Suffolk|gb": [
+  52.246,
+  0.7125
+ ],
+ "Bury, Lancashire|gb": [
+  53.5923,
+  -2.2987
+ ],
+ "Buxton, Derbyshire|gb": [
+  53.2593,
+  -1.9101
+ ],
+ "Cadiz|es": [
+  36.5297,
+  -6.2929
+ ],
+ "Cagliari|it": [
+  39.2172,
+  9.1133
+ ],
+ "Calatayud|es": [
+  41.3528,
+  -1.6423
+ ],
+ "Cambridge|gb": [
+  52.1976,
+  0.1392
+ ],
+ "Cardiff|gb": [
+  51.4817,
+  -3.1792
+ ],
+ "Carrara|it": [
+  44.0797,
+  10.0978
+ ],
+ "Castellammare di Stabia|it": [
+  40.6943,
+  14.4805
+ ],
+ "Castellón de la Plana|es": [
+  39.986,
+  -0.0377
+ ],
+ "Catanzaro|it": [
+  38.83,
+  16.4316
+ ],
+ "Cesena|it": [
+  44.1364,
+  12.2422
+ ],
+ "Ceuta|es": [
+  35.8884,
+  -5.3041
+ ],
+ "Cheltenham|gb": [
+  51.8996,
+  -2.0712
+ ],
+ "Chesham, Buckinghamshire|gb": [
+  51.705,
+  -0.6111
+ ],
+ "Chesterfield|gb": [
+  53.2352,
+  -1.4264
+ ],
+ "Chiavari|it": [
+  44.3176,
+  9.3245
+ ],
+ "Chippenham, Wiltshire|gb": [
+  51.4588,
+  -2.1159
+ ],
+ "Cleethorpes|gb": [
+  53.5572,
+  -0.029
+ ],
+ "Clermont-Ferrand|fr": [
+  45.7775,
+  3.0819
+ ],
+ "Colchester|gb": [
+  51.8897,
+  0.8995
+ ],
+ "Cologne|de": [
+  50.9384,
+  6.96
+ ],
+ "Como|it": [
+  45.9396,
+  9.1494
+ ],
+ "Cordoba|es": [
+  37.8846,
+  -4.776
+ ],
+ "Cornella de Llobregat|es": [
+  41.3557,
+  2.0706
+ ],
+ "Cottbus|de": [
+  51.7567,
+  14.3357
+ ],
+ "Coventry|gb": [
+  52.4082,
+  -1.5105
+ ],
+ "Crawley|gb": [
+  51.1103,
+  -0.1801
+ ],
+ "Cremona|it": [
+  45.2209,
+  10.037
+ ],
+ "Crewe|gb": [
+  53.0996,
+  -2.4415
+ ],
+ "Crosby, Merseyside|gb": null,
+ "Crowborough, East Sussex|gb": [
+  51.059,
+  0.1636
+ ],
+ "Częstochowa|pl": [
+  50.812,
+  19.1132
+ ],
+ "Dagenham, Essex|gb": [
+  51.5463,
+  0.1632
+ ],
+ "Darmstadt|de": [
+  49.8728,
+  8.6512
+ ],
+ "Den Haag|nl": [
+  52.0749,
+  4.2697
+ ],
+ "Derby|gb": [
+  52.9142,
+  -1.472
+ ],
+ "Deventer|nl": [
+  52.2695,
+  6.2365
+ ],
+ "Dijon|fr": [
+  47.3216,
+  5.0415
+ ],
+ "Doncaster|gb": [
+  53.5228,
+  -1.1335
+ ],
+ "Dorking, Surrey|gb": [
+  51.2325,
+  -0.3307
+ ],
+ "Dortmund|de": [
+  51.5142,
+  7.4653
+ ],
+ "Dresden|de": [
+  51.0493,
+  13.7381
+ ],
+ "Dunkerque|fr": [
+  51.0348,
+  2.3773
+ ],
+ "Echt-Susteren|nl": [
+  51.0821,
+  5.8991
+ ],
+ "Edewecht|de": [
+  53.1284,
+  7.9855
+ ],
+ "Eibar|es": [
+  43.1843,
+  -2.4733
+ ],
+ "Eindhoven|nl": [
+  51.4393,
+  5.4786
+ ],
+ "El Prat de Llobregat|es": [
+  41.3306,
+  2.0931
+ ],
+ "Elche|es": [
+  38.2653,
+  -0.6988
+ ],
+ "Elda|es": [
+  38.479,
+  -0.7957
+ ],
+ "Elizondo|es": [
+  43.1463,
+  -1.5184
+ ],
+ "Empoli|it": [
+  43.7195,
+  10.9459
+ ],
+ "Encamp|es": [
+  42.2477,
+  1.1757
+ ],
+ "Enschede|nl": [
+  52.221,
+  6.8941
+ ],
+ "Essen|de": [
+  51.4582,
+  7.0158
+ ],
+ "Exeter|gb": [
+  50.7256,
+  -3.5269
+ ],
+ "Exmouth, Devonshire|gb": [
+  50.6191,
+  -3.4147
+ ],
+ "Farnborough, Hampshire|gb": [
+  51.2919,
+  -0.754
+ ],
+ "Farnham, Surrey|gb": [
+  51.2152,
+  -0.7985
+ ],
+ "Fleetwood|gb": [
+  53.9246,
+  -3.0076
+ ],
+ "Flixton, Greater Manchester|gb": [
+  53.4437,
+  -2.384
+ ],
+ "Florence|it": [
+  43.7698,
+  11.2556
+ ],
+ "Frankfurt|de": [
+  50.1106,
+  8.6821
+ ],
+ "Freiburg|de": [
+  47.9961,
+  7.8494
+ ],
+ "Frosinone|it": [
+  41.6285,
+  13.5758
+ ],
+ "Fürth|de": [
+  49.4886,
+  10.9587
+ ],
+ "Gainsborough, Lincolnshire|gb": [
+  53.3995,
+  -0.7759
+ ],
+ "Gdansk|pl": [
+  54.3483,
+  18.654
+ ],
+ "Gdynia|pl": [
+  54.5165,
+  18.5403
+ ],
+ "Gelsenkirchen|de": [
+  51.511,
+  7.096
+ ],
+ "Genoa|it": [
+  44.4073,
+  8.9339
+ ],
+ "Getafe|es": [
+  40.3071,
+  -3.7332
+ ],
+ "Gijón|es": [
+  43.5449,
+  -5.6627
+ ],
+ "Gillingham|gb": [
+  51.3872,
+  0.5462
+ ],
+ "Girona|es": [
+  41.9793,
+  2.8199
+ ],
+ "Gliwice|pl": [
+  50.2941,
+  18.6657
+ ],
+ "Granada|es": [
+  37.1735,
+  -3.5995
+ ],
+ "Grenoble|fr": [
+  45.1876,
+  5.7358
+ ],
+ "Groesbeek|nl": [
+  51.7741,
+  5.9305
+ ],
+ "Groningen|nl": [
+  53.2191,
+  6.568
+ ],
+ "Grudziądz|pl": [
+  53.4725,
+  18.7619
+ ],
+ "Guingamp|fr": [
+  48.5618,
+  -3.1502
+ ],
+ "Guiseley, West Yorkshire|gb": [
+  53.8748,
+  -1.7075
+ ],
+ "Güímar|es": [
+  28.315,
+  -16.41
+ ],
+ "Głogów|pl": [
+  51.6634,
+  16.0861
+ ],
+ "Haarlem|nl": [
+  52.3885,
+  4.6388
+ ],
+ "Hamburg|de": [
+  53.5502,
+  10.0013
+ ],
+ "Hannover|de": [
+  52.3745,
+  9.7386
+ ],
+ "Hardenberg|nl": [
+  52.5755,
+  6.6188
+ ],
+ "Heerenveen|nl": [
+  52.9985,
+  5.9231
+ ],
+ "Heerlen|nl": [
+  50.8775,
+  5.9815
+ ],
+ "Heidenheim|de": [
+  48.6768,
+  10.1529
+ ],
+ "High Wycombe|gb": [
+  51.6317,
+  -0.756
+ ],
+ "Huddersfield|gb": [
+  53.6467,
+  -1.7822
+ ],
+ "Hull|gb": [
+  53.7624,
+  -0.3301
+ ],
+ "Ibiza|es": [
+  38.9744,
+  1.4197
+ ],
+ "Ipswich|gb": [
+  52.0579,
+  1.1528
+ ],
+ "Isilemulino|fr": null,
+ "Kaiserslautern|de": [
+  49.4432,
+  7.769
+ ],
+ "Karlsruhe|de": [
+  49.0069,
+  8.4034
+ ],
+ "Katowice|pl": [
+  50.2599,
+  19.0216
+ ],
+ "Katwijk aan Zee|nl": [
+  52.2049,
+  4.3966
+ ],
+ "Kettering, Northamptonshire|gb": [
+  52.3994,
+  -0.728
+ ],
+ "Kielce|pl": [
+  50.872,
+  20.631
+ ],
+ "Kiel|de": [
+  54.3227,
+  10.1356
+ ],
+ "Kleczew|pl": [
+  52.3707,
+  18.178
+ ],
+ "Kloetinge|nl": [
+  51.4985,
+  3.9131
+ ],
+ "Kraków|pl": [
+  50.0469,
+  19.9972
+ ],
+ "La Coruña|es": [
+  43.3455,
+  -8.4139
+ ],
+ "Las Palmas|es": [
+  28.1289,
+  -15.4349
+ ],
+ "Laval|fr": [
+  48.0707,
+  -0.7734
+ ],
+ "Le Havre|fr": [
+  49.4939,
+  0.108
+ ],
+ "Le Mans|fr": [
+  48.0074,
+  0.1968
+ ],
+ "Leatherhead, Surrey|gb": [
+  51.2955,
+  -0.3293
+ ],
+ "Lebrija|es": [
+  36.9193,
+  -6.0764
+ ],
+ "Lecce|it": [
+  40.1522,
+  18.2261
+ ],
+ "Leczna|pl": [
+  51.3003,
+  22.8868
+ ],
+ "Leeds|gb": [
+  53.7974,
+  -1.5438
+ ],
+ "Leeuwarden|nl": [
+  53.2006,
+  5.7919
+ ],
+ "Leganes|es": [
+  40.3282,
+  -3.7653
+ ],
+ "Leicester|gb": [
+  52.6362,
+  -1.1332
+ ],
+ "Leipzig|de": [
+  51.3406,
+  12.3747
+ ],
+ "Leiston, Suffolk|gb": [
+  52.2065,
+  1.5764
+ ],
+ "Lens|fr": [
+  50.4292,
+  2.832
+ ],
+ "Leverkusen|de": [
+  51.0325,
+  6.9881
+ ],
+ "Lille|fr": [
+  50.6366,
+  3.0635
+ ],
+ "Lincoln|gb": [
+  53.2294,
+  -0.5405
+ ],
+ "Liverpool|gb": [
+  53.3933,
+  -2.9166
+ ],
+ "Lodz|pl": [
+  51.7728,
+  19.4785
+ ],
+ "London|gb": [
+  51.5074,
+  -0.1278
+ ],
+ "Lorient|fr": [
+  47.7477,
+  -3.3661
+ ],
+ "Lubin|pl": [
+  51.3997,
+  16.1993
+ ],
+ "Lublin|pl": [
+  51.2506,
+  22.5701
+ ],
+ "Luton|gb": [
+  51.8911,
+  -0.423
+ ],
+ "Lyon|fr": [
+  45.7578,
+  4.832
+ ],
+ "Macclesfield, Cheshire|gb": [
+  53.2607,
+  -2.1255
+ ],
+ "Madrid|es": [
+  40.4168,
+  -3.7035
+ ],
+ "Magdeburg|de": [
+  52.1315,
+  11.6401
+ ],
+ "Maidstone, Kent|gb": [
+  51.2748,
+  0.5232
+ ],
+ "Mainz|de": [
+  49.9995,
+  8.2736
+ ],
+ "Malaga|es": [
+  36.7648,
+  -4.4422
+ ],
+ "Manchester|gb": [
+  53.4425,
+  -2.2325
+ ],
+ "Mansfield|gb": [
+  53.1444,
+  -1.1964
+ ],
+ "Mantova|it": [
+  45.1693,
+  10.6708
+ ],
+ "Maracena|es": [
+  37.2076,
+  -3.633
+ ],
+ "Market Harborough, Leicestershire|gb": [
+  52.4777,
+  -0.9209
+ ],
+ "Marseille|fr": [
+  43.2964,
+  5.3778
+ ],
+ "Melilla|es": [
+  35.2919,
+  -2.9409
+ ],
+ "Metz|fr": [
+  49.1197,
+  6.1764
+ ],
+ "Middlesbrough|gb": [
+  54.576,
+  -1.2344
+ ],
+ "Milan|it": [
+  45.4642,
+  9.1896
+ ],
+ "Milton Keynes|gb": [
+  52.0407,
+  -0.7594
+ ],
+ "Modena|it": [
+  44.5385,
+  10.936
+ ],
+ "Monaco|fr": [
+  42.2803,
+  9.4304
+ ],
+ "Montbéliard|fr": [
+  47.5102,
+  6.7978
+ ],
+ "Montpellier|fr": [
+  43.6112,
+  3.8767
+ ],
+ "Monza|it": [
+  45.6395,
+  9.2788
+ ],
+ "Morecambe, Lancashire|gb": [
+  54.0721,
+  -2.8651
+ ],
+ "Mulbarton, Norfolk|gb": [
+  52.5605,
+  1.2423
+ ],
+ "Munich|de": [
+  48.1371,
+  11.5754
+ ],
+ "Málaga|es": [
+  36.7648,
+  -4.4422
+ ],
+ "Mönchengladbach|de": [
+  51.1947,
+  6.4354
+ ],
+ "Nancy|fr": [
+  48.6937,
+  6.1834
+ ],
+ "Nantes|fr": [
+  47.2186,
+  -1.5541
+ ],
+ "Naples|it": [
+  40.8359,
+  14.2488
+ ],
+ "Navarrete|es": [
+  42.429,
+  -2.5616
+ ],
+ "Newcastle|gb": [
+  54.9738,
+  -1.6132
+ ],
+ "Newport|gb": [
+  51.5719,
+  -2.9752
+ ],
+ "Nice|fr": [
+  43.7009,
+  7.2684
+ ],
+ "Niepołomice|pl": [
+  50.0331,
+  20.2172
+ ],
+ "Nijkerk|nl": [
+  52.2149,
+  5.4781
+ ],
+ "Nijmegen|nl": [
+  51.8426,
+  5.839
+ ],
+ "Noja|es": [
+  43.4813,
+  -3.521
+ ],
+ "Noordwijk|nl": [
+  52.2411,
+  4.4462
+ ],
+ "Northampton|gb": [
+  52.2343,
+  -0.9028
+ ],
+ "Northfleet, Kent|gb": [
+  51.4432,
+  0.3363
+ ],
+ "Norwich|gb": [
+  52.6286,
+  1.2924
+ ],
+ "Nottingham|gb": [
+  52.9534,
+  -1.1496
+ ],
+ "Nuremberg|de": [
+  49.4539,
+  11.0773
+ ],
+ "Oldham|gb": [
+  53.5416,
+  -2.1148
+ ],
+ "Opole|pl": [
+  50.6668,
+  17.9236
+ ],
+ "Osnabrück|de": [
+  52.272,
+  8.0476
+ ],
+ "Ourense|es": [
+  42.194,
+  -7.5371
+ ],
+ "Oviedo|es": [
+  43.3533,
+  -5.8795
+ ],
+ "Oxford, Oxfordshire|gb": [
+  51.752,
+  -1.2578
+ ],
+ "Oxford|gb": [
+  51.752,
+  -1.2578
+ ],
+ "Paderborn|de": [
+  51.7177,
+  8.7527
+ ],
+ "Padova|it": [
+  45.3914,
+  11.8058
+ ],
+ "Palermo|it": [
+  38.1112,
+  13.3524
+ ],
+ "Palma de Mallorca|es": [
+  39.5696,
+  2.6501
+ ],
+ "Pamplona|es": [
+  42.8157,
+  -1.6522
+ ],
+ "Paris - Saint-Ouen|fr": [
+  48.9012,
+  2.33
+ ],
+ "Paris|fr": [
+  48.8589,
+  2.32
+ ],
+ "Parma|it": [
+  44.6952,
+  10.098
+ ],
+ "Pau|fr": [
+  43.2958,
+  -0.3686
+ ],
+ "Peterborough|gb": [
+  52.5726,
+  -0.2427
+ ],
+ "Pisa|it": [
+  43.4715,
+  10.6798
+ ],
+ "Plymouth, Devon|gb": [
+  50.4669,
+  -4.0835
+ ],
+ "Plymouth|gb": [
+  50.3714,
+  -4.1424
+ ],
+ "Portsmouth|gb": [
+  50.8,
+  -1.0906
+ ],
+ "Poznań|pl": [
+  52.4007,
+  16.9197
+ ],
+ "Preston|gb": [
+  53.7593,
+  -2.6993
+ ],
+ "Pruszków|pl": [
+  52.172,
+  20.803
+ ],
+ "Płock|pl": [
+  52.5465,
+  19.7009
+ ],
+ "Radom|pl": [
+  51.4167,
+  21.1607
+ ],
+ "Reading|gb": [
+  51.4564,
+  -0.9701
+ ],
+ "Redditch, Worcestershire|gb": [
+  52.3058,
+  -1.9417
+ ],
+ "Reggio Emilia|it": [
+  44.6087,
+  10.5941
+ ],
+ "Reims|fr": [
+  49.2578,
+  4.0319
+ ],
+ "Rennes|fr": [
+  48.1113,
+  -1.68
+ ],
+ "Ribadesella|es": [
+  43.4457,
+  -5.0835
+ ],
+ "Rijssen|nl": [
+  52.308,
+  6.5213
+ ],
+ "Rochdale|gb": [
+  53.6154,
+  -2.1558
+ ],
+ "Rodez|fr": [
+  44.3511,
+  2.5728
+ ],
+ "Rome|it": [
+  41.8933,
+  12.4829
+ ],
+ "Rotherham|gb": [
+  53.431,
+  -1.3552
+ ],
+ "Rotterdam|nl": [
+  51.9244,
+  4.4778
+ ],
+ "Sabadell|es": [
+  41.5461,
+  2.1083
+ ],
+ "Saint-Ètienne|fr": [
+  45.4401,
+  4.3873
+ ],
+ "Salford|gb": [
+  53.4877,
+  -2.2892
+ ],
+ "Salisbury, Wiltshire|gb": [
+  51.0691,
+  -1.7954
+ ],
+ "San Pedro del Pinatar|es": [
+  37.8315,
+  -0.7855
+ ],
+ "San Sebastian|es": [
+  43.3224,
+  -1.9839
+ ],
+ "Santa Cruz de Tenerife|es": [
+  28.4672,
+  -16.2508
+ ],
+ "Santander|es": [
+  43.4619,
+  -3.81
+ ],
+ "Sawston, Cambridgeshire|gb": [
+  52.1252,
+  0.1693
+ ],
+ "Sevilla|es": [
+  37.3886,
+  -5.9953
+ ],
+ "Sheerness|gb": [
+  51.4399,
+  0.7621
+ ],
+ "Sheffield|gb": [
+  53.3807,
+  -1.4702
+ ],
+ "Shrewsbury|gb": [
+  52.7078,
+  -2.7541
+ ],
+ "Sinsheim|de": [
+  49.2345,
+  8.8989
+ ],
+ "Sittard|nl": [
+  50.9974,
+  5.8667
+ ],
+ "Soria|es": [
+  41.6013,
+  -2.7219
+ ],
+ "Sosnowiec|pl": [
+  50.2781,
+  19.1343
+ ],
+ "Southampton|gb": [
+  50.9025,
+  -1.4042
+ ],
+ "Spakenburg|nl": [
+  52.2502,
+  5.377
+ ],
+ "Spennymoor, County Durham|gb": [
+  54.6996,
+  -1.6012
+ ],
+ "Spiesen-Elversberg|de": [
+  49.3145,
+  7.137
+ ],
+ "Stafford, Staffordshire|gb": [
+  52.8063,
+  -2.1164
+ ],
+ "Staphorst|nl": [
+  52.6367,
+  6.208
+ ],
+ "Stevenage|gb": [
+  51.9017,
+  -0.2027
+ ],
+ "Stockport|gb": [
+  53.4079,
+  -2.1602
+ ],
+ "Stoke on Trent|gb": [
+  53.0162,
+  -2.1813
+ ],
+ "Strasbourg|fr": [
+  48.5846,
+  7.7507
+ ],
+ "Stuttgart|de": [
+  48.7784,
+  9.18
+ ],
+ "Sunderland|gb": [
+  54.9059,
+  -1.3829
+ ],
+ "Swansea|gb": [
+  51.6196,
+  -3.9459
+ ],
+ "Swindon|gb": [
+  51.5615,
+  -1.7854
+ ],
+ "Szczecin|pl": [
+  53.4298,
+  14.5929
+ ],
+ "Tadley, Hampshire|gb": [
+  51.3414,
+  -1.1447
+ ],
+ "Talayuela|es": [
+  39.986,
+  -5.6096
+ ],
+ "Tarnobrzeg|pl": [
+  50.5838,
+  21.7118
+ ],
+ "Tavernes de la Valldigna|es": [
+  39.0716,
+  -0.2679
+ ],
+ "Tilburg|nl": [
+  51.5856,
+  5.0661
+ ],
+ "Tonbridge, Kent|gb": [
+  51.1955,
+  0.2751
+ ],
+ "Toulouse|fr": [
+  43.6045,
+  1.4442
+ ],
+ "Troyes|fr": [
+  48.2972,
+  4.0746
+ ],
+ "Truro, Cornwall|gb": [
+  50.2633,
+  -5.0518
+ ],
+ "Turin|it": [
+  45.0678,
+  7.6825
+ ],
+ "Tychy|pl": [
+  50.1265,
+  19.0068
+ ],
+ "Udine|it": [
+  46.0635,
+  13.2358
+ ],
+ "Utrecht|nl": [
+  52.0907,
+  5.1216
+ ],
+ "Valencia|es": [
+  39.4697,
+  -0.3763
+ ],
+ "Valladolid|es": [
+  41.62,
+  -4.726
+ ],
+ "Veenendaal|nl": [
+  52.0232,
+  5.5518
+ ],
+ "Velsen-Zuid|nl": [
+  52.46,
+  4.6514
+ ],
+ "Venice|it": [
+  45.4372,
+  12.3346
+ ],
+ "Verona|it": [
+  45.4425,
+  10.9857
+ ],
+ "Vicenza|it": [
+  45.6349,
+  11.4064
+ ],
+ "Vigo|es": [
+  42.1986,
+  -8.728
+ ],
+ "Villarreal|es": [
+  39.9373,
+  -0.1004
+ ],
+ "Vitoria-Gasteiz|es": [
+  42.8506,
+  -2.6614
+ ],
+ "Vlaardingen|nl": [
+  51.9098,
+  4.3403
+ ],
+ "Volendam|nl": [
+  52.4964,
+  5.0683
+ ],
+ "Walsall|gb": [
+  52.5848,
+  -1.9823
+ ],
+ "Warsaw|pl": [
+  52.232,
+  21.0067
+ ],
+ "Watford|gb": [
+  51.6554,
+  -0.3957
+ ],
+ "West Bromwich|gb": [
+  52.5187,
+  -1.9923
+ ],
+ "Weymouth, Dorset|gb": [
+  50.6096,
+  -2.4543
+ ],
+ "Wigan|gb": [
+  53.5462,
+  -2.6319
+ ],
+ "Wimbledon|gb": [
+  51.4215,
+  -0.2064
+ ],
+ "Wimborne Minster, Dorset|gb": [
+  50.7995,
+  -1.9873
+ ],
+ "Wirral|gb": [
+  53.341,
+  -3.0501
+ ],
+ "Woerden|nl": [
+  52.0859,
+  4.8833
+ ],
+ "Wolfsburg|de": [
+  52.4206,
+  10.7862
+ ],
+ "Wolverhampton|gb": [
+  52.5848,
+  -2.1276
+ ],
+ "Worksop, Nottinghamshire|gb": [
+  53.3042,
+  -1.1246
+ ],
+ "Wrexham|gb": [
+  53.0465,
+  -2.9938
+ ],
+ "Wrocław|pl": [
+  51.109,
+  17.0327
+ ],
+ "York|gb": [
+  53.9657,
+  -1.0743
+ ],
+ "Zabrze|pl": [
+  50.3143,
+  18.7816
+ ],
+ "Zwolle|nl": [
+  52.5146,
+  6.0977
+ ],
+ "Środa Wielkopolska|pl": [
+  52.2284,
+  17.2778
+ ],
+ "Świdnik|pl": [
+  51.2165,
+  22.691
+ ]
+}
