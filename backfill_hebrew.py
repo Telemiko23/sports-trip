@@ -5,11 +5,12 @@ touching the football API:
   - Hebrew display fields (home_he, away_he, city_he, comp_he), from he_names.py
   - manual corrections from overrides.py: a team's city (geocoded through Nominatim if
     it's new - the only network call this script makes), venue name, and crest
-  - for a UEFA competition fixture (Champions/Europa/Conference League) without an
-    override, re-verifies its city/country the same way build_fixtures.py's UEFA block
-    does (reusing a cached city|country_code first, only calling Nominatim for a city we
-    haven't seen under any country yet) - so a fix to that resolution logic (e.g. telling
-    Scotland apart from England) is picked up here too, not just on the next full pull.
+  - for a UEFA competition fixture (Champions/Europa/Conference League/Nations League)
+    without an override, re-verifies its city/country the same way build_fixtures.py's
+    UEFA block does (reusing a cached city|country_code first, only calling Nominatim for
+    a city we haven't seen under any country yet) - so a fix to that resolution logic
+    (e.g. telling Scotland apart from England) is picked up here too, not just on the
+    next full pull.
   - the exact stadium location (venue_lat/venue_lng), cached in venues_cache.json the same
     way cities_cache.json caches city coordinates - lets the venue name link straight to
     Google Maps instead of just the city centre.
@@ -22,15 +23,17 @@ import os
 from he_names import he_team, he_city, he_comp
 from overrides import TEAM_CITY_OVERRIDE, VENUE_OVERRIDE, LOGO_OVERRIDE
 from download_logos import download_comp_logos
-from build_fixtures import geocode, geocode_any, CC_TO_OUR_COUNTRY, CC_COUNTRY_NAME, UEFA_COMPETITIONS
+from build_fixtures import geocode, geocode_any, CC_TO_OUR_COUNTRY, CC_COUNTRY_NAME, UEFA_COMPETITIONS, NATIONAL_COMPETITIONS
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-UEFA_LABELS = {label for _, _, label in UEFA_COMPETITIONS}
+# both are "unknown venue country until geocoded" competitions - UEFA club competitions and
+# UEFA Nations League alike
+UEFA_LABELS = {label for _, _, label in UEFA_COMPETITIONS} | {label for _, _, label in NATIONAL_COMPETITIONS}
 
 COUNTRY_CC = {
     "England": "gb", "Spain": "es", "Germany": "de", "France": "fr",
-    "Netherlands": "nl", "Italy": "it", "Poland": "pl",
+    "Netherlands": "nl", "Italy": "it", "Poland": "pl", "Portugal": "pt",
 }
 
 

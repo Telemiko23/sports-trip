@@ -38,6 +38,9 @@ HE_COMPETITIONS = {
     "Champions League": "ליגת האלופות",
     "Europa League": "הליגה האירופית",
     "Conference League": "ליגת הקונפרנס",
+    "UEFA Nations League": "ליגת האומות",
+    "Primeira Liga": "פרימיירה ליגה",
+    "Taça de Portugal": "גביע פורטוגל",
 }
 
 HE_TEAMS = {

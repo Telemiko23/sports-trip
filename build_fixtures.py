@@ -22,9 +22,10 @@ Files in the same folder:
   he_names.py         Hebrew names for competitions/cities/teams - edit this to fix a translation
   logos/              team crests, downloaded automatically at the end of every run (see download_logos.py)
 
-Cost per run: about 30-60 API-Football requests (Pro plan = 7,500/day), including the
-3 UEFA club competitions (Champions/Europa/Conference League - only fixtures involving a
-team from one of the 7 tracked countries are kept; every other one is discarded).
+Cost per run: about 30-65 API-Football requests (Pro plan = 7,500/day), including the
+3 UEFA club competitions (Champions/Europa/Conference League) and UEFA Nations League -
+only fixtures involving a team/nation from one of our 8 tracked countries are kept; every
+other one is discarded.
 The first run is slower (several minutes) because every city is geocoded once through
 OpenStreetMap Nominatim, limited to 1 request per second as their usage policy requires.
 """
@@ -57,6 +58,7 @@ COUNTRY = {
     "Netherlands": ("Europe/Amsterdam", "nl"),
     "Italy": ("Europe/Rome", "it"),
     "Poland": ("Europe/Warsaw", "pl"),
+    "Portugal": ("Europe/Lisbon", "pt"),
 }
 
 # (API-Football league id, label, country). None = look the id up by name.
@@ -84,8 +86,20 @@ COMPETITIONS = [
     (137, "Coppa Italia", "Italy"),
     (106, "Ekstraklasa", "Poland"),
     (None, "Puchar Polski", "Poland"),
+    (None, "Primeira Liga", "Portugal"),
+    (None, "Taça de Portugal", "Portugal"),
 ]
-LOOKUP_NAMES = {"Puchar Polski": {"cup", "puchar polski", "polish cup"}}
+# by-name lookup, for a competition whose id isn't hardcoded above (None) - avoids hardcoding
+# an id we can't verify, and survives a sponsor rename (Primeira Liga's had several: Liga
+# Bwin, Liga NOS, Liga Portugal Betclic...) since we match on several plausible name variants
+LOOKUP_NAMES = {
+    "Puchar Polski": {"cup", "puchar polski", "polish cup"},
+    "Primeira Liga": {"primeira liga", "liga portugal", "liga portugal betclic", "liga bwin", "liga nos"},
+    "Taça de Portugal": {"taça de portugal", "taca de portugal", "portuguese cup"},
+}
+# resolve_id() filters by the API's 'type' field ('League' or 'Cup') - defaults to Cup
+# (Puchar Polski's original case); a competition here that's actually a league needs "League"
+LOOKUP_KIND = {"Primeira Liga": "League"}
 KEEP_STATUS = {"NS", "TBD"}  # not started / time to be defined
 
 # UEFA club competitions - not tied to one country, so they're not in COMPETITIONS above.
@@ -95,6 +109,15 @@ UEFA_COMPETITIONS = [
     ("Europa League", {"uefa europa league", "europa league"}, "Europa League"),
     ("Conference League", {"uefa europa conference league", "europa conference league", "conference league"}, "Conference League"),
 ]
+
+# UEFA Nations League - a national-team competition, not a club one, so it can't reuse
+# known_teams (club names) for relevance - it's checked against NATION_TEAMS instead (our
+# tracked countries' own national-team names, assumed identical to the country label, e.g.
+# the England national team's API name is "England" - not yet verified against a live pull)
+NATIONAL_COMPETITIONS = [
+    ("UEFA Nations League", {"uefa nations league", "nations league"}, "UEFA Nations League"),
+]
+NATION_TEAMS = set(COUNTRY.keys())
 
 # a UEFA fixture's real country isn't known until its venue is geocoded (unlike domestic
 # fixtures, where it's the competition's own country) - map the resolved country code back
@@ -202,9 +225,10 @@ def save_json(name, obj):
 
 def resolve_id(label, country):
     names = LOOKUP_NAMES.get(label, set())
+    kind = LOOKUP_KIND.get(label, "Cup")
     data = call("leagues", country=country)
     for x in data.get("response", []):
-        if x["league"]["name"].strip().lower() in names and x["league"].get("type") == "Cup":
+        if x["league"]["name"].strip().lower() in names and x["league"].get("type") == kind:
             return x["league"]["id"]
     return None
 
@@ -426,6 +450,80 @@ def main():
         comps_meta.append({"id": ucid, "label": ulabel, "country": "Europe",
                             "logo": f"https://media.api-sports.io/football/leagues/{ucid}.png"})
         print(f"{'UEFA':12} {ulabel:16} season={used} fixtures={added} (of our teams) without_city={missing_city}")
+
+    # ---- national-team competitions (UEFA Nations League) - identical "unknown venue
+    # country" handling as the UEFA club competitions above, just checked against national
+    # team names (NATION_TEAMS) instead of club names (known_teams) ----
+    for search_term, accepted_names, ulabel in NATIONAL_COMPETITIONS:
+        ucid = resolve_uefa_id(search_term, accepted_names)
+        if ucid is None:
+            print(f"{'Intl':12} {ulabel:16} not found in the API - skipped")
+            continue
+
+        items, used = [], None
+        for s in (season, season - 1):
+            data = call("fixtures", **{"league": ucid, "season": s, "from": start, "to": end, "timezone": "UTC"})
+            if data.get("errors"):
+                print(f"{'Intl':12} {ulabel:16} ERROR {data['errors']}")
+                break
+            if data.get("response"):
+                items, used = data["response"], s
+                break
+
+        added = skipped_other = missing_city = 0
+        for i in items:
+            fx, tm, lg = i["fixture"], i["teams"], i["league"]
+            home_name, away_name = tm["home"]["name"], tm["away"]["name"]
+            if fx["status"]["short"] not in KEEP_STATUS or fx["id"] in seen:
+                continue
+            if home_name not in NATION_TEAMS and away_name not in NATION_TEAMS:
+                skipped_other += 1
+                continue
+            seen.add(fx["id"])
+
+            venue = fx.get("venue") or {}
+            city = (venue.get("city") or "").strip() or None
+            row_cc = None
+            if home_name in TEAM_CITY_OVERRIDE:
+                city, row_cc = TEAM_CITY_OVERRIDE[home_name]
+            elif city:
+                key_guess = next((k for k in cache if k.startswith(f"{city}|")), None) or \
+                            next((k for k in manual if k.startswith(f"{city}|")), None)
+                if key_guess:
+                    row_cc = key_guess.split("|", 1)[1]
+                else:
+                    coords, row_cc, ok = geocode_any(city)
+                    if ok and coords and row_cc:
+                        cache[f"{city}|{row_cc}"] = coords
+
+            if not city:
+                missing_city += 1
+            tzname = CC_TIMEZONE.get(row_cc, "Europe/London")
+            local_dt = datetime.datetime.fromisoformat(fx["date"]).astimezone(ZoneInfo(tzname))
+
+            rows.append({
+                "id": fx["id"],
+                "dt": local_dt.strftime("%Y-%m-%dT%H:%M"),
+                "status": fx["status"]["short"],
+                "home": home_name,
+                "away": away_name,
+                "home_he": he_team(home_name),
+                "away_he": he_team(away_name),
+                "home_logo": LOGO_OVERRIDE.get(home_name) or tm["home"].get("logo"),
+                "away_logo": LOGO_OVERRIDE.get(away_name) or tm["away"].get("logo"),
+                "comp_id": ucid,
+                "comp": ulabel,
+                "comp_he": he_comp(ulabel),
+                "country": CC_TO_OUR_COUNTRY.get(row_cc) or CC_COUNTRY_NAME.get(row_cc) or row_cc or "Europe",
+                "round": lg.get("round"),
+                "venue": VENUE_OVERRIDE.get(home_name) or venue.get("name"),
+                "city": city,
+                "cc": row_cc,
+            })
+            added += 1
+        comps_meta.append({"id": ucid, "label": ulabel, "country": "Europe",
+                            "logo": f"https://media.api-sports.io/football/leagues/{ucid}.png"})
+        print(f"{'Intl':12} {ulabel:16} season={used} fixtures={added} (of our teams) without_city={missing_city}")
 
     # ---- geocode every distinct city once ----
     todo = sorted({(r["city"], r["cc"]) for r in rows if r["city"] and f"{r['city']}|{r['cc']}" not in cache
