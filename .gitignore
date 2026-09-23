@@ -1,0 +1,8 @@
+# Data pipeline working files - not needed by the published site, keep them local only
+*.py
+*.csv
+*.json
+!package.json
+ROADMAP.md
+README.md
+__pycache__/
