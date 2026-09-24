@@ -85,7 +85,10 @@ Spanish clubs the API didn't have a crest for).
 | `ROADMAP.md` | What was defined at the start, what's been done (by work round), and what's planned next. |
 | `STATUS.md` | Current state, not a log: live deployment info, affiliate signup progress, the ToS legal review. |
 | `ANALYTICS.md` | Every Google Analytics 4 custom event the site fires: name, params, trigger, and what it's for. |
-| `MULTISPORT.md` | Design-only doc for adding sports beyond football (Formula 1, Darts) - not implemented yet. |
+| `MULTISPORT.md` | Design-only doc for adding sports beyond football (Formula 1, Darts, AllSportDB findings) - not implemented yet. |
+| `BRANDING.md` | How to rename the product: one edit in `brand.js`, plus the manual steps in GitHub / Google Analytics / Travelpayouts. |
+| `brand.js` | The product's public name and version - read by `index.html` for the page title, header and footer. |
+| `allsportdb_probe.py` | Read-only exploration of the AllSportDB API (needs `ALLSPORTDB_KEY` env var) - writes a git-ignored dump, doesn't touch `fixtures.js`. |
 | `README.md` | This file. |
 
 ## Common scenarios

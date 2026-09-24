@@ -90,6 +90,53 @@ architecturally once there's a paid key, since the adapter would look a lot like
 paid for - flagging now only so the schema above already has a session/practice-vs-race
 concept ready for it.
 
+## Update 2026-09-24 - AllSportDB (the user registered; free plan)
+
+**What it is**: a calendar of *events* (tournaments/race weekends/championships), ~all
+sports - boxing, tennis, Euroleague, motorsport (F1 included), golf, rugby, cycling, etc.
+Not match-level data: one row is e.g. "Formula 1 - Azerbaijan Grand Prix, Baku, 24-26
+September" or "Laver Cup, London, 25-27 September". That granularity actually fits a
+*trip* planner well (you plan around a weekend in a city, not a single fixture).
+
+**API** (OpenAPI spec is public: `api.allsportdb.com/v3/swagger.json`): read-only REST,
+Bearer-JWT auth. Endpoints: `/calendar` (events; filters `dateFrom`, `dateTo`, `sportId`,
+`country`, `competitionId`, free-text, `page`...), `/sports`, `/competitions`,
+`/countries`, `/locations`, `/regions`, `/continents`. An event carries name, date range,
+sport + emoji, competition, logo URLs, official/tickets/live URLs, and a `location` list
+(country + city names).
+
+**Free ("Basic") plan limits that matter for us** (from their pricing page):
+- 10,000 calls/month (plenty - a daily run needs maybe 30-60 calls).
+- **10 events per call** - paging is mandatory.
+- Current + future events only - which is exactly what we want anyway.
+- **The authorisation key is valid 30 days and must be renewed by hand** from their API
+  Settings page. For our daily GitHub Action that's a recurring chore: the key stored in
+  the repo Secret would silently expire monthly unless renewed (or unless we pay).
+- **No lat/lng** in the free plan (geospatial data is Standard, £20/month) - fine, we
+  already geocode city names ourselves via Nominatim, same as football.
+- **No tickets links** on the free plan (Standard only).
+- Their Terms page is generic (liability/accounts) - it says nothing about attribution or
+  redistribution of the data, so it neither permits nor forbids what we'd do. Worth a
+  short email to them to confirm, and we'd credit them in the footer regardless.
+
+**Fit with the event schema above**: `title` = event name, `comp` = competition,
+`sport` + `emoji` map directly, dates are ranges (so `dt` = start, and `extra.dateTo` for
+the end - the UI currently assumes a single kickoff time, so multi-day events need a small
+"date range" treatment in the cards/trip logic, not just a new data source).
+
+**Nothing is wired up yet.** `allsportdb_probe.py` is a read-only exploration script (needs
+the user's key in the `ALLSPORTDB_KEY` env var) that dumps what the API really returns
+for the next 120 days per sport, so we pick sports based on real coverage, not guesses.
+
+## Darts - correction after testing TheSportsDB for real
+
+Last night I recommended TheSportsDB's free Darts API. **That was too optimistic - tested
+this morning, it doesn't deliver what we need**: the free key (`123`) lists the "PDC Darts"
+league, but its 2026 season returns only 15 events, the newest dated February 2026, and
+"next events" is empty - i.e. no upcoming darts at all. Premium ($9/month) may differ but I
+haven't verified that, and I wouldn't pay before confirming it has forward-looking data.
+AllSportDB (above) is the better bet for darts if it lists PDC events - the probe will tell.
+
 ## Darts - two sources looked at tonight, neither wired up
 
 **[pdc-europe.tv/events](https://www.pdc-europe.tv/events/)** - PDC Europe's own events

@@ -206,7 +206,7 @@ dialog#legalDialog p:last-child{margin-bottom:0}
 </head>
 <body>
 <div class="hero"><div class="hero-in">
-  <h1>מסלול <b>משחקים</b></h1>
+  <h1 id="brandName">מסלול <b>משחקים</b></h1>
   <span id="fresh" class="fresh"></span>
   <a class="jump" href="#trip">⚽ הטיול שלי (<b id="tripCount">0</b>)</a>
 </div></div>
@@ -281,12 +281,21 @@ dialog#legalDialog p:last-child{margin-bottom:0}
     יופעל, הזמנה דרכם עשויה לזכות את האתר בעמלה, בלי שינוי במחיר שאתם משלמים.</p>
 </dialog>
 
+<script src="brand.js"></script>
 <script src="fixtures.js"></script>
 <script src="airports.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
 <script>
 (function () {
-  var APP_VERSION = '1.1.0';
+  var BRAND = window.BRAND || { name: 'מסלול משחקים', version: '' };
+  var APP_VERSION = BRAND.version;
+  (function () {
+    var parts = String(BRAND.name).split(' ');
+    var h1 = document.getElementById('brandName');
+    h1.textContent = parts[0] + (parts.length > 1 ? ' ' : '');
+    if (parts.length > 1) { var b = document.createElement('b'); b.textContent = parts.slice(1).join(' '); h1.appendChild(b); }
+    document.title = BRAND.name;
+  })();
   var DATA = window.TRIP_DATA;
   var app = document.getElementById('app');
   if (!DATA || !Array.isArray(DATA.fixtures)) {

@@ -6,3 +6,6 @@ __pycache__/
 
 # local dev-server config for browser testing, not part of the deployed site
 .claude/
+
+# raw output of allsportdb_probe.py - exploration only, may be large
+allsportdb_probe.json
