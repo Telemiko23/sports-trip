@@ -1,0 +1,34 @@
+{
+  "_about": "Per-day session schedules for events, keyed by the cleaned event title (same key as HE_EVENTS). Hand-entered from official schedule pages/screenshots the user supplied (times are LOCAL to the venue). Shown in the 'פירוט' popup; an event/day without an entry simply has no details button. 'f1' marks the main-series rows so they can be emphasized.",
+  "Azerbaijan Grand Prix": {
+    "note": "שעון מקומי (באקו)",
+    "days": {
+      "2026-09-24": [
+        {"series": "פורמולה 2", "name": "אימון", "start": "10:00", "end": "10:45"},
+        {"series": "FIA", "name": "הצגת מכוניות F1", "start": "11:00", "end": "12:00"},
+        {"series": "פורמולה 1", "name": "אימון חופשי 1", "start": "12:30", "end": "13:30", "main": true},
+        {"series": "פורמולה 2", "name": "מוקדמות 1", "start": "14:00", "end": "14:20"},
+        {"series": "פורמולה 2", "name": "מוקדמות 2", "start": "14:30", "end": "14:50"},
+        {"series": "פורמולה 1", "name": "מסיבת עיתונאים - קבוצות", "start": "14:30", "end": "15:30", "main": true},
+        {"series": "פורמולה 2", "name": "מסיבת עיתונאים", "start": "15:30", "end": "15:55"},
+        {"series": "פורמולה 1", "name": "אימון חופשי 2", "start": "16:00", "end": "17:00", "main": true}
+      ],
+      "2026-09-25": [
+        {"series": "פורמולה 2", "name": "מירוץ ספרינט (21 הקפות או 45 דקות +הקפה)", "start": "08:15", "end": "09:05"},
+        {"series": "פורמולה 2", "name": "מסיבת עיתונאים", "start": "09:25", "end": "09:45"},
+        {"series": "פורמולה 1", "name": "אימון חופשי 3", "start": "12:30", "end": "13:30", "main": true},
+        {"series": "פורמולה 2", "name": "מירוץ ראשי 1 (29 הקפות או 60 דקות +הקפה)", "start": "14:15", "end": "15:20"},
+        {"series": "פורמולה 2", "name": "מסיבת עיתונאים", "start": "15:40", "end": "15:55"},
+        {"series": "פורמולה 1", "name": "מוקדמות", "start": "16:00", "end": "17:00", "main": true},
+        {"series": "פורמולה 1", "name": "מסיבת עיתונאים", "start": "17:00", "end": "18:00", "main": true}
+      ],
+      "2026-09-26": [
+        {"series": "פורמולה 2", "name": "מירוץ ראשי 2 (29 הקפות או 60 דקות +הקפה)", "start": "11:00", "end": "12:05"},
+        {"series": "פורמולה 2", "name": "מסיבת עיתונאים", "start": "12:25", "end": "12:55"},
+        {"series": "פורמולה 1", "name": "הצגת הנהגים", "start": "13:00", "end": "13:30", "main": true},
+        {"series": "פורמולה 1", "name": "ההמנון הלאומי", "start": "14:44", "end": "14:46", "main": true},
+        {"series": "פורמולה 1", "name": "הגרנד פרי (51 הקפות או 120 דקות)", "start": "15:00", "end": "17:00", "main": true}
+      ]
+    }
+  }
+}

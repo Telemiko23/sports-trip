@@ -32,6 +32,7 @@ import urllib.parse
 import urllib.request
 
 from he_names import he_event, he_comp, he_city
+from overrides import EVENT_VENUE_OVERRIDE
 
 BASE = "https://api.allsportdb.com/v3"
 KEY = os.environ.get("ALLSPORTDB_KEY")
@@ -126,6 +127,27 @@ def build_rows(raw):
     from build_fixtures import geocode, load_json, save_json
     cache = load_json("cities_cache.json", {})
     manual = load_json("cities_manual.json", {})
+    vcache = load_json("venues_cache.json", {})
+    vstate = {"dirty": False}
+    spath = os.path.join(HERE, "events_sessions.json")
+    sessions_all = json.load(open(spath, encoding="utf-8")) if os.path.exists(spath) else {}
+
+    def pin(venue, city, cc):
+        """Exact stadium/circuit coordinates, geocoded once and cached in venues_cache.json."""
+        vkey = f"{venue}|{city}"
+        vc = vcache.get(vkey)
+        if vc is None and vkey not in vcache and cc:
+            print(f"Geocoding stadium {venue} ({city})...")
+            vc, ok = geocode(f"{venue}, {city}", cc)
+            if ok:
+                vcache[vkey] = vc
+                vstate["dirty"] = True
+        return vc
+
+    def sessions_for(title):
+        s = sessions_all.get(title)
+        return {"sessions": s["days"], "sessions_note": s.get("note")} if s else {}
+
     rows, comps, seen = [], {}, set()
     skipped = []
     dirty = False
@@ -153,22 +175,23 @@ def build_rows(raw):
         comp_id = COMP_ID_OFFSET + e["competitionId"]
         comps.setdefault(comp_id, {"id": comp_id, "label": e["competition"], "label_he": he_comp(e["competition"]),
                                    "country": sport_name, "sport": sport_key, "emoji": emoji})
+        venue = EVENT_VENUE_OVERRIDE.get(title)
+        vc = pin(venue, city, cc) if venue else None
         rows.append({
             "id": EVENT_ID_OFFSET + e["id"], "sport": sport_key, "emoji": emoji,
             "dt": date_from + "T00:00", "date_to": date_to, "status": "TBD",
             "title": title, "title_he": he_event(title),
             "comp_id": comp_id, "comp": e["competition"], "comp_he": he_comp(e["competition"]),
-            "country": country, "round": None, "venue": None, "city": city, "city_he": he_city(city, country),
+            "country": country, "round": None, "venue": venue, "city": city, "city_he": he_city(city, country),
             "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
-            "venue_lat": None, "venue_lng": None, "web_url": e.get("webUrl"),
+            "venue_lat": vc[0] if vc else None, "venue_lng": vc[1] if vc else None, "web_url": e.get("webUrl"),
+            **sessions_for(title),
         })
     # hand-entered events (darts) - same row shape, plus an exact stadium pin via venues_cache.json
     mpath = os.path.join(HERE, "events_manual.json")
     if os.path.exists(mpath):
         with open(mpath, encoding="utf-8") as f:
             m = json.load(f)
-        vcache = load_json("venues_cache.json", {})
-        vdirty = False
         for ev in m["events"]:
             key = f"{ev['city']}|{ev['cc']}"
             coords = manual.get(key) or cache.get(key)
@@ -178,14 +201,7 @@ def build_rows(raw):
                 if ok:
                     cache[key] = coords
                     dirty = True
-            vkey = f"{ev['venue']}|{ev['city']}"
-            vc = vcache.get(vkey)
-            if vc is None and vkey not in vcache:
-                print(f"Geocoding stadium {ev['venue']} ({ev['city']})...")
-                vc, ok = geocode(f"{ev['venue']}, {ev['city']}", ev["cc"])
-                if ok:
-                    vcache[vkey] = vc
-                    vdirty = True
+            vc = pin(ev["venue"], ev["city"], ev["cc"])
             comp_id = 2 * COMP_ID_OFFSET + m["competitions"][ev["comp"]]
             comps.setdefault(comp_id, {"id": comp_id, "label": ev["comp"], "label_he": he_comp(ev["comp"]),
                                        "country": m["sport_name"], "sport": m["sport"], "emoji": m["emoji"]})
@@ -198,9 +214,10 @@ def build_rows(raw):
                 "city_he": he_city(ev["city"], ev["country"]),
                 "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
                 "venue_lat": vc[0] if vc else None, "venue_lng": vc[1] if vc else None, "web_url": None,
+                **sessions_for(ev["title"]),
             })
-        if vdirty:
-            save_json("venues_cache.json", vcache)
+    if vstate["dirty"]:
+        save_json("venues_cache.json", vcache)
     rows.sort(key=lambda r: r["dt"])
     if dirty:
         save_json("cities_cache.json", cache)

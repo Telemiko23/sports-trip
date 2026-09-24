@@ -30,7 +30,8 @@ translation/correction file (no need for fresh fixtures from the API), just run
 
 | File | What it is |
 |---|---|
-| `index.html` | The site - HTML+CSS+JS in one file, in Hebrew (RTL). Reads `fixtures.js` and `airports.js` at load time. |
+| `index.html` | The page skeleton (Hebrew, RTL) - loads the files below. |
+| `style.css`, `app.js`, `analytics.js` | The site's styles, logic and the GA4 init - split out of `index.html` in v1.4.0 (no inline scripts, so the CSP forbids them). `app.js` reads `fixtures.js`/`airports.js`. |
 | `fixtures.js` | **Auto-generated - don't edit by hand.** Every fixture, with Hebrew fields, location, logo and stadium already attached. |
 
 ## API pull pipeline
@@ -86,6 +87,8 @@ Spanish clubs the API didn't have a crest for).
 | `ROADMAP.md` | What was defined at the start, what's been done (by work round), and what's planned next. |
 | `STATUS.md` | Current state, not a log: live deployment info, affiliate signup progress, the ToS legal review. |
 | `ANALYTICS.md` | Every Google Analytics 4 custom event the site fires: name, params, trigger, and what it's for. |
+| `events_manual.json`, `events_sessions.json` | Hand-maintained inputs for `build_events.py`: darts events, and per-day session schedules for the "פירוט" popup. |
+| `missing_info.csv` | Working file: every event/team missing a venue, city or pin, with suggestions - fill in the last columns and send back. Delete once ingested. |
 | `MULTISPORT.md` | Design-only doc for adding sports beyond football (Formula 1, Darts, AllSportDB findings) - not implemented yet. |
 | `BRANDING.md` | How to rename the product: one edit in `brand.js`, plus the manual steps in GitHub / Google Analytics / Travelpayouts. |
 | `brand.js` | The product's public name and version - read by `index.html` for the page title, header and footer. |

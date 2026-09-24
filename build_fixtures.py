@@ -118,6 +118,15 @@ NATIONAL_COMPETITIONS = [
     ("UEFA Nations League", {"uefa nations league", "nations league"}, "UEFA Nations League"),
 ]
 NATION_TEAMS = set(COUNTRY.keys())
+# The API gives no venue/city for national-team fixtures, so the host country is assumed to be the
+# home nation's own (true for the group stage) - used only for the kickoff time zone and the
+# country grouping, never to invent a city or stadium. API team name -> country code.
+NATION_CC = {
+    "England": "gb", "Spain": "es", "Germany": "de", "France": "fr", "Netherlands": "nl", "Italy": "it",
+    "Poland": "pl", "Portugal": "pt", "Belgium": "be", "Bosnia & Herzegovina": "ba", "Croatia": "hr",
+    "Czechia": "cz", "Denmark": "dk", "Greece": "gr", "Norway": "no", "Romania": "ro", "Serbia": "rs",
+    "Sweden": "se", "Türkiye": "tr", "Wales": "wls",
+}
 
 # a UEFA fixture's real country isn't known until its venue is geocoded (unlike domestic
 # fixtures, where it's the competition's own country) - map the resolved country code back
@@ -136,6 +145,12 @@ CC_TIMEZONE = {
     "sk": "Europe/Bratislava", "hu": "Europe/Budapest", "ro": "Europe/Bucharest", "bg": "Europe/Sofia",
     "sct": "Europe/London", "wls": "Europe/London", "nir": "Europe/London", "ie": "Europe/Dublin", "cy": "Asia/Nicosia", "il": "Asia/Jerusalem",
     "az": "Asia/Baku", "ge": "Asia/Tbilisi", "kz": "Asia/Almaty",
+    "ba": "Europe/Sarajevo", "al": "Europe/Tirane", "ad": "Europe/Andorra", "am": "Asia/Yerevan",
+    "by": "Europe/Minsk", "ee": "Europe/Tallinn", "fo": "Atlantic/Faroe", "fi": "Europe/Helsinki",
+    "gi": "Europe/Gibraltar", "is": "Atlantic/Reykjavik", "xk": "Europe/Belgrade", "li": "Europe/Vaduz",
+    "lt": "Europe/Vilnius", "lu": "Europe/Luxembourg", "lv": "Europe/Riga", "mc": "Europe/Monaco",
+    "md": "Europe/Chisinau", "me": "Europe/Podgorica", "mk": "Europe/Skopje", "mt": "Europe/Malta",
+    "ru": "Europe/Moscow", "sm": "Europe/San_Marino", "si": "Europe/Ljubljana",
 }
 
 # English display name for a country code not already covered by COUNTRY above (used as the
@@ -498,6 +513,7 @@ def main():
 
             if not city:
                 missing_city += 1
+                row_cc = row_cc or NATION_CC.get(home_name)  # time zone + country only; the city stays unknown
             tzname = CC_TIMEZONE.get(row_cc, "Europe/London")
             local_dt = datetime.datetime.fromisoformat(fx["date"]).astimezone(ZoneInfo(tzname))
 

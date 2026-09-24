@@ -99,6 +99,21 @@ VENUE_OVERRIDE = {
     "Raków Częstochowa": "Miejski Stadion Pilkarski Rakow",
 }
 
+# non-football events from AllSportDB (build_events.py): the API has no venue field on the free
+# plan, so the circuit/stadium is filled in here, keyed by the cleaned event title. Only entries
+# I'm certain of live here; suggestions still needing a human check go through the missing-info CSV.
+EVENT_VENUE_OVERRIDE = {
+    "Azerbaijan Grand Prix": "Baku City Circuit",
+    "Bahrain Grand Prix": "Sepang International Circuit",  # the Bahrain GP was moved to Malaysia in 2026
+    "Singapore Grand Prix": "Marina Bay Street Circuit",
+    "United States Grand Prix": "Circuit of the Americas",
+    "Mexico City Grand Prix": "Autódromo Hermanos Rodríguez",
+    "São Paulo Grand Prix": "Autódromo José Carlos Pace",
+    "Las Vegas Grand Prix": "Las Vegas Strip Circuit",
+    "Qatar Grand Prix": "Lusail International Circuit",
+    "Abu Dhabi Grand Prix": "Yas Marina Circuit",
+}
+
 LOGO_OVERRIDE = {
     "Ceuta 6 de Junio": "logos/28424.png",
     "Anaitasuna": "logos/28425.png",

@@ -182,3 +182,16 @@ dialog#legalDialog p{font-size:13.5px;line-height:1.6;color:var(--muted);margin:
 dialog#legalDialog p:last-child{margin-bottom:0}
 .dialog-close{position:absolute;top:12px;left:12px;background:none;border:0;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:6px}
 .dialog-close:hover{color:var(--warn);background:var(--warn-soft)}
+.sport-head{display:flex;justify-content:space-between;align-items:center;margin:16px 0 6px;font:700 15px/1.2 var(--serif);padding-block:6px;border-bottom:1px solid var(--line)}
+.sport-head .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-inline-end:7px}
+#comps > .sport-head:first-child{margin-top:8px}
+#comps .sub{margin-inline-start:10px;padding-inline-start:10px;border-inline-start:2px solid var(--line)}
+.detail-btn{margin-inline-start:8px;border:1.5px solid var(--gold);color:var(--gold-deep);background:transparent;border-radius:999px;padding:1px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.detail-btn:hover{background:var(--gold-soft)}
+dialog#detailDialog{max-width:min(560px,94vw);width:100%;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;background:var(--card);color:var(--ink);box-shadow:var(--shadow-hover)}
+dialog#detailDialog::backdrop{background:rgba(6,18,12,.55)}
+dialog#detailDialog h3{font:700 18px/1.2 var(--serif);margin:0 0 4px}
+dialog#detailDialog p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.drow{display:grid;grid-template-columns:82px 1fr auto;gap:10px;align-items:baseline;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.drow.main{color:var(--ink);font-weight:700}
+.drow .dtime{font-variant-numeric:tabular-nums;white-space:nowrap}

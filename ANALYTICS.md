@@ -115,3 +115,8 @@ those aren't listed here since we didn't add them and don't control their params
 - **Params**: none.
 - **Trigger**: clicking "מידע משפטי ופרטיות" in the footer.
 - **Use**: mostly a curiosity/compliance signal - whether anyone actually reads it.
+
+### `event_details_open`
+- **Params**: `sport`, `title` (the day's title, e.g. "Azerbaijan Grand Prix - Day 2").
+- **Trigger**: clicking "פירוט" on a multi-day-event day that has a session schedule.
+- **Use**: whether the session breakdown is worth extending to more events.

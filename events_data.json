@@ -60,14 +60,152 @@
    "comp_he": "פורמולה 1",
    "country": "Azerbaijan",
    "round": null,
-   "venue": null,
+   "venue": "Baku City Circuit",
    "city": "Baku",
    "city_he": "באקו",
    "lat": 40.3756,
    "lng": 49.8328,
-   "venue_lat": null,
-   "venue_lng": null,
-   "web_url": "https://www.formula1.com"
+   "venue_lat": 40.3729,
+   "venue_lng": 49.853,
+   "web_url": "https://www.formula1.com",
+   "sessions": {
+    "2026-09-24": [
+     {
+      "series": "פורמולה 2",
+      "name": "אימון",
+      "start": "10:00",
+      "end": "10:45"
+     },
+     {
+      "series": "FIA",
+      "name": "הצגת מכוניות F1",
+      "start": "11:00",
+      "end": "12:00"
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "אימון חופשי 1",
+      "start": "12:30",
+      "end": "13:30",
+      "main": true
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מוקדמות 1",
+      "start": "14:00",
+      "end": "14:20"
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מוקדמות 2",
+      "start": "14:30",
+      "end": "14:50"
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "מסיבת עיתונאים - קבוצות",
+      "start": "14:30",
+      "end": "15:30",
+      "main": true
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מסיבת עיתונאים",
+      "start": "15:30",
+      "end": "15:55"
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "אימון חופשי 2",
+      "start": "16:00",
+      "end": "17:00",
+      "main": true
+     }
+    ],
+    "2026-09-25": [
+     {
+      "series": "פורמולה 2",
+      "name": "מירוץ ספרינט (21 הקפות או 45 דקות +הקפה)",
+      "start": "08:15",
+      "end": "09:05"
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מסיבת עיתונאים",
+      "start": "09:25",
+      "end": "09:45"
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "אימון חופשי 3",
+      "start": "12:30",
+      "end": "13:30",
+      "main": true
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מירוץ ראשי 1 (29 הקפות או 60 דקות +הקפה)",
+      "start": "14:15",
+      "end": "15:20"
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מסיבת עיתונאים",
+      "start": "15:40",
+      "end": "15:55"
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "מוקדמות",
+      "start": "16:00",
+      "end": "17:00",
+      "main": true
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "מסיבת עיתונאים",
+      "start": "17:00",
+      "end": "18:00",
+      "main": true
+     }
+    ],
+    "2026-09-26": [
+     {
+      "series": "פורמולה 2",
+      "name": "מירוץ ראשי 2 (29 הקפות או 60 דקות +הקפה)",
+      "start": "11:00",
+      "end": "12:05"
+     },
+     {
+      "series": "פורמולה 2",
+      "name": "מסיבת עיתונאים",
+      "start": "12:25",
+      "end": "12:55"
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "הצגת הנהגים",
+      "start": "13:00",
+      "end": "13:30",
+      "main": true
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "ההמנון הלאומי",
+      "start": "14:44",
+      "end": "14:46",
+      "main": true
+     },
+     {
+      "series": "פורמולה 1",
+      "name": "הגרנד פרי (51 הקפות או 120 דקות)",
+      "start": "15:00",
+      "end": "17:00",
+      "main": true
+     }
+    ]
+   },
+   "sessions_note": "שעון מקומי (באקו)"
   },
   {
    "id": 1000019744,
@@ -198,13 +336,13 @@
    "comp_he": "פורמולה 1",
    "country": "Malaysia",
    "round": null,
-   "venue": null,
+   "venue": "Sepang International Circuit",
    "city": "Sepang",
    "city_he": "סיפאנג",
    "lat": 2.8009,
    "lng": 101.7094,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 2.76,
+   "venue_lng": 101.7369,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -244,13 +382,13 @@
    "comp_he": "פורמולה 1",
    "country": "Singapore",
    "round": null,
-   "venue": null,
+   "venue": "Marina Bay Street Circuit",
    "city": "Singapore",
    "city_he": "סינגפור",
    "lat": 1.3571,
    "lng": 103.8195,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 1.289,
+   "venue_lng": 103.8613,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -382,13 +520,13 @@
    "comp_he": "פורמולה 1",
    "country": "United States",
    "round": null,
-   "venue": null,
+   "venue": "Circuit of the Americas",
    "city": "Austin",
    "city_he": "אוסטין",
    "lat": 30.2711,
    "lng": -97.7437,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 30.1356,
+   "venue_lng": -97.6366,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -474,13 +612,13 @@
    "comp_he": "פורמולה 1",
    "country": "Mexico",
    "round": null,
-   "venue": null,
+   "venue": "Autódromo Hermanos Rodríguez",
    "city": "Mexico City",
    "city_he": "מקסיקו סיטי",
    "lat": 19.3208,
    "lng": -99.1515,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 19.4052,
+   "venue_lng": -99.0961,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -543,13 +681,13 @@
    "comp_he": "פורמולה 1",
    "country": "Brazil",
    "round": null,
-   "venue": null,
+   "venue": "Autódromo José Carlos Pace",
    "city": "São Paulo",
    "city_he": "סאו פאולו",
    "lat": -23.5507,
    "lng": -46.6334,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": -23.7018,
+   "venue_lng": -46.6969,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -681,13 +819,13 @@
    "comp_he": "פורמולה 1",
    "country": "United States",
    "round": null,
-   "venue": null,
+   "venue": "Las Vegas Strip Circuit",
    "city": "Las Vegas",
    "city_he": "לאס וגאס",
    "lat": 36.1674,
    "lng": -115.1484,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 36.1109,
+   "venue_lng": -115.1618,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -727,13 +865,13 @@
    "comp_he": "פורמולה 1",
    "country": "Qatar",
    "round": null,
-   "venue": null,
+   "venue": "Lusail International Circuit",
    "city": "Lusail",
    "city_he": "לוסייל",
    "lat": 25.4229,
    "lng": 51.5197,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 25.4897,
+   "venue_lng": 51.4529,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -796,13 +934,13 @@
    "comp_he": "פורמולה 1",
    "country": "United Arab Emirates",
    "round": null,
-   "venue": null,
+   "venue": "Yas Marina Circuit",
    "city": "Abu Dhabi",
    "city_he": "אבו דאבי",
    "lat": 24.4538,
    "lng": 54.3774,
-   "venue_lat": null,
-   "venue_lng": null,
+   "venue_lat": 24.4718,
+   "venue_lng": 54.6058,
    "web_url": "https://www.formula1.com"
   },
   {

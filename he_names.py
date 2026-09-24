@@ -501,6 +501,18 @@ HE_TEAMS = {
     "Uxbridge": "אוקסברידג'",
     "Valencia": "ולנסיה",
     "Viking": "ויקינג",
+    # Portugal (Primeira Liga / Taça) and Nations League national teams - added 2026-09-24 from a live pull
+    "Academico Viseu": "אקדמיקו ויזאו", "Alverca": "אלוורקה", "Arouca": "ארוקה", "Camacha": "קמאשה",
+    "Casa Pia": "קאזה פיה", "Estoril": "אשטוריל", "Estrela": "אשטרלה", "Famalicao": "פמליקאו",
+    "Florgrade": "פלורגרדה", "GIL Vicente": "ז'יל וינסנטה", "Maritimo": "מריטימו", "Moreirense": "מורירנסה",
+    "Nacional": "נשיונל", "Rio Ave": "ריו אאבה", "SC Braga": "בראגה", "Santa Clara": "סנטה קלרה",
+    "Vitória SC": "ויטוריה גימראש",
+    "Brann": "ברן", "Eastbourne Borough": "איסטבורן בורו", "Egnatia Rrogozhinë": "אגנטיה רוגוז'ינה",
+    "FC Copenhagen": "קופנהגן", "Gent": "חנט", "KuPS": "קופס",
+    "Belgium": "בלגיה", "Bosnia & Herzegovina": "בוסניה והרצגובינה", "Croatia": "קרואטיה", "Czechia": "צ'כיה",
+    "Denmark": "דנמרק", "England": "אנגליה", "France": "צרפת", "Germany": "גרמניה", "Greece": "יוון",
+    "Italy": "איטליה", "Netherlands": "הולנד", "Norway": "נורווגיה", "Poland": "פולין", "Portugal": "פורטוגל",
+    "Romania": "רומניה", "Serbia": "סרביה", "Spain": "ספרד", "Sweden": "שוודיה", "Türkiye": "טורקיה", "Wales": "ויילס",
     "Valladolid": "ריאל ואיאדוליד",
     "Venezia": "ונציה",
     "VfB Stuttgart": "שטוטגרט",
@@ -1054,6 +1066,14 @@ HE_CITIES = {
     "Hildesheim|Germany": "הילדסהיים",
     "Jena|Germany": "ינה",
     "Lingen|Germany": "לינגן",
+    "Alverca do Ribatejo|Portugal": "אלוורקה דו ריבטז'ו", "Amadora|Portugal": "אמדורה", "Arouca|Portugal": "ארוקה",
+    "Barcelos|Portugal": "ברסלוס", "Bergen|Norway": "ברגן", "Braga|Portugal": "בראגה",
+    "Camacha (Ilha da Madeira)|Portugal": "קמאשה (מדיירה)", "Copenhagen|Denmark": "קופנהגן",
+    "Estoril|Portugal": "אשטוריל", "Funchal|Portugal": "פונשל", "Guimarães|Portugal": "גימראש",
+    "Moreira de Conegos|Portugal": "מורירה דה קונגוס", "Nicosia|Cyprus": "ניקוסיה", "Plzen|Czechia": "פילזן",
+    "Ponta Delgada|Portugal": "פונטה דלגדה", "Rio Maior|Portugal": "ריו מאיור",
+    "Thame, Oxfordshire|England": "תיים, אוקספורדשייר", "Vila Nova de Famalicao|Portugal": "וילה נובה דה פמליקאו",
+    "Vila do Conde|Portugal": "וילה דו קונדה", "Viseu|Portugal": "ויזאו",
 }
 
 _CONS = {
