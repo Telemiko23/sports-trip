@@ -1,0 +1,25 @@
+{
+  "_about": "Hand-entered darts events (no licensed API covers upcoming darts - see MULTISPORT.md). Facts only (name, dates, venue, city), read on 2026-09-24 from Wikipedia's '2026 in PDC' / '2026 PDC Pro Tour' / '2027 PDC World Darts Championship' pages (CC BY-SA) and PDC Europe's public events list (pdc-europe.tv/events). NOT scraped - refresh by hand every few weeks. build_events.py turns this into rows exactly like the AllSportDB ones.",
+  "sport": "darts",
+  "sport_name": "Darts",
+  "emoji": "🎯",
+  "competitions": {
+    "PDC Majors": 1,
+    "PDC European Tour": 2,
+    "PDC Europe Galas": 3
+  },
+  "events": [
+    {"id": 1, "comp": "PDC Majors", "title": "World Grand Prix", "from": "2026-09-28", "to": "2026-10-04", "venue": "Mattioli Arena", "city": "Leicester", "country": "England", "cc": "gb"},
+    {"id": 2, "comp": "PDC European Tour", "title": "Swiss Darts Trophy", "from": "2026-10-09", "to": "2026-10-11", "venue": "St. Jakobshalle", "city": "Basel", "country": "Switzerland", "cc": "ch"},
+    {"id": 3, "comp": "PDC European Tour", "title": "Dutch Darts Championship", "from": "2026-10-16", "to": "2026-10-18", "venue": "MECC Maastricht", "city": "Maastricht", "country": "Netherlands", "cc": "nl"},
+    {"id": 4, "comp": "PDC Majors", "title": "European Championship", "from": "2026-10-22", "to": "2026-10-25", "venue": "Westfalenhalle", "city": "Dortmund", "country": "Germany", "cc": "de"},
+    {"id": 5, "comp": "PDC Europe Galas", "title": "Bremen Darts Gala", "from": "2026-10-30", "to": "2026-10-30", "venue": "ÖVB-Arena", "city": "Bremen", "country": "Germany", "cc": "de"},
+    {"id": 6, "comp": "PDC Europe Galas", "title": "Jena Darts Gala", "from": "2026-11-07", "to": "2026-11-07", "venue": "Sparkassen-Arena", "city": "Jena", "country": "Germany", "cc": "de"},
+    {"id": 7, "comp": "PDC Europe Galas", "title": "PDC Europe Super League", "from": "2026-11-10", "to": "2026-11-13", "venue": "Halle 39", "city": "Hildesheim", "country": "Germany", "cc": "de"},
+    {"id": 8, "comp": "PDC Majors", "title": "Grand Slam of Darts", "from": "2026-11-14", "to": "2026-11-22", "venue": "WV Active Aldersley", "city": "Wolverhampton", "country": "England", "cc": "gb"},
+    {"id": 9, "comp": "PDC Majors", "title": "Players Championship Finals", "from": "2026-11-27", "to": "2026-11-29", "venue": "Butlin's Minehead", "city": "Minehead", "country": "England", "cc": "gb"},
+    {"id": 10, "comp": "PDC Europe Galas", "title": "Köln World Darts Gala", "from": "2026-12-02", "to": "2026-12-02", "venue": "LANXESS arena", "city": "Cologne", "country": "Germany", "cc": "de"},
+    {"id": 11, "comp": "PDC Europe Galas", "title": "Emsland Darts Gala", "from": "2026-12-04", "to": "2026-12-05", "venue": "EmslandArena", "city": "Lingen", "country": "Germany", "cc": "de"},
+    {"id": 12, "comp": "PDC Majors", "title": "World Darts Championship", "from": "2026-12-11", "to": "2027-01-03", "venue": "Alexandra Palace", "city": "London", "country": "England", "cc": "gb"}
+  ]
+}

@@ -53,6 +53,9 @@ HE_COMPETITIONS = {
     "Davis Cup Finals": "גמר גביע דייוויס",
     "Tennis United Cup": "גביע יונייטד",
     "Tennis Grand Slam": "גראנד סלאם",
+    "PDC Majors": "טורנירי הענק של PDC",
+    "PDC European Tour": "הטור האירופי של PDC",
+    "PDC Europe Galas": "גאלות PDC אירופה",
 }
 
 # non-football event titles (name after the "<year> <competition> - " prefix is stripped)
@@ -83,9 +86,21 @@ HE_EVENTS = {
     "Davis Cup Finals": "גמר גביע דייוויס",
     "Next Gen ATP Finals": "גמר נקסט ג'ן ATP",
     "Tennis United Cup": "גביע יונייטד",
+    "World Grand Prix": "גרנד פרי העולמי בדארטס",
+    "Swiss Darts Trophy": "גביע שווייץ בדארטס",
+    "Dutch Darts Championship": "אליפות הולנד בדארטס",
+    "European Championship": "אליפות אירופה בדארטס",
+    "Bremen Darts Gala": "גאלת הדארטס ברמן",
+    "Jena Darts Gala": "גאלת הדארטס ינה",
+    "PDC Europe Super League": "סופר ליג PDC אירופה",
+    "Grand Slam of Darts": "גראנד סלאם של הדארטס",
+    "Players Championship Finals": "גמר ה-Players Championship",
+    "Köln World Darts Gala": "גאלת העולם בדארטס - קלן",
+    "Emsland Darts Gala": "גאלת הדארטס אמסלנד",
+    "World Darts Championship": "אליפות העולם בדארטס",
 }
 
-HE_SPORTS = {"Formula 1": "פורמולה 1", "Tennis": "טניס"}
+HE_SPORTS = {"Formula 1": "פורמולה 1", "Tennis": "טניס", "Darts": "דארטס"}
 
 HE_TEAMS = {
     "1. FC Heidenheim": "היידנהיים",
@@ -1034,6 +1049,11 @@ HE_CITIES = {
     "Reggio Calabria|Italy": "רג'ו קלבריה",
     "Sydney|Australia": "סידני",
     "Perth|Australia": "פרת'",
+    "Maastricht|Netherlands": "מאסטריכט",
+    "Minehead|England": "מיינהד",
+    "Hildesheim|Germany": "הילדסהיים",
+    "Jena|Germany": "ינה",
+    "Lingen|Germany": "לינגן",
 }
 
 _CONS = {

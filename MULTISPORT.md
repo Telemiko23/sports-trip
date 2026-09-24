@@ -152,6 +152,19 @@ for the next 120 days per sport, so we pick sports based on real coverage, not g
   Grand Prix in Malaysia"). Verified by search after first flagging it as an error - a
   reminder to check a suspicious-looking datum before calling the source wrong.
 
+## Darts - implemented (v1.3.0) as a hand-maintained list
+
+No licensed feed has *upcoming* darts (AllSportDB: no darts at all; TheSportsDB free: nothing
+after Feb 2026), and scraping pdc-europe.tv isn't clearly permitted. So `events_manual.json`
+holds 12 upcoming events (World Grand Prix, European Tour Basel/Maastricht, European
+Championship, Grand Slam, Players Championship Finals, World Championship at Alexandra
+Palace, plus PDC Europe's galas/Super League), entered **by hand as facts** (name, dates,
+venue, city) read from Wikipedia's "2026 in PDC" pages (CC BY-SA) and PDC Europe's public
+events list - not scraped. `build_events.py` turns them into rows like any other sport.
+Trade-off: it needs a manual refresh every few weeks (new European Tour dates, the 2027
+Premier League from Feb). Two venues (Wolverhampton, Minehead) didn't geocode, so their
+stadium link falls back to a Maps text search.
+
 ## Darts - correction after testing TheSportsDB for real
 
 Last night I recommended TheSportsDB's free Darts API. **That was too optimistic - tested

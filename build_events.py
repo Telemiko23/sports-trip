@@ -16,6 +16,9 @@ GitHub Action (a dead key would break the football refresh too). Instead:
     each football refresh without touching the AllSportDB API at all; events that have
     already ended are dropped at merge time.
 
+Also reads events_manual.json - hand-entered events for a sport no licensed API covers (darts) -
+and turns them into the same rows (with an exact stadium pin via venues_cache.json).
+
 Only future events are kept - there's no reason to pull past ones.
 """
 import datetime
@@ -159,6 +162,46 @@ def build_rows(raw):
             "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
             "venue_lat": None, "venue_lng": None, "web_url": e.get("webUrl"),
         })
+    # hand-entered events (darts) - same row shape, plus an exact stadium pin via venues_cache.json
+    mpath = os.path.join(HERE, "events_manual.json")
+    if os.path.exists(mpath):
+        with open(mpath, encoding="utf-8") as f:
+            m = json.load(f)
+        vcache = load_json("venues_cache.json", {})
+        vdirty = False
+        for ev in m["events"]:
+            key = f"{ev['city']}|{ev['cc']}"
+            coords = manual.get(key) or cache.get(key)
+            if coords is None and key not in cache:
+                print(f"Geocoding {ev['city']} ({ev['cc']})...")
+                coords, ok = geocode(ev["city"], ev["cc"])
+                if ok:
+                    cache[key] = coords
+                    dirty = True
+            vkey = f"{ev['venue']}|{ev['city']}"
+            vc = vcache.get(vkey)
+            if vc is None and vkey not in vcache:
+                print(f"Geocoding stadium {ev['venue']} ({ev['city']})...")
+                vc, ok = geocode(f"{ev['venue']}, {ev['city']}", ev["cc"])
+                if ok:
+                    vcache[vkey] = vc
+                    vdirty = True
+            comp_id = 2 * COMP_ID_OFFSET + m["competitions"][ev["comp"]]
+            comps.setdefault(comp_id, {"id": comp_id, "label": ev["comp"], "label_he": he_comp(ev["comp"]),
+                                       "country": m["sport_name"], "sport": m["sport"], "emoji": m["emoji"]})
+            rows.append({
+                "id": 2 * EVENT_ID_OFFSET + ev["id"], "sport": m["sport"], "emoji": m["emoji"],
+                "dt": ev["from"] + "T00:00", "date_to": ev["to"], "status": "TBD",
+                "title": ev["title"], "title_he": he_event(ev["title"]),
+                "comp_id": comp_id, "comp": ev["comp"], "comp_he": he_comp(ev["comp"]),
+                "country": ev["country"], "round": None, "venue": ev["venue"], "city": ev["city"],
+                "city_he": he_city(ev["city"], ev["country"]),
+                "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
+                "venue_lat": vc[0] if vc else None, "venue_lng": vc[1] if vc else None, "web_url": None,
+            })
+        if vdirty:
+            save_json("venues_cache.json", vcache)
+    rows.sort(key=lambda r: r["dt"])
     if dirty:
         save_json("cities_cache.json", cache)
     for name in skipped:

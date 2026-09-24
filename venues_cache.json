@@ -23,6 +23,10 @@
   53.4268,
   -1.3627
  ],
+ "Alexandra Palace|London": [
+  51.5943,
+  -0.1306
+ ],
  "Alexandra Stadium|Crewe": [
   53.0874,
   -2.4357
@@ -139,6 +143,7 @@
   51.0996,
   -0.1947
  ],
+ "Butlin's Minehead|Minehead": null,
  "Camp Nou|Barcelona": [
   41.3808,
   2.1156
@@ -266,6 +271,10 @@
  "Emirates Stadium|London": [
   51.555,
   -0.1084
+ ],
+ "EmslandArena|Lingen": [
+  52.514,
+  7.314
  ],
  "Estadi Mallorca Son Moix|Palma de Mallorca": [
   39.5899,
@@ -455,6 +464,10 @@
   45.7654,
   4.9821
  ],
+ "Halle 39|Hildesheim": [
+  52.1748,
+  9.941
+ ],
  "Hayes Lane|London": [
   51.3977,
   -0.0054
@@ -543,6 +556,10 @@
   53.2005,
   5.7684
  ],
+ "LANXESS arena|Cologne": [
+  50.9385,
+  6.9829
+ ],
  "LEAG Energie Stadion|Cottbus": [
   51.7516,
   14.3456
@@ -579,6 +596,10 @@
   56.1168,
   8.9518
  ],
+ "MECC Maastricht|Maastricht": [
+  50.8393,
+  5.7118
+ ],
  "MHPArena|Stuttgart": [
   48.7922,
   9.2321
@@ -590,6 +611,10 @@
  "MMArena|Le Mans": [
   47.9592,
   0.2231
+ ],
+ "Mattioli Arena|Leicester": [
+  52.6439,
+  -1.131
  ],
  "Max-Morlock-Stadion|Nuremberg": [
   49.4263,
@@ -847,6 +872,10 @@
   50.6264,
   -3.4125
  ],
+ "Sparkassen-Arena|Jena": [
+  50.8999,
+  11.5885
+ ],
  "Sparta Stadion Het Kasteel|Rotterdam": [
   51.9201,
   4.4337
@@ -886,6 +915,10 @@
  "St. Andrew's Stadium|Birmingham": [
   52.4756,
   -1.868
+ ],
+ "St. Jakobshalle|Basel": [
+  47.5399,
+  7.6187
  ],
  "St. James' Park|Newcastle": [
   54.9755,
@@ -1340,6 +1373,7 @@
   48.9807,
   9.393
  ],
+ "WV Active Aldersley|Wolverhampton": null,
  "WWK Arena|Augsburg": [
   48.3231,
   10.8859
@@ -1355,6 +1389,10 @@
  "Weserstadion|Bremen": [
   53.0664,
   8.8377
+ ],
+ "Westfalenhalle|Dortmund": [
+  51.4965,
+  7.4569
  ],
  "Weston Homes Stadium|Peterborough": [
   52.5645,
@@ -1380,5 +1418,9 @@
  "Åråsen Stadion|Lillestrøm": [
   59.9627,
   11.0636
+ ],
+ "ÖVB-Arena|Bremen": [
+  53.0867,
+  8.8169
  ]
 }
