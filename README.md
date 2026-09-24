@@ -38,6 +38,7 @@ translation/correction file (no need for fresh fixtures from the API), just run
 | File | What it does | When to run it |
 |---|---|---|
 | `build_fixtures.py` | Pulls fixtures from API-Football for the 8 countries / 25 domestic competitions plus 4 UEFA competitions (3 club + Nations League), geocodes any new city/stadium, runs translation+corrections+logos, writes `fixtures.js`. | Whenever you want up-to-date fixtures (upcoming matches change, new cup rounds get drawn). Uses API quota. |
+| `build_events.py` | Non-football events (Formula 1, tennis) from the AllSportDB API, worldwide - saves `events_raw.json` + `events_data.json` and merges them into `fixtures.js`. **Not** part of the daily Action (AllSportDB's free key expires every 30 days) - run by hand with `ALLSPORTDB_KEY` set; without a key it rebuilds from the saved raw file (offline, e.g. after a translation fix). `build_fixtures.py` carries the still-upcoming events over on every run. | Every few weeks, or after editing event/city translations (no key needed for that). |
 | `coverage_check.py` | Checks against the API (without writing `fixtures.js`) which competitions exist, how many fixtures they have, and how many teams have a city - before running `build_fixtures.py` on a new key/plan. | Only when testing a new API key or adding a competition. |
 | `coverage_report.json` | Output of `coverage_check.py`. | Auto-generated. |
 

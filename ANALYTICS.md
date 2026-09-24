@@ -14,7 +14,8 @@ those aren't listed here since we didn't add them and don't control their params
 ## Trip building
 
 ### `add_to_trip` / `remove_from_trip`
-- **Params**: `comp` (competition label, English), `country`, `city`, `days_until_match`
+- **Params**: `sport` (`"football"` | `"f1"` | `"tennis"` - added in v1.2.0; older events lack
+  it), `comp` (competition label, English), `country`, `city`, `days_until_match`
   (integer, can be negative if oddly in the past), `source` (`"list"` | `"map"` |
   `"trip_panel"`).
 - **Trigger**: clicking "הוסף לטיול" on a match card in the results list, in a map

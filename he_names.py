@@ -41,7 +41,51 @@ HE_COMPETITIONS = {
     "UEFA Nations League": "ליגת האומות",
     "Primeira Liga": "פרימיירה ליגה",
     "Taça de Portugal": "גביע פורטוגל",
+    # non-football (build_events.py)
+    "Formula 1": "פורמולה 1",
+    "ATP Tour": "סיבוב ה-ATP",
+    "WTA Tour": "סיבוב ה-WTA",
+    "ATP Finals": "גמר ה-ATP",
+    "WTA Finals": "גמר ה-WTA",
+    "Next Gen ATP Finals": "גמר נקסט ג'ן ATP",
+    "Laver Cup": "גביע לייבר",
+    "Billie Jean King Cup": "גביע בילי ג'ין קינג",
+    "Davis Cup Finals": "גמר גביע דייוויס",
+    "Tennis United Cup": "גביע יונייטד",
+    "Tennis Grand Slam": "גראנד סלאם",
 }
+
+# non-football event titles (name after the "<year> <competition> - " prefix is stripped)
+HE_EVENTS = {
+    "Azerbaijan Grand Prix": "גרנד פרי אזרבייג'ן",
+    "Bahrain Grand Prix": "גרנד פרי בחריין (נערך במלזיה)",
+    "Singapore Grand Prix": "גרנד פרי סינגפור",
+    "United States Grand Prix": "גרנד פרי ארצות הברית",
+    "Mexico City Grand Prix": "גרנד פרי מקסיקו סיטי",
+    "São Paulo Grand Prix": "גרנד פרי סאו פאולו",
+    "Las Vegas Grand Prix": "גרנד פרי לאס וגאס",
+    "Qatar Grand Prix": "גרנד פרי קטאר",
+    "Abu Dhabi Grand Prix": "גרנד פרי אבו דאבי",
+    "Singapore Tennis Open": "סינגפור טניס אופן",
+    "Billie Jean King Cup - Finals": "גביע בילי ג'ין קינג - גמר",
+    "Laver Cup": "גביע לייבר",
+    "China Open": "אליפות סין הפתוחה",
+    "Japan Open": "אליפות יפן הפתוחה",
+    "Rolex Shanghai Masters": "רולקס שנגחאי מאסטרס",
+    "Wuhan Open": "אליפות ווהאן הפתוחה",
+    "Ningbo Open": "אליפות נינגבו הפתוחה",
+    "Toray Pan Pacific Open Tennis": "טוריי פאן פסיפיק אופן",
+    "Swiss Indoors": "סוויס אינדורס (באזל)",
+    "Erste Bank Open": "ארסטה בנק אופן (וינה)",
+    "Rolex Paris Masters": "רולקס פריז מאסטרס",
+    "WTA Finals": "גמר ה-WTA",
+    "ATP Finals": "גמר ה-ATP",
+    "Davis Cup Finals": "גמר גביע דייוויס",
+    "Next Gen ATP Finals": "גמר נקסט ג'ן ATP",
+    "Tennis United Cup": "גביע יונייטד",
+}
+
+HE_SPORTS = {"Formula 1": "פורמולה 1", "Tennis": "טניס"}
 
 HE_TEAMS = {
     "1. FC Heidenheim": "היידנהיים",
@@ -964,6 +1008,32 @@ HE_CITIES = {
     "Split|Croatia": "ספליט",
     "Tbilisi|Georgia": "טביליסי",
     "Zagreb|Croatia": "זאגרב",
+    # non-football events (country names as AllSportDB spells them)
+    "Baku|Azerbaijan": "באקו",
+    "Singapore|Singapore": "סינגפור",
+    "Shenzhen|China": "שנג'ן",
+    "London|United Kingdom": "לונדון",
+    "Beijing|China": "בייג'ינג",
+    "Tokyo|Japan": "טוקיו",
+    "Sepang|Malaysia": "סיפאנג",
+    "Shanghai|China": "שנגחאי",
+    "Wuhan|China": "ווהאן",
+    "Ningbo|China": "נינגבו",
+    "Austin|United States": "אוסטין",
+    "Basel|Switzerland": "באזל",
+    "Vienna|Austria": "וינה",
+    "Mexico City|Mexico": "מקסיקו סיטי",
+    "Paris|France": "פריז",
+    "São Paulo|Brazil": "סאו פאולו",
+    "Indian Wells|United States": "אינדיאן וולס",
+    "Torino|Italy": "טורינו",
+    "Las Vegas|United States": "לאס וגאס",
+    "Bologna|Italy": "בולוניה",
+    "Lusail|Qatar": "לוסייל",
+    "Abu Dhabi|United Arab Emirates": "אבו דאבי",
+    "Reggio Calabria|Italy": "רג'ו קלבריה",
+    "Sydney|Australia": "סידני",
+    "Perth|Australia": "פרת'",
 }
 
 _CONS = {
@@ -1026,3 +1096,7 @@ def he_city(city, country):
 
 def he_comp(label):
     return HE_COMPETITIONS.get(label) or label
+
+
+def he_event(title):
+    return HE_EVENTS.get(title) or title

@@ -62,6 +62,8 @@ def main():
     cache_dirty = vcache_dirty = False
 
     for r in payload["fixtures"]:
+        if r.get("sport", "football") != "football":
+            continue  # other sports are rebuilt by build_events.py, which owns their translation/geocoding
         home = r["home"]
 
         if VENUE_OVERRIDE.get(home):
@@ -138,7 +140,7 @@ def main():
 
     for c in payload.get("competitions", []):
         c["label_he"] = he_comp(c["label"])
-        if not c.get("logo"):
+        if not c.get("logo") and c.get("sport", "football") == "football":
             c["logo"] = f"https://media.api-sports.io/football/leagues/{c['id']}.png"
 
     if cache_dirty:

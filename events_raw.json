@@ -1,0 +1,1277 @@
+[
+ {
+  "id": 19583,
+  "name": "2026 WTA Tour - Singapore Tennis Open",
+  "year": 2026,
+  "date": "21 - 27 September 2026",
+  "dateFrom": "2026-09-21T00:00:00",
+  "dateTo": "2026-09-27T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-WTA-Tour-Singapore-Tennis-Open-19583",
+  "webUrl": "https://www.wtatennis.com/tournaments/1152/singapore/2026",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Singapore_Tennis_Open_–_Singles#Draw",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40sgtennisopen",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-21T10:02:59.272",
+  "location": [
+   {
+    "id": 53,
+    "regionId": null,
+    "name": "Singapore",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "sg",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3774,
+      "name": "Singapore",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19742,
+  "name": "2026 Billie Jean King Cup - Finals",
+  "year": 2026,
+  "date": "22 - 27 September 2026",
+  "dateFrom": "2026-09-22T00:00:00",
+  "dateTo": "2026-09-27T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 294,
+  "competition": "Billie Jean King Cup",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Billie-Jean-King-Cup-Finals-19742",
+  "webUrl": "https://www.billiejeankingcup.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Billie_Jean_King_Cup",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/BillieJeanKingCup",
+  "twitterUrl": "https://twitter.com/search?q=%40BJKCup%20OR%20%23BJKCupFinals",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-21T10:02:35.317",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 5323,
+      "name": "Shenzhen",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19809,
+  "name": "2026 Formula 1 - Azerbaijan Grand Prix",
+  "year": 2026,
+  "date": "24 - 26 September 2026",
+  "dateFrom": "2026-09-24T00:00:00",
+  "dateTo": "2026-09-26T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Azerbaijan-Grand-Prix-19809",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%40bakucitycircuit%20OR%20%23AzerbaijanGP%20OR%20%23F1Baku",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-22T14:37:06.029",
+  "location": [
+   {
+    "id": 1,
+    "regionId": null,
+    "name": "Azerbaijan",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "az",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3407,
+      "name": "Baku",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19744,
+  "name": "2026 Laver Cup",
+  "year": 2026,
+  "date": "25 - 27 September 2026",
+  "dateFrom": "2026-09-25T00:00:00",
+  "dateTo": "2026-09-27T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 687,
+  "competition": "Laver Cup",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Laver-Cup-19744",
+  "webUrl": "https://lavercup.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Laver_Cup",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/LaverCup",
+  "twitterUrl": "https://twitter.com/search?q=%40LaverCup%20OR%20%40TheO2",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-22T14:34:28.01",
+  "location": [
+   {
+    "id": 34,
+    "regionId": null,
+    "name": "United Kingdom",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "gb",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3423,
+      "name": "London",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19585,
+  "name": "2026 WTA Tour - China Open",
+  "year": 2026,
+  "date": "30 September - 11 October 2026",
+  "dateFrom": "2026-09-30T00:00:00",
+  "dateTo": "2026-10-11T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-WTA-Tour-China-Open-19585",
+  "webUrl": "https://www.wtatennis.com/tournaments/1020/beijing/2026",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_(tennis)",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40ChinaOpen",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-23T07:09:50.447",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3540,
+      "name": "Beijing",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19764,
+  "name": "2026 ATP Tour - Japan Open",
+  "year": 2026,
+  "date": "30 September - 6 October 2026",
+  "dateFrom": "2026-09-30T00:00:00",
+  "dateTo": "2026-10-06T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 260,
+  "competition": "ATP Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Tour-Japan-Open-19764",
+  "webUrl": "https://japanopentennis.com/atp/en/",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Japan_Open_(tennis)",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/japanopentennis/",
+  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40japanopentennis",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-01T14:18:56.19",
+  "location": [
+   {
+    "id": 15,
+    "regionId": null,
+    "name": "Japan",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "jp",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3412,
+      "name": "Tokyo",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19765,
+  "name": "2026 ATP Tour - China Open",
+  "year": 2026,
+  "date": "30 September - 6 October 2026",
+  "dateFrom": "2026-09-30T00:00:00",
+  "dateTo": "2026-10-06T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 260,
+  "competition": "ATP Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Tour-China-Open-19765",
+  "webUrl": "https://www.atptour.com/en/tournaments/beijing/327/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_(tennis)",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/ATPTour",
+  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40ChinaOpen",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-23T07:09:23.686",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3540,
+      "name": "Beijing",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 20922,
+  "name": "2026 Formula 1 - Bahrain Grand Prix",
+  "year": 2026,
+  "date": "2 - 4 October 2026",
+  "dateFrom": "2026-10-02T00:00:00",
+  "dateTo": "2026-10-04T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Bahrain-Grand-Prix-20922",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23BahrainGP%20OR%20%40BAH_Int_Circuit",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-01T14:06:28.312",
+  "location": [
+   {
+    "id": 50,
+    "regionId": null,
+    "name": "Malaysia",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "my",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3495,
+      "name": "Sepang",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19766,
+  "name": "2026 ATP Tour - Rolex Shanghai Masters",
+  "year": 2026,
+  "date": "7 - 18 October 2026",
+  "dateFrom": "2026-10-07T00:00:00",
+  "dateTo": "2026-10-18T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 260,
+  "competition": "ATP Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Tour-Rolex-Shanghai-Masters-19766",
+  "webUrl": "https://en.rolexshanghaimasters.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Shanghai_Masters_(tennis)",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/RolexSHMasters",
+  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40SH_RolexMasters%20OR%20%23ShanghaiMasters",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-08T11:52:01.604",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3458,
+      "name": "Shanghai",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19810,
+  "name": "2026 Formula 1 - Singapore Grand Prix",
+  "year": 2026,
+  "date": "9 - 11 October 2026",
+  "dateFrom": "2026-10-09T00:00:00",
+  "dateTo": "2026-10-11T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Singapore-Grand-Prix-19810",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23SingaporeGP%20OR%20%40F1NightRace",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-08T12:01:41.594",
+  "location": [
+   {
+    "id": 53,
+    "regionId": null,
+    "name": "Singapore",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "sg",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3774,
+      "name": "Singapore",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19586,
+  "name": "2026 WTA Tour - Wuhan Open",
+  "year": 2026,
+  "date": "12 - 18 October 2026",
+  "dateFrom": "2026-10-12T00:00:00",
+  "dateTo": "2026-10-18T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-WTA-Tour-Wuhan-Open-19586",
+  "webUrl": "https://www.wtatennis.com/tournaments/1075/wuhan/2026",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Wuhan_Open",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/wuhanopentennis",
+  "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40WuhanOpenTennis%20OR%20%23WuhanOpen",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-15T14:19:34.704",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3789,
+      "name": "Wuhan",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19587,
+  "name": "2026 WTA Tour - Ningbo Open",
+  "year": 2026,
+  "date": "19 - 25 October 2026",
+  "dateFrom": "2026-10-19T00:00:00",
+  "dateTo": "2026-10-25T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-WTA-Tour-Ningbo-Open-19587",
+  "webUrl": "https://www.wtatennis.com/tournaments/2092/ningbo/2026",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Ningbo_Open",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-22T14:56:47.946",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 5724,
+      "name": "Ningbo",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19811,
+  "name": "2026 Formula 1 - United States Grand Prix",
+  "year": 2026,
+  "date": "23 - 25 October 2026",
+  "dateFrom": "2026-10-23T00:00:00",
+  "dateTo": "2026-10-25T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-United-States-Grand-Prix-19811",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23USGP%20OR%20%40COTA",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-22T14:47:54.138",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3471,
+      "name": "Austin",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19588,
+  "name": "2026 WTA Tour - Toray Pan Pacific Open Tennis",
+  "year": 2026,
+  "date": "26 October - 1 November 2026",
+  "dateFrom": "2026-10-26T00:00:00",
+  "dateTo": "2026-11-01T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-WTA-Tour-Toray-Pan-Pacific-Open-Tennis-19588",
+  "webUrl": "https://www.wtatennis.com/tournaments/1056/tokyo/2026",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2025-12-03T11:38:25.583",
+  "location": [
+   {
+    "id": 15,
+    "regionId": null,
+    "name": "Japan",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "jp",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3412,
+      "name": "Tokyo",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19767,
+  "name": "2026 ATP Tour - Swiss Indoors",
+  "year": 2026,
+  "date": "26 October - 1 November 2026",
+  "dateFrom": "2026-10-26T00:00:00",
+  "dateTo": "2026-11-01T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 260,
+  "competition": "ATP Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Tour-Swiss-Indoors-19767",
+  "webUrl": "https://www.atptour.com/en/tournaments/basel/328/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Swiss_Indoors",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/ATPTour",
+  "twitterUrl": "https://twitter.com/atptour",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2025-12-19T16:45:32.083",
+  "location": [
+   {
+    "id": 30,
+    "regionId": null,
+    "name": "Switzerland",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "ch",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4472,
+      "name": "Basel",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19768,
+  "name": "2026 ATP Tour - Erste Bank Open",
+  "year": 2026,
+  "date": "26 October - 1 November 2026",
+  "dateFrom": "2026-10-26T00:00:00",
+  "dateTo": "2026-11-01T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 260,
+  "competition": "ATP Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Tour-Erste-Bank-Open-19768",
+  "webUrl": "https://www.atptour.com/en/tournaments/vienna/337/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Vienna_Open",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/ATPTour",
+  "twitterUrl": "https://twitter.com/atptour",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2025-12-19T16:45:32.09",
+  "location": [
+   {
+    "id": 57,
+    "regionId": null,
+    "name": "Austria",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "at",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3522,
+      "name": "Vienna",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19812,
+  "name": "2026 Formula 1 - Mexico City Grand Prix",
+  "year": 2026,
+  "date": "30 October - 1 November 2026",
+  "dateFrom": "2026-10-30T00:00:00",
+  "dateTo": "2026-11-01T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Mexico-City-Grand-Prix-19812",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-04-03T11:49:36.293",
+  "location": [
+   {
+    "id": 47,
+    "regionId": null,
+    "name": "Mexico",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "mx",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4187,
+      "name": "Mexico City",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19769,
+  "name": "2026 ATP Tour - Rolex Paris Masters",
+  "year": 2026,
+  "date": "2 - 8 November 2026",
+  "dateFrom": "2026-11-02T00:00:00",
+  "dateTo": "2026-11-08T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 260,
+  "competition": "ATP Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Tour-Rolex-Paris-Masters-19769",
+  "webUrl": "https://www.atptour.com/en/tournaments/paris/352/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Paris_Masters",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/ATPTour",
+  "twitterUrl": "https://twitter.com/atptour",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2025-12-19T16:45:32.1",
+  "location": [
+   {
+    "id": 10,
+    "regionId": null,
+    "name": "France",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "fr",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3426,
+      "name": "Paris",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19813,
+  "name": "2026 Formula 1 - São Paulo Grand Prix",
+  "year": 2026,
+  "date": "6 - 8 November 2026",
+  "dateFrom": "2026-11-06T00:00:00",
+  "dateTo": "2026-11-08T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-São-Paulo-Grand-Prix-19813",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-04-03T11:49:36.293",
+  "location": [
+   {
+    "id": 2,
+    "regionId": null,
+    "name": "Brazil",
+    "continent": "South America",
+    "continentId": 6,
+    "code": "br",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3472,
+      "name": "São Paulo",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19560,
+  "name": "2026 WTA Finals",
+  "year": 2026,
+  "date": "8 - 15 November 2026",
+  "dateFrom": "2026-11-08T00:00:00",
+  "dateTo": "2026-11-15T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 293,
+  "competition": "WTA Finals",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-WTA-Finals-19560",
+  "webUrl": "https://www.wtatennis.com/tournaments/wta-finals",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_WTA_Finals",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/search?q=%40WTA%20OR%20%23WTAFinals",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-08-28T08:28:08.678",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3860,
+      "name": "Indian Wells",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19743,
+  "name": "2026 ATP Finals",
+  "year": 2026,
+  "date": "15 - 22 November 2026",
+  "dateFrom": "2026-11-15T00:00:00",
+  "dateTo": "2026-11-22T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 261,
+  "competition": "ATP Finals",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-ATP-Finals-19743",
+  "webUrl": "https://www.nittoatpfinals.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_ATP_Finals",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/nittoatpfinals",
+  "twitterUrl": "https://twitter.com/atptour",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2025-12-19T16:32:32.75",
+  "location": [
+   {
+    "id": 39,
+    "regionId": null,
+    "name": "Italy",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "it",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 5022,
+      "name": "Torino",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19814,
+  "name": "2026 Formula 1 - Las Vegas Grand Prix",
+  "year": 2026,
+  "date": "19 - 21 November 2026",
+  "dateFrom": "2026-11-19T00:00:00",
+  "dateTo": "2026-11-21T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Las-Vegas-Grand-Prix-19814",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-04-03T11:49:36.293",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3753,
+      "name": "Las Vegas",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 20022,
+  "name": "2026 Davis Cup Finals",
+  "year": 2026,
+  "date": "24 - 29 November 2026",
+  "dateFrom": "2026-11-24T00:00:00",
+  "dateTo": "2026-11-29T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 262,
+  "competition": "Davis Cup Finals",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Davis-Cup-Finals-20022",
+  "webUrl": "https://www.daviscup.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Davis_Cup",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/DavisCupTennis",
+  "twitterUrl": "https://twitter.com/DavisCup",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-02-23T15:46:59.072",
+  "location": [
+   {
+    "id": 39,
+    "regionId": null,
+    "name": "Italy",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "it",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 5033,
+      "name": "Bologna",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19815,
+  "name": "2026 Formula 1 - Qatar Grand Prix",
+  "year": 2026,
+  "date": "27 - 29 November 2026",
+  "dateFrom": "2026-11-27T00:00:00",
+  "dateTo": "2026-11-29T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Qatar-Grand-Prix-19815",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-04-03T11:49:36.293",
+  "location": [
+   {
+    "id": 23,
+    "regionId": null,
+    "name": "Qatar",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "qa",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 6061,
+      "name": "Lusail",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19816,
+  "name": "2026 Formula 1 - Abu Dhabi Grand Prix",
+  "year": 2026,
+  "date": "4 - 6 December 2026",
+  "dateFrom": "2026-12-04T00:00:00",
+  "dateTo": "2026-12-06T00:00:00",
+  "sportId": 11,
+  "sport": "Motor Sports",
+  "emoji": null,
+  "competitionId": 65,
+  "competition": "Formula 1",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Formula-1-Abu-Dhabi-Grand-Prix-19816",
+  "webUrl": "https://www.formula1.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-04-03T11:49:36.293",
+  "location": [
+   {
+    "id": 33,
+    "regionId": null,
+    "name": "United Arab Emirates",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "ae",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3382,
+      "name": "Abu Dhabi",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21079,
+  "name": "2026 Next Gen ATP Finals",
+  "year": 2026,
+  "date": "9 - 13 December 2026",
+  "dateFrom": "2026-12-09T00:00:00",
+  "dateTo": "2026-12-13T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 743,
+  "competition": "Next Gen ATP Finals",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2026-Next-Gen-ATP-Finals-21079",
+  "webUrl": "https://www.nextgenatpfinals.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Next_Generation_ATP_Finals",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/nextgenfinals",
+  "twitterUrl": "https://twitter.com/nextgenfinals",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-18T12:58:09.849",
+  "location": [
+   {
+    "id": 39,
+    "regionId": null,
+    "name": "Italy",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "it",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 5415,
+      "name": "Reggio Calabria",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 20187,
+  "name": "2027 Tennis United Cup",
+  "year": 2027,
+  "date": "1 - 10 January 2027",
+  "dateFrom": "2027-01-01T00:00:00",
+  "dateTo": "2027-01-10T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 461,
+  "competition": "Tennis United Cup",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-Tennis-United-Cup-20187",
+  "webUrl": "https://www.unitedcup.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/United_Cup",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/UnitedCupTennis",
+  "twitterUrl": "https://twitter.com/search?q=%40UnitedCupTennis%20OR%20%40TennisAustralia%20OR%20%40atptour%20OR%20%40WTA%20OR%20%23UnitedCup",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-08-10T07:11:43.763",
+  "location": [
+   {
+    "id": 37,
+    "regionId": null,
+    "name": "Australia",
+    "continent": "Oceania",
+    "continentId": 8,
+    "code": "au",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3869,
+      "name": "Sydney",
+      "lat": null,
+      "lng": null
+     },
+     {
+      "id": 4212,
+      "name": "Perth",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -47,6 +47,8 @@ def download_logos():
     resolved = {}
 
     for r in rows:
+        if r.get("sport", "football") != "football":
+            continue  # other sports (build_events.py) have no team crests
         for role, name_key, logo_key in (("home", "home", "home_logo"), ("away", "away", "away_logo")):
             team = r[name_key]
             url = r.get(logo_key)

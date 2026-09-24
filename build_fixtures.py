@@ -581,6 +581,11 @@ def main():
         "competitions": comps_meta,
         "fixtures": rows,
     }
+    # non-football events (build_events.py) live in their own data file so this daily run never
+    # needs the AllSportDB key - just carry the still-upcoming ones over into the new fixtures.js
+    from build_events import merge_events
+    n_events = merge_events(payload)
+    print(f"Merged {n_events} upcoming non-football events from events_data.json")
     with open(os.path.join(HERE, "fixtures.js"), "w", encoding="utf-8") as f:
         f.write("window.TRIP_DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
 

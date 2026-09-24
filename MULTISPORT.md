@@ -146,9 +146,11 @@ for the next 120 days per sport, so we pick sports based on real coverage, not g
 - **Not usable for trips**: Basketball - 38 of 47 events are Euroleague/EuroCup *rounds*
   located just "Europe" (no city, no individual game); Football - 18 of 23 have no city
   (and we already have far better football data); Boxing - only 6, mostly minor "TBA".
-- **Data-quality warning**: the F1 "Bahrain Grand Prix" is listed at Sepang, Malaysia -
-  an obvious error. Any AllSportDB adapter needs a manual-override layer like
-  `overrides.py` has for football, and sanity checks against the sport's own calendar.
+- ~~Data-quality warning: the F1 "Bahrain Grand Prix" is listed at Sepang~~ - **this was
+  my mistake, it's correct**: the Bahrain GP (originally April, Sakhir) was cancelled over
+  the Iran war and rescheduled to Sepang, Malaysia, Oct 2-4 ("Formula 1 Gulf Air Bahrain
+  Grand Prix in Malaysia"). Verified by search after first flagging it as an error - a
+  reminder to check a suspicious-looking datum before calling the source wrong.
 
 ## Darts - correction after testing TheSportsDB for real
 

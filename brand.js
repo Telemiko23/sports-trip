@@ -3,5 +3,5 @@
 // title and header both read from it. `version` is shown small in the footer.
 window.BRAND = {
   name: 'מסלול משחקים',
-  version: '1.1.0'
+  version: '1.2.0'
 };

@@ -33,7 +33,7 @@ def main():
         if f.get("city") and (f.get("lat") is None or f.get("lng") is None):
             cc = COUNTRY_CC.get(f["country"], "?")
             key = (f["city"], f["country"], cc)
-            missing.setdefault(key, {"n": 0, "home": f["home"]})
+            missing.setdefault(key, {"n": 0, "home": f.get("home") or f.get("title")})
             missing[key]["n"] += 1
 
     if not missing:
