@@ -128,6 +128,28 @@ the end - the UI currently assumes a single kickoff time, so multi-day events ne
 the user's key in the `ALLSPORTDB_KEY` env var) that dumps what the API really returns
 for the next 120 days per sport, so we pick sports based on real coverage, not guesses.
 
+## AllSportDB probe results (real free-plan data, run 2026-09-24)
+
+544 events between 2026-09-05 and 2027-01-22 across 55 sports (70 in the catalog). Findings:
+- **No Darts and no horse racing at all** (Equestrian is show-jumping only). So AllSportDB
+  does not solve Darts - that stays open.
+- **Locations are city *names* only - zero lat/lng** (0 of 637) on the free plan. Fine:
+  same Nominatim geocoding pipeline as football.
+- **Free plan has no logos, ticket links or live links** (0 events with any).
+- **One event can span several cities** (e.g. a rugby Nations Championship round in
+  Paris + Dublin + Udine) - the schema needs `locations[]`, not a single city.
+- **Trip-useful sports (a real European city + a specific date)**: Formula 1 (only ~5
+  Europe-based motorsport events in this window, but the F1 calendar is global),
+  Snooker (10, mostly UK: Belfast, Leicester, York, Blackpool, Edinburgh), Rugby (7),
+  Tennis (7 in Europe; mostly Asia in this window), Cycling (13), Ice Hockey (11),
+  Motorbike Racing (8), plus winter sports (Alpine/Ski Jumping/Biathlon ~13-19 each).
+- **Not usable for trips**: Basketball - 38 of 47 events are Euroleague/EuroCup *rounds*
+  located just "Europe" (no city, no individual game); Football - 18 of 23 have no city
+  (and we already have far better football data); Boxing - only 6, mostly minor "TBA".
+- **Data-quality warning**: the F1 "Bahrain Grand Prix" is listed at Sepang, Malaysia -
+  an obvious error. Any AllSportDB adapter needs a manual-override layer like
+  `overrides.py` has for football, and sanity checks against the sport's own calendar.
+
 ## Darts - correction after testing TheSportsDB for real
 
 Last night I recommended TheSportsDB's free Darts API. **That was too optimistic - tested
