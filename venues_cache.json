@@ -131,6 +131,10 @@
   53.3703,
   -1.4707
  ],
+ "Brann Stadion|Bergen": [
+  60.3668,
+  5.3574
+ ],
  "Brentford Community Stadium|London": [
   51.4907,
   -0.289
@@ -252,6 +256,10 @@
   50.0686,
   8.6454
  ],
+ "Doosan Arena|Plzen": [
+  49.75,
+  13.3851
+ ],
  "Eco-Power Stadium|Doncaster": [
   53.5098,
   -1.1138
@@ -291,6 +299,10 @@
  "Estadi de la Nova Creu Alta|Sabadell": [
   41.5549,
   2.0918
+ ],
+ "Estadio Antonio Coimbra da Mota|Estoril": [
+  38.7159,
+  -9.4064
  ],
  "Estadio Carlos Belmonte|Albacete": [
   38.9811,
@@ -340,6 +352,10 @@
   39.9961,
   -0.0386
  ],
+ "Estadio Municipal de Famalicao|Vila Nova de Famalicao": [
+  41.4013,
+  -8.5224
+ ],
  "Estadio Municipal de Ipurua|Eibar": [
   43.1819,
   -2.4756
@@ -372,6 +388,7 @@
   42.426,
   -2.5535
  ],
+ "Estadio Zubieta|San Sebastian": null,
  "Estadio de Balaídos|Vigo": [
   42.2128,
   -8.7393
@@ -424,6 +441,7 @@
   50.8615,
   20.6247
  ],
+ "FC Alverca Sports Complex|Alverca do Ribatejo": null,
  "Ferencváros Stadion|Budapest": [
   47.4755,
   19.0955
@@ -443,6 +461,10 @@
  "Fritz Walter Stadion|Kaiserslautern": [
   49.4346,
   7.7766
+ ],
+ "GSP Stadium|Nicosia": [
+  35.1145,
+  33.3637
  ],
  "Georgios Karaiskakis Stadium|Piraeus": [
   37.9465,
@@ -624,6 +646,7 @@
   52.9431,
   -1.1344
  ],
+ "Meadow View Park|Thame, Oxfordshire": null,
  "Memorial Stadium|Bristol": [
   51.4863,
   -2.5832
@@ -688,6 +711,14 @@
   45.7092,
   9.6808
  ],
+ "New Meadow|Shrewsbury": [
+  52.6886,
+  -2.7494
+ ],
+ "New York Stadium|Rotherham": [
+  53.4268,
+  -1.3627
+ ],
  "Nouste Camp|Pau": [
   43.3076,
   -0.3252
@@ -736,6 +767,11 @@
   45.9169,
   6.1192
  ],
+ "Parken Stadium|Copenhagen": [
+  55.7027,
+  12.5723
+ ],
+ "Parque Joaquim de Almeida Freitas|Moreira de Conegos": null,
  "Peninsula Stadium|Salford": [
   53.5137,
   -2.2763
@@ -761,6 +797,10 @@
   8.8876
  ],
  "Prenton Park|Birkenhead": [
+  53.3737,
+  -3.0326
+ ],
+ "Prenton Park|Wirral": [
   53.3737,
   -3.0326
  ],
@@ -1406,6 +1446,7 @@
   53.9843,
   -1.0527
  ],
+ "York`s LNER Community Stadium|York": null,
  "Zwaluwenlaan Sports Park|Vlaardingen": [
   51.9317,
   4.3607
