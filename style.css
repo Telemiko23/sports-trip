@@ -52,7 +52,7 @@ h1.brand{margin:0;line-height:0}
 .jump .ico{width:18px;height:18px}
 @media (max-width:760px){ .site-header-in{padding:12px 12px} .brand-logo img{height:30px} }
 
-.layout{max-width:1400px;margin:0 auto;padding:24px 20px 64px;display:grid;
+.layout{max-width:1400px;margin:0 auto;padding:16px 20px 64px;display:grid;
   grid-template-columns:290px minmax(0,1fr) 400px;gap:24px;align-items:start}
 @media (max-width:1150px){ .layout{grid-template-columns:270px minmax(0,1fr)} #trip{grid-column:1 / -1} }
 @media (max-width:760px){ .layout{grid-template-columns:1fr;padding-inline:12px} }
@@ -105,7 +105,9 @@ input[type=range]{width:100%;accent-color:var(--brand-primary)}
 /* ---------- results ---------- */
 #summary{margin:0 0 16px;color:var(--text-muted);font-size:15px}
 #summary strong{color:var(--text);font-size:18px;font-weight:700}
-.viewToggle{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:4px;margin:0 0 16px}
+.viewbar{max-width:1400px;margin:0 auto;padding:16px 20px 0}
+@media (max-width:760px){ .viewbar{padding-inline:12px} }
+.viewToggle{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:4px;margin:0}
 .vtab{display:inline-flex;align-items:center;gap:8px;border:0;background:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--text-muted);transition:background .15s,color .15s}
 .vtab:hover{color:var(--text)}
 .vtab[aria-pressed=true]{background:var(--brand-primary);color:var(--on-primary);box-shadow:inset 0 0 0 1px var(--link)}
