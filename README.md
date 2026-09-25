@@ -92,7 +92,8 @@ Spanish clubs the API didn't have a crest for).
 | `missing_info.csv` | Working file: every event/team missing a venue, city or pin, with suggestions - fill in the last columns and send back. Delete once ingested. |
 | `MULTISPORT.md` | Design-only doc for adding sports beyond football (Formula 1, Darts, AllSportDB findings) - not implemented yet. |
 | `BRANDING.md` | How to rename the product: one edit in `brand.js`, plus the manual steps in GitHub / Google Analytics / Travelpayouts. |
-| `brand.js` | The product's public name (ToSport), wordmark, tagline and version - read by `app.js` for the page title, header and footer. |
+| `brand.js` | The product's public name (ToSport), descriptor and version - read by `app.js` for the page title, logo text and footer. |
+| `brand/` | The logo PNGs (`tosport-logo-blue-white.png` in the header, `tosport-logo-white.png`), `favicon.png` and `apple-touch-icon.png` - prepared from the transparent variants supplied by the user; see BRANDING.md for what was done to them. |
 | `allsportdb_probe.py` | Read-only exploration of the AllSportDB API (needs `ALLSPORTDB_KEY` env var) - writes a git-ignored dump, doesn't touch `fixtures.js`. |
 | `README.md` | This file. |
 

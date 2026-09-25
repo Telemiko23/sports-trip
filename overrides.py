@@ -103,6 +103,8 @@ VENUE_OVERRIDE = {
 # plan, so the circuit/stadium is filled in here, keyed by the cleaned event title. Only entries
 # I'm certain of live here; suggestions still needing a human check go through the missing-info CSV.
 EVENT_VENUE_OVERRIDE = {
+    "Davis Cup Finals": "BolognaFiere Arena",  # from the official schedule page
+    "ATP Finals": "Inalpi Arena",  # from the official schedule page
     "Azerbaijan Grand Prix": "Baku City Circuit",
     "Bahrain Grand Prix": "Sepang International Circuit",  # the Bahrain GP was moved to Malaysia in 2026
     "Singapore Grand Prix": "Marina Bay Street Circuit",

@@ -60,7 +60,7 @@ those aren't listed here since we didn't add them and don't control their params
 ## Filters
 
 ### `base_city_set`
-- **Params**: `city`.
+- **Params**: `city`, `source` (`"map"` when it came from clicking a map pin - v1.6.0; absent when typed/selected in the box).
 - **Trigger**: selecting a base city from the autocomplete (only on an actual selection,
   not while typing).
 - **Use**: which cities people plan trips around most.
@@ -115,6 +115,11 @@ those aren't listed here since we didn't add them and don't control their params
 - **Params**: none.
 - **Trigger**: clicking "מידע משפטי ופרטיות" in the footer.
 - **Use**: mostly a curiosity/compliance signal - whether anyone actually reads it.
+
+### `category_collapse_toggle`
+- **Params**: `category` (`football` | `motorsport` | `tennis` | `darts`), `expanded` (boolean, the new state).
+- **Trigger**: clicking the chevron/name of a sport category in the filter sidebar.
+- **Use**: whether people fold categories away - if many do, the sidebar is too long by default.
 
 ### `back_to_top_click`
 - **Params**: none.

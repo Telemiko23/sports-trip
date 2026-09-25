@@ -1,11 +1,9 @@
 (function () {
-  var BRAND = window.BRAND || { name: 'ToSport', mark: ['To', 'Sport'], tagline: '', version: '' };
+  var BRAND = window.BRAND || { name: 'ToSport', descriptor: '', version: '' };
   var APP_VERSION = BRAND.version;
   (function () {
-    var h1 = document.getElementById('brandName');
-    h1.textContent = BRAND.mark[0];
-    var b = document.createElement('b'); b.textContent = BRAND.mark[1]; h1.appendChild(b);
-    document.title = BRAND.name + (BRAND.tagline ? ' - ' + BRAND.tagline : '');
+    document.title = BRAND.name + (BRAND.descriptor ? ' - ' + BRAND.descriptor : '');
+    var d = document.getElementById('brandTag'); if (d) d.textContent = BRAND.descriptor || '';
   })();
   var DATA = window.TRIP_DATA;
   var app = document.getElementById('app');
@@ -30,11 +28,6 @@
     'Formula 1': 'פורמולה 1', Tennis: 'טניס', Darts: 'דארטס',
     Singapore: 'סינגפור', China: 'סין', Japan: 'יפן', Malaysia: 'מלזיה', 'United States': 'ארצות הברית', Mexico: 'מקסיקו',
     Brazil: 'ברזיל', Qatar: 'קטאר', 'United Arab Emirates': 'איחוד האמירויות', Australia: 'אוסטרליה', 'United Kingdom': 'הממלכה המאוחדת'
-  };
-  var COUNTRY_COLOR = {
-    England: '#2F6FBD', Spain: '#C0392B', Germany: '#6B6B6B', France: '#7A4FBF', Netherlands: '#D9782D', Italy: '#1E9E8C', Poland: '#B23A6B',
-    Portugal: '#2E8B57', Europe: '#8C6420',
-    f1: '#D42A2A', tennis: '#7BA428', darts: '#C2185B', 'Formula 1': '#D42A2A', Tennis: '#7BA428', Darts: '#C2185B'
   };
   var HE_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
   var HE_DAYS_FULL = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
@@ -109,7 +102,6 @@
     return f.flag && /^[a-z]{2}(-[a-z]{3})?$/.test(f.flag)
       ? '<img class="flag" src="flags/' + f.flag + '.svg" alt="" title="' + esc(HE_COUNTRY[f.country] || f.country || '') + '" loading="lazy">' : '';
   }
-  function colorOf(f) { return COUNTRY_COLOR[isEvent(f) ? f.sport : f.country] || '#999'; }
   function shortRange(f) {
     var a = parseDay(dayOf(f)), b = parseDay(endDay(f));
     var fa = a.getDate() + '/' + (a.getMonth() + 1), fb = b.getDate() + '/' + (b.getMonth() + 1);
@@ -120,7 +112,7 @@
   // "פירוט" opens the day's session schedule - only rendered when we actually have one
   function detailBtn(f) { return f.sessions && f.sessions.length ? ' <button type="button" class="detail-btn" data-detail="' + f.id + '">פירוט</button>' : ''; }
   function tagHtml(f) {
-    return '<span class="tag" style="--ctry-color:' + colorOf(f) + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
+    return '<span class="tag">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
   }
   function kickHtml(f, withDate) {
     var d0 = parseDay(dayOf(f));
@@ -138,7 +130,7 @@
   function cardHtml(f, withDate) {
     var picked = S.trip.indexOf(f.id) !== -1;
     var dist = (S.base && hasPos(f)) ? ' <span class="dist">' + (km(S.base, f) < 3 ? 'בעיר הבסיס' : Math.round(km(S.base, f)) + ' ק״מ') + '</span>' : '';
-    return '<li class="match' + (picked ? ' picked' : '') + '" style="--ctry-color:' + colorOf(f) + '">' + kickHtml(f, withDate) +
+    return '<li class="match' + (picked ? ' picked' : '') + '">' + kickHtml(f, withDate) +
       '<div class="teams">' + titleHtml(f) + '</div>' +
       '<div class="meta">' + tagHtml(f) + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
       '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
@@ -279,7 +271,7 @@
     }).join('');
   }
   function groupHead(ct, cls) {
-    return '<div class="' + cls + '"><span><i class="dot" style="background:' + (COUNTRY_COLOR[ct] || '#999') + '"></i>' + esc(HE_COUNTRY[ct] || ct) + '</span><button type="button" class="linkbtn" data-ctry="' + esc(ct) + '">הכל / כלום</button></div>';
+    return '<div class="' + cls + '"><span>' + esc(HE_COUNTRY[ct] || ct) + '</span><button type="button" class="linkbtn" data-ctry="' + esc(ct) + '">הכל / כלום</button></div>';
   }
   // two levels: a category (sport family), then - where a category has several groups - its groups.
   // Football's groups are countries; motorsport is the umbrella for F1 now and bikes/horses later.
@@ -300,7 +292,7 @@
       var head = cat.key === 'football' || (groups.length > 1 && byCountry[ct].length > 1);
       return (head ? groupHead(ct, 'ctry') : '') + compRows(ct);
     }).join('');
-    return '<div class="sport-head"><span>' + esc(cat.he) + '</span><button type="button" class="linkbtn" data-sport="' + esc(cat.key) + '">הכל / כלום</button></div><div class="sub">' + body + '</div>';
+    return '<div class="sport-head"><button type="button" class="cat-toggle" data-toggle="' + esc(cat.key) + '" aria-expanded="true" aria-controls="sub-' + esc(cat.key) + '"><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>' + esc(cat.he) + '</button><button type="button" class="linkbtn" data-sport="' + esc(cat.key) + '">הכל / כלום</button></div><div class="sub" id="sub-' + esc(cat.key) + '">' + body + '</div>';
   }).join('');
 
   function setBase(place, typedText) {
@@ -328,6 +320,14 @@
     track('competition_toggle', { comp: c ? c.label : id, checked: e.target.checked });
   });
   $('#comps').addEventListener('click', function (e) {
+    var tg = e.target.closest ? e.target.closest('[data-toggle]') : null;
+    if (tg) {
+      var open = tg.getAttribute('aria-expanded') !== 'true';
+      tg.setAttribute('aria-expanded', String(open));
+      $('#sub-' + tg.getAttribute('data-toggle')).hidden = !open;
+      track('category_collapse_toggle', { category: tg.getAttribute('data-toggle'), expanded: open });
+      return;
+    }
     var ct = e.target.getAttribute('data-ctry'), sp = e.target.getAttribute('data-sport');
     if (!ct && !sp) return;
     var list = sp ? comps.filter(function (c) { return categoryOf(c) === sp; }) : byCountry[ct];
@@ -433,8 +433,17 @@
   }
   function selectPin(key) {
     mapState.sel = key;
-    renderPanel(); markSelected();
     var g = mapState.groups[key];
+    var at = g && g.list.filter(hasPos)[0];
+    if (at) {
+      var place = { city: at.city, cityHe: cityHe(at), lat: at.lat, lng: at.lng };
+      if (!S.base || S.base.lat !== place.lat || S.base.lng !== place.lng) {
+        $('#base').value = place.cityHe;
+        setBase(place, place.cityHe);   // -> update() -> renderMap() re-fits the map to the radius circle
+        track('base_city_set', { city: place.city, source: 'map' });
+      }
+    }
+    renderPanel(); markSelected();
     if (g) track('map_marker_click', { city: g.cityHe, venue: g.venue || '', match_count: g.list.length });
     $('#mapPanel').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
   }
@@ -484,7 +493,7 @@
     if (mapState.sel && !byCity[mapState.sel]) mapState.sel = null;
     renderPanel(); markSelected();
     if (S.base) {
-      mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#B8862E', weight: 1.5, fillOpacity: .08 }).addTo(mapState.map);
+      mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#2454E6', weight: 2, fillOpacity: .1 }).addTo(mapState.map);
       if (keyChanged) mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
     } else if (keys.length && keyChanged) {
       mapState.map.fitBounds(keys.map(function (k) { return [byCity[k].lat, byCity[k].lng]; }), { padding: [30, 30], maxZoom: 6 });
@@ -593,9 +602,8 @@
       var d = parseDay(dayOf(f));
       var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
       var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
-      var stubCtryColor = colorOf(f);
       var ev = isEvent(f), endD = parseDay(endDay(f));
-      var stubTag = '<span class="tag" style="--ctry-color:' + stubCtryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
+      var stubTag = '<span class="tag">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
       html += '<div class="stub"><div class="date"><span class="num">' + d.getDate() + '</span><span class="mon">' + esc(d.toLocaleDateString('he-IL', { month: 'short' })) + '</span><span class="wd">' + (ev && endDay(f) !== dayOf(f) ? 'עד ' + endD.getDate() + '.' + (endD.getMonth() + 1) : HE_DAYS_FULL[d.getDay()]) + '</span></div>' +
         '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
         (ev ? '<div class="t">' + flagHtml(f) + '<bdi dir="rtl" class="tname">' + esc(titleHe(f)) + '</bdi></div>'
@@ -650,7 +658,7 @@
     $('#detailSub').textContent = fmtLong(dayOf(f)) + (f.sessions_note ? ' · ' + f.sessions_note : '');
     $('#detailRows').innerHTML = f.sessions.map(function (s) {
       return '<div class="drow' + (s.main ? ' main' : '') + '"><span class="dser">' + esc(s.series) + '</span><span class="dname">' + esc(s.name) +
-        '</span><span class="dtime"><bdi dir="ltr">' + esc(s.start) + ' - ' + esc(s.end) + '</bdi></span></div>';
+        '</span><span class="dtime"><bdi dir="ltr">' + esc(s.start ? (s.end ? s.start + ' - ' + s.end : s.start) : '') + '</bdi></span></div>';
     }).join('');
     var official = /^https?:\/\//.test(f.web_url || '') ? ' <a href="' + esc(f.web_url) + '" target="_blank" rel="noopener">לאתר התחרות</a>' : '';
     $('#detailOfficial').innerHTML = official;

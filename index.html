@@ -6,19 +6,27 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.tile.openstreetmap.org https://media.api-sports.io; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>ToSport</title>
+<meta name="description" content="ToSport - מתכננים טיולים סביב הספורט שאתם אוהבים.">
+<meta name="theme-color" content="#0B1220">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="brand/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BKHDQGMC8T"></script>
 <script src="analytics.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="hero"><div class="hero-in">
-  <h1 id="brandName" dir="ltr">To<b>Sport</b></h1>
-  <a class="jump" href="#trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b id="tripCount">0</b>)</a>
-</div></div>
+<header class="site-header"><div class="site-header-in">
+  <h1 class="brand">
+    <a class="brand-logo" href="./"><img src="brand/tosport-logo-blue-white.png" width="165" height="36" alt="ToSport - דף הבית"></a>
+  </h1>
+  <span class="brand-tag" id="brandTag">מתכננים טיולים סביב הספורט שאתם אוהבים.</span>
+  <a class="jump" href="#trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b id="tripCount">0</b>)</a>
+</div></header>
 
 <div id="app" class="layout">
   <aside id="filters" aria-label="סינון משחקים">

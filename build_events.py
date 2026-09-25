@@ -145,9 +145,17 @@ def build_rows(raw):
                 vstate["dirty"] = True
         return vc
 
-    def sessions_for(title):
+    def sessions_for(title, date_from):
+        """Session schedule for the details popup. If the official schedule starts earlier than the
+        calendar's date (e.g. qualifying days before the main draw), the event is extended back to it."""
         s = sessions_all.get(title)
-        return {"sessions": s["days"], "sessions_note": s.get("note")} if s else {}
+        if not s:
+            return {}
+        out = {"sessions": s["days"], "sessions_note": s.get("note")}
+        first = min(s["days"])
+        if first < date_from:
+            out["dt"] = first + "T00:00"
+        return out
 
     rows, comps, seen = [], {}, set()
     skipped = []
@@ -186,7 +194,7 @@ def build_rows(raw):
             "country": country, "round": None, "venue": venue, "city": city, "city_he": he_city(city, country),
             "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
             "venue_lat": vc[0] if vc else None, "venue_lng": vc[1] if vc else None, "web_url": e.get("webUrl"),
-            **sessions_for(title),
+            **sessions_for(title, date_from),
         })
     # hand-entered events (darts) - same row shape, plus an exact stadium pin via venues_cache.json
     mpath = os.path.join(HERE, "events_manual.json")
@@ -215,7 +223,7 @@ def build_rows(raw):
                 "city_he": he_city(ev["city"], ev["country"]),
                 "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
                 "venue_lat": vc[0] if vc else None, "venue_lng": vc[1] if vc else None, "web_url": None,
-                **sessions_for(ev["title"]),
+                **sessions_for(ev["title"], ev["from"]),
             })
     if vstate["dirty"]:
         save_json("venues_cache.json", vcache)
