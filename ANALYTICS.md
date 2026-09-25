@@ -35,7 +35,7 @@ those aren't listed here since we didn't add them and don't control their params
 ### `map_marker_click`
 - **Params**: `city`, `venue` (empty string if the pin is a city-level fallback, not a
   precise stadium), `match_count` (how many fixtures are behind that pin).
-- **Trigger**: clicking a pin on the map (opens its popup).
+- **Trigger**: clicking a pin on the map (since v1.5.0 this fills the events panel under the map - there is no popup any more).
 - **Use**: which stadiums/cities draw exploration interest on the map.
 
 ### `venue_maps_click`
@@ -84,7 +84,7 @@ those aren't listed here since we didn't add them and don't control their params
 
 ### `competition_country_toggle`
 - **Params**: `country`, `checked`.
-- **Trigger**: clicking a country's own "הכל / כלום" link in the filter sidebar.
+- **Trigger**: clicking a country's own "הכל / כלום" link in the filter sidebar, or (v1.5.0) a sport category's link - then `country` is the category key: `football`, `motorsport`, `tennis`, `darts`.
 - **Use**: bulk country-level interest (e.g. "turn off everything English").
 
 ### `competition_all_toggle`
@@ -115,6 +115,12 @@ those aren't listed here since we didn't add them and don't control their params
 - **Params**: none.
 - **Trigger**: clicking "מידע משפטי ופרטיות" in the footer.
 - **Use**: mostly a curiosity/compliance signal - whether anyone actually reads it.
+
+### `back_to_top_click`
+- **Params**: none.
+- **Trigger**: clicking the floating "back to top" button (appears after scrolling ~700px).
+- **Use**: how long/scroll-heavy the list is in practice - frequent use suggests the list needs better
+  filtering or pagination.
 
 ### `event_details_open`
 - **Params**: `sport`, `title` (the day's title, e.g. "Azerbaijan Grand Prix - Day 2").

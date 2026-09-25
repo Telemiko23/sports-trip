@@ -1,7 +1,9 @@
-// Single source of truth for the product's public identity. To rename the product, edit
-// `name` here (first word renders plain, the rest highlighted in the header) - the page
-// title and header both read from it. `version` is shown small in the footer.
+// Single source of truth for the product's public identity. To rename the product, edit it here:
+// `mark` is the wordmark in two parts (first part plain, second highlighted), `tagline` follows the
+// name in the page title, `version` is shown small in the footer. See BRANDING.md.
 window.BRAND = {
-  name: 'מסלול משחקים',
-  version: '1.4.0'
+  name: 'ToSport',
+  mark: ['To', 'Sport'],
+  tagline: 'תכנון טיולי ספורט',
+  version: '1.5.0'
 };

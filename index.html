@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.tile.openstreetmap.org https://media.api-sports.io; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>מסלול משחקים</title>
+<title>ToSport</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BKHDQGMC8T"></script>
 <script src="analytics.js"></script>
@@ -16,9 +16,8 @@
 </head>
 <body>
 <div class="hero"><div class="hero-in">
-  <h1 id="brandName">מסלול <b>משחקים</b></h1>
-  <span id="fresh" class="fresh"></span>
-  <a class="jump" href="#trip">⚽ הטיול שלי (<b id="tripCount">0</b>)</a>
+  <h1 id="brandName" dir="ltr">To<b>Sport</b></h1>
+  <a class="jump" href="#trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b id="tripCount">0</b>)</a>
 </div></div>
 
 <div id="app" class="layout">
@@ -49,14 +48,14 @@
 
   <main id="results" aria-live="polite">
     <div class="viewToggle" id="viewToggle" role="tablist">
-      <button type="button" class="vtab" data-view="list" aria-pressed="true">📋 רשימה</button>
-      <button type="button" class="vtab" data-view="map" aria-pressed="false">🗺️ מפה</button>
+      <button type="button" class="vtab" data-view="list" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>רשימה</button>
+      <button type="button" class="vtab" data-view="map" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v14L9 18l6 2.5 6-2.5v-14L15 6.5zM9 4v14M15 6.5v14"/></svg>מפה</button>
     </div>
     <p id="summary"></p>
     <div id="list"></div>
     <div id="mapWrap" style="display:none">
       <div id="map"></div>
-      <p class="hint">לחצו על עיר במפה כדי לראות את המשחקים בה ולהוסיף לטיול.</p>
+      <section id="mapPanel" class="map-panel" aria-live="polite"></section>
     </div>
   </main>
 
@@ -73,7 +72,7 @@
   אירועי ספורט נוספים: <a href="https://allsportdb.com" target="_blank" rel="noopener">AllSportDB</a>
   <div class="credits-row">
     <button type="button" class="linkbtn" id="legalBtn">מידע משפטי ופרטיות</button>
-    <span class="version">גרסה <span id="appVersion"></span></span>
+    <span class="version"><span id="fresh"></span> · גרסה <span id="appVersion"></span></span>
   </div>
 </footer>
 
@@ -82,6 +81,7 @@
   <h3 id="detailTitle"></h3>
   <p id="detailSub"></p>
   <div id="detailRows"></div>
+  <p class="detail-note" id="detailNote">השעות המוצגות הן לידיעה בלבד ואיננו מתחייבים לדיוקן. לוחות הזמנים עשויים להשתנות, ולכן חשוב לבדוק באתר הרשמי של התחרות לפני כל תכנון.<span id="detailOfficial"></span></p>
 </dialog>
 
 <dialog id="legalDialog">
@@ -98,6 +98,8 @@
     קישורי הלינה מיועדים בעתיד לכלול קישור שותפים (affiliate) של Booking.com - אם וכשזה
     יופעל, הזמנה דרכם עשויה לזכות את האתר בעמלה, בלי שינוי במחיר שאתם משלמים.</p>
 </dialog>
+
+<button type="button" id="toTop" class="to-top" aria-label="חזרה לראש העמוד" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script src="brand.js"></script>
 <script src="fixtures.js"></script>

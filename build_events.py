@@ -32,7 +32,8 @@ import urllib.parse
 import urllib.request
 
 from he_names import he_event, he_comp, he_city
-from overrides import EVENT_VENUE_OVERRIDE
+from overrides import COUNTRY_FLAG, EVENT_COMP_LOGO, EVENT_VENUE_OVERRIDE
+from download_logos import download_flags
 
 BASE = "https://api.allsportdb.com/v3"
 KEY = os.environ.get("ALLSPORTDB_KEY")
@@ -244,6 +245,15 @@ def merge_events(payload):
     payload["fixtures"] = [r for r in payload["fixtures"] if r.get("sport", "football") == "football"]
     payload["competitions"] = [c for c in payload["competitions"] if c.get("sport", "football") == "football"]
     rows, comps = load_events()
+    # presentation extras kept out of the raw data: the competition's crest, and the host country's flag
+    for c in comps:
+        if c["label"] in EVENT_COMP_LOGO:
+            c["logo"] = EVENT_COMP_LOGO[c["label"]]
+    for r in rows:
+        r["flag"] = COUNTRY_FLAG.get(r["country"])
+    download_flags(r["flag"] for r in rows if r["flag"])
+    for name in sorted({r["country"] for r in rows if not r["flag"]}):
+        print(f"  no flag mapped for host country {name!r} - add it to COUNTRY_FLAG in overrides.py")
     payload["fixtures"].extend(rows)
     payload["competitions"].extend(comps)
     payload["fixtures"].sort(key=lambda r: r["dt"])

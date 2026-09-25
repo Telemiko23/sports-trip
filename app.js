@@ -1,12 +1,11 @@
 (function () {
-  var BRAND = window.BRAND || { name: 'מסלול משחקים', version: '' };
+  var BRAND = window.BRAND || { name: 'ToSport', mark: ['To', 'Sport'], tagline: '', version: '' };
   var APP_VERSION = BRAND.version;
   (function () {
-    var parts = String(BRAND.name).split(' ');
     var h1 = document.getElementById('brandName');
-    h1.textContent = parts[0] + (parts.length > 1 ? ' ' : '');
-    if (parts.length > 1) { var b = document.createElement('b'); b.textContent = parts.slice(1).join(' '); h1.appendChild(b); }
-    document.title = BRAND.name;
+    h1.textContent = BRAND.mark[0];
+    var b = document.createElement('b'); b.textContent = BRAND.mark[1]; h1.appendChild(b);
+    document.title = BRAND.name + (BRAND.tagline ? ' - ' + BRAND.tagline : '');
   })();
   var DATA = window.TRIP_DATA;
   var app = document.getElementById('app');
@@ -28,7 +27,7 @@
     Luxembourg: 'לוקסמבורג', Malta: 'מלטה', Moldova: 'מולדובה', Monaco: 'מונקו', Montenegro: 'מונטנגרו',
     'North Macedonia': 'צפון מקדוניה', Russia: 'רוסיה', 'San Marino': 'סן מרינו', Slovenia: 'סלובניה',
     Wales: 'ויילס', 'Northern Ireland': 'צפון אירלנד',
-    'Formula 1': '🏎️ פורמולה 1', Tennis: '🎾 טניס', Darts: '🎯 דארטס',
+    'Formula 1': 'פורמולה 1', Tennis: 'טניס', Darts: 'דארטס',
     Singapore: 'סינגפור', China: 'סין', Japan: 'יפן', Malaysia: 'מלזיה', 'United States': 'ארצות הברית', Mexico: 'מקסיקו',
     Brazil: 'ברזיל', Qatar: 'קטאר', 'United Arab Emirates': 'איחוד האמירויות', Australia: 'אוסטרליה', 'United Kingdom': 'הממלכה המאוחדת'
   };
@@ -104,6 +103,12 @@
   function endDay(f) { return f.date_to || dayOf(f); }
   function isEvent(f) { return !!f.sport && f.sport !== 'football'; }
   function titleHe(f) { return isEvent(f) ? (f.title_he || f.title) : (f.home_he || f.home) + ' – ' + (f.away_he || f.away); }
+  // host-country flag for non-football events (saved locally in flags/; the code is validated
+  // before it is used in a path, so a malformed value in the data can't point anywhere else)
+  function flagHtml(f) {
+    return f.flag && /^[a-z]{2}(-[a-z]{3})?$/.test(f.flag)
+      ? '<img class="flag" src="flags/' + f.flag + '.svg" alt="" title="' + esc(HE_COUNTRY[f.country] || f.country || '') + '" loading="lazy">' : '';
+  }
   function colorOf(f) { return COUNTRY_COLOR[isEvent(f) ? f.sport : f.country] || '#999'; }
   function shortRange(f) {
     var a = parseDay(dayOf(f)), b = parseDay(endDay(f));
@@ -114,6 +119,30 @@
   function rangeHtml(f) { return f.day_no ? 'יום ' + f.day_no : '<bdi dir="ltr">' + esc(shortRange(f)) + '</bdi>'; }
   // "פירוט" opens the day's session schedule - only rendered when we actually have one
   function detailBtn(f) { return f.sessions && f.sessions.length ? ' <button type="button" class="detail-btn" data-detail="' + f.id + '">פירוט</button>' : ''; }
+  function tagHtml(f) {
+    return '<span class="tag" style="--ctry-color:' + colorOf(f) + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
+  }
+  function kickHtml(f, withDate) {
+    var d0 = parseDay(dayOf(f));
+    var date = withDate ? '<span class="kdate"><bdi dir="ltr">' + esc(d0.getDate() + '/' + (d0.getMonth() + 1)) + '</bdi></span>' : '';
+    if (isEvent(f)) return '<div class="kick tbd">' + (f.day_no ? date + rangeHtml(f) : rangeHtml(f)) + '</div>';
+    return f.status === 'TBD' ? '<div class="kick tbd">' + date + 'שעה לא מאושרת</div>' : '<div class="kick">' + date + esc(f.dt.slice(11, 16)) + '</div>';
+  }
+  function titleHtml(f) {
+    if (isEvent(f)) return flagHtml(f) + '<bdi dir="rtl">' + esc(titleHe(f)) + '</bdi>';
+    var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
+    var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
+    return '<bdi dir="rtl">' + homeLogo + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + awayLogo + '</bdi>';
+  }
+  // one card used by both the list and the map panel, so they can never drift apart
+  function cardHtml(f, withDate) {
+    var picked = S.trip.indexOf(f.id) !== -1;
+    var dist = (S.base && hasPos(f)) ? ' <span class="dist">' + (km(S.base, f) < 3 ? 'בעיר הבסיס' : Math.round(km(S.base, f)) + ' ק״מ') + '</span>' : '';
+    return '<li class="match' + (picked ? ' picked' : '') + '" style="--ctry-color:' + colorOf(f) + '">' + kickHtml(f, withDate) +
+      '<div class="teams">' + titleHtml(f) + '</div>' +
+      '<div class="meta">' + tagHtml(f) + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
+      '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
+  }
   function longRange(f) {
     return dayOf(f) === endDay(f) ? fmtLong(dayOf(f)) : parseDay(dayOf(f)).toLocaleDateString('he-IL', { day: 'numeric', month: 'long' }) + ' – ' + parseDay(endDay(f)).toLocaleDateString('he-IL', { day: 'numeric', month: 'long' });
   }
@@ -252,12 +281,27 @@
   function groupHead(ct, cls) {
     return '<div class="' + cls + '"><span><i class="dot" style="background:' + (COUNTRY_COLOR[ct] || '#999') + '"></i>' + esc(HE_COUNTRY[ct] || ct) + '</span><button type="button" class="linkbtn" data-ctry="' + esc(ct) + '">הכל / כלום</button></div>';
   }
-  // two levels: a sport, then (football only) its countries - other sports are a single group
-  var footballGroups = order.filter(function (ct) { return !byCountry[ct][0].sport; });
-  $('#comps').innerHTML =
-    '<div class="sport-head"><span>⚽ כדורגל</span><button type="button" class="linkbtn" data-sport="football">הכל / כלום</button></div>' +
-    '<div class="sub">' + footballGroups.map(function (ct) { return groupHead(ct, 'ctry') + compRows(ct); }).join('') + '</div>' +
-    order.filter(function (ct) { return byCountry[ct][0].sport; }).map(function (ct) { return groupHead(ct, 'sport-head') + compRows(ct); }).join('');
+  // two levels: a category (sport family), then - where a category has several groups - its groups.
+  // Football's groups are countries; motorsport is the umbrella for F1 now and bikes/horses later.
+  var CATEGORIES = [
+    { key: 'football', he: 'כדורגל' }, { key: 'motorsport', he: 'ספורט מוטורי' },
+    { key: 'tennis', he: 'טניס' }, { key: 'darts', he: 'דארטס' }
+  ];
+  var SPORT_CATEGORY = { f1: 'motorsport' };
+  function categoryOf(c) { return c.sport ? (SPORT_CATEGORY[c.sport] || c.sport) : 'football'; }
+  comps.forEach(function (c) {
+    var k = categoryOf(c);
+    if (!CATEGORIES.some(function (x) { return x.key === k; })) CATEGORIES.push({ key: k, he: k });
+  });
+  $('#comps').innerHTML = CATEGORIES.map(function (cat) {
+    var groups = order.filter(function (ct) { return byCountry[ct].some(function (c) { return categoryOf(c) === cat.key; }); });
+    if (!groups.length) return '';
+    var body = groups.map(function (ct) {
+      var head = cat.key === 'football' || (groups.length > 1 && byCountry[ct].length > 1);
+      return (head ? groupHead(ct, 'ctry') : '') + compRows(ct);
+    }).join('');
+    return '<div class="sport-head"><span>' + esc(cat.he) + '</span><button type="button" class="linkbtn" data-sport="' + esc(cat.key) + '">הכל / כלום</button></div><div class="sub">' + body + '</div>';
+  }).join('');
 
   function setBase(place, typedText) {
     S.base = place;
@@ -286,7 +330,7 @@
   $('#comps').addEventListener('click', function (e) {
     var ct = e.target.getAttribute('data-ctry'), sp = e.target.getAttribute('data-sport');
     if (!ct && !sp) return;
-    var list = sp ? comps.filter(function (c) { return !c.sport; }) : byCountry[ct];
+    var list = sp ? comps.filter(function (c) { return categoryOf(c) === sp; }) : byCountry[ct];
     if (sp) ct = sp;
     var allOn = list.every(function (c) { return S.comps[c.id]; });
     list.forEach(function (c) { S.comps[c.id] = !allOn; });
@@ -342,20 +386,7 @@
         html += '<section class="day"><h3>' + esc(fmtLong(d)) + '</h3><ul class="matches">';
         open = true; lastDay = d;
       }
-      var picked = S.trip.indexOf(f.id) !== -1;
-      var time = isEvent(f) ? '<div class="kick tbd">' + rangeHtml(f) + '</div>'
-        : f.status === 'TBD' ? '<div class="kick tbd">שעה לא מאושרת</div>' : '<div class="kick">' + esc(f.dt.slice(11, 16)) + '</div>';
-      var dist = (S.base && hasPos(f)) ? ' <span class="dist">' + (km(S.base, f) < 3 ? 'בעיר הבסיס' : Math.round(km(S.base, f)) + ' ק״מ') + '</span>' : '';
-      var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
-      var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
-      var ctryColor = colorOf(f);
-      var teamsHtml = isEvent(f)
-        ? '<bdi dir="rtl">' + esc(f.emoji || '') + ' ' + esc(titleHe(f)) + '</bdi>'
-        : '<bdi dir="rtl">' + homeLogo + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + awayLogo + '</bdi>';
-      html += '<li class="match' + (picked ? ' picked' : '') + '" style="--ctry-color:' + ctryColor + '">' + time +
-        '<div class="teams">' + teamsHtml + '</div>' +
-        '<div class="meta"><span class="tag" style="--ctry-color:' + ctryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>' + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
-        '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
+      html += cardHtml(f, false);
     });
     if (open) html += '</ul></section>';
     $('#list').innerHTML = html;
@@ -371,7 +402,7 @@
   // lastMapKey captures everything that changes which cities/markers should show (filters,
   // base city, radius) but deliberately excludes S.trip - adding/removing a trip match must
   // never move or rebuild the map, or the user loses their place after every click.
-  var mapState = { map: null, markers: null, circle: null, lastKey: null };
+  var mapState = { map: null, markers: null, circle: null, lastKey: null, sel: null, groups: {}, pins: {} };
   function mapFilterKey() {
     return JSON.stringify([S.base ? [S.base.lat, S.base.lng] : null, S.radius, S.from, S.to, S.days, S.comps]);
   }
@@ -383,50 +414,50 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
     }).addTo(mapState.map);
     mapState.markers = L.layerGroup().addTo(mapState.map);
-    // handled directly here (not via toggleTrip -> update -> renderMap) so adding a match
-    // from the map never rebuilds markers, closes the popup, or moves the view
-    mapState.map.on('popupopen', function (e) {
-      var el = e.popup.getElement();
-      if (!el) return;
-      el.querySelectorAll('button.add').forEach(function (b) {
-        b.addEventListener('click', function () {
-          var id = Number(b.getAttribute('data-id'));
-          var i = S.trip.indexOf(id);
-          var added = i === -1;
-          if (added) S.trip.push(id); else S.trip.splice(i, 1);
-          saveTrip();
-          renderTrip();
-          var picked = S.trip.indexOf(id) !== -1;
-          b.setAttribute('aria-pressed', String(picked));
-          b.textContent = picked ? 'בטיול ✓' : 'הוסף לטיול';
-          var f = byId[id];
-          if (f) { var p = fixtureTrackParams(f); p.source = 'map'; track(added ? 'add_to_trip' : 'remove_from_trip', p); }
-        });
-      });
+  }
+  function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  // A pin's events are shown in a panel under the map (the same cards as the list) instead of a
+  // Leaflet popup - normal page flow, one typeface, no nested scrolling, and it survives re-renders.
+  function renderPanel() {
+    var el = $('#mapPanel'), g = mapState.sel && mapState.groups[mapState.sel];
+    if (!g) { el.innerHTML = '<p class="panel-empty">לחצו על סיכה במפה כדי לראות את האירועים במקום ולהוסיף אותם לטיול.</p>'; return; }
+    var rows = g.list.slice().sort(function (a, b) { return a.dt < b.dt ? -1 : 1; });
+    el.innerHTML = '<div class="panel-head"><div><h3><bdi dir="rtl">' + esc(g.venue || g.cityHe) + '</bdi></h3><p><bdi dir="rtl">' + (g.venue ? esc(g.cityHe) + ' · ' : '') + rows.length + ' אירועים</bdi></p></div>' +
+      '<button type="button" class="panel-close" data-close aria-label="סגור">×</button></div><ul class="matches">' + rows.map(function (f) { return cardHtml(f, true); }).join('') + '</ul>';
+  }
+  function markSelected() {
+    Object.keys(mapState.pins).forEach(function (k) {
+      var el = mapState.pins[k].getElement(), pin = el && el.querySelector('.map-pin');
+      if (pin) pin.classList.toggle('sel', k === mapState.sel);
     });
   }
-  function mapPopupHtml(city) {
-    var rows = city.list.slice().sort(function (a, b) { return a.dt < b.dt ? -1 : 1; }).map(function (f) {
-      var picked = S.trip.indexOf(f.id) !== -1;
-      var ctryColor = colorOf(f);
-      return '<div class="map-match">' +
-        '<div class="map-match-top"><span class="tag" style="--ctry-color:' + ctryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span><span><bdi dir="rtl">' + esc(isEvent(f) ? longRange(f) : fmtLong(dayOf(f))) + '</bdi>' + (f.status === 'TBD' ? '' : ' · ' + esc(f.dt.slice(11, 16))) + '</span></div>' +
-        '<div class="teams"><bdi dir="rtl">' + (isEvent(f) ? esc(f.emoji || '') + ' ' + esc(titleHe(f)) : esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away)) + '</bdi></div>' +
-        (f.venue || f.sessions ? '<div class="map-venue">' + (f.venue ? venueHtml(f) : '') + detailBtn(f) + '</div>' : '') +
-        '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></div>';
-    }).join('');
-    var title = city.venue ? city.venue + ' · ' + city.cityHe : city.cityHe;
-    return '<div class="map-popup-in"><h4><bdi dir="rtl">' + esc(title) + '</bdi></h4>' + rows + '</div>';
+  function selectPin(key) {
+    mapState.sel = key;
+    renderPanel(); markSelected();
+    var g = mapState.groups[key];
+    if (g) track('map_marker_click', { city: g.cityHe, venue: g.venue || '', match_count: g.list.length });
+    $('#mapPanel').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
   }
+  $('#mapPanel').addEventListener('click', function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var add = t.closest('button.add');
+    if (add) { toggleTrip(Number(add.getAttribute('data-id')), 'map'); return; }
+    if (t.closest('[data-close]')) {
+      mapState.sel = null; renderPanel(); markSelected();
+      $('#map').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
+    }
+  });
   function renderMap() {
     if (!mapState.map) return;
     var key = mapFilterKey();
     var keyChanged = key !== mapState.lastKey;
     mapState.lastKey = key;
     mapState.markers.clearLayers();
+    mapState.pins = {}; mapState.groups = {};
     if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
     var list = filtered().list;
-    var byCity = {};
+    var byCity = mapState.groups;
     // pin by the exact stadium when we know it (so e.g. Real Madrid's Bernabéu and
     // Atlético's Metropolitano get separate pins, not one shared city dot), falling back
     // to the city-level position - and possibly a shared pin with other such fixtures -
@@ -435,25 +466,28 @@
       var precise = f.venue_lat != null && f.venue_lng != null;
       var lat = precise ? f.venue_lat : f.lat, lng = precise ? f.venue_lng : f.lng;
       if (lat == null || lng == null) return;
-      var key = lat + ',' + lng;
-      if (!byCity[key]) byCity[key] = { cityHe: cityHe(f), venue: precise ? f.venue : null, lat: lat, lng: lng, list: [] };
-      byCity[key].list.push(f);
+      var k = lat + ',' + lng;
+      if (!byCity[k]) byCity[k] = { cityHe: cityHe(f), venue: precise ? f.venue : null, lat: lat, lng: lng, list: [] };
+      byCity[k].list.push(f);
     });
-    var groups = Object.keys(byCity).map(function (k) { return byCity[k]; });
-    groups.forEach(function (g) {
+    var keys = Object.keys(byCity);
+    keys.forEach(function (k) {
+      var g = byCity[k];
       var icon = L.divIcon({
         className: '', html: '<div class="map-pin"><span>' + g.list.length + '</span></div>',
-        iconSize: [28, 28], iconAnchor: [14, 26], popupAnchor: [0, -26]
+        iconSize: [28, 28], iconAnchor: [14, 26]
       });
-      L.marker([g.lat, g.lng], { icon: icon }).bindPopup(mapPopupHtml(g), { maxWidth: 300, maxHeight: 300 })
-        .on('click', function () { track('map_marker_click', { city: g.cityHe, venue: g.venue || '', match_count: g.list.length }); })
+      mapState.pins[k] = L.marker([g.lat, g.lng], { icon: icon, title: g.venue || g.cityHe })
+        .on('click', function () { selectPin(k); })
         .addTo(mapState.markers);
     });
+    if (mapState.sel && !byCity[mapState.sel]) mapState.sel = null;
+    renderPanel(); markSelected();
     if (S.base) {
       mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#B8862E', weight: 1.5, fillOpacity: .08 }).addTo(mapState.map);
       if (keyChanged) mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
-    } else if (groups.length && keyChanged) {
-      mapState.map.fitBounds(groups.map(function (g) { return [g.lat, g.lng]; }), { padding: [30, 30], maxZoom: 6 });
+    } else if (keys.length && keyChanged) {
+      mapState.map.fitBounds(keys.map(function (k) { return [byCity[k].lat, byCity[k].lng]; }), { padding: [30, 30], maxZoom: 6 });
     }
   }
   $('#viewToggle').addEventListener('click', function (e) {
@@ -564,7 +598,7 @@
       var stubTag = '<span class="tag" style="--ctry-color:' + stubCtryColor + '">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
       html += '<div class="stub"><div class="date"><span class="num">' + d.getDate() + '</span><span class="mon">' + esc(d.toLocaleDateString('he-IL', { month: 'short' })) + '</span><span class="wd">' + (ev && endDay(f) !== dayOf(f) ? 'עד ' + endD.getDate() + '.' + (endD.getMonth() + 1) : HE_DAYS_FULL[d.getDay()]) + '</span></div>' +
         '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
-        (ev ? '<div class="t"><bdi dir="rtl" class="tname">' + esc(f.emoji || '') + ' ' + esc(titleHe(f)) + '</bdi></div>'
+        (ev ? '<div class="t">' + flagHtml(f) + '<bdi dir="rtl" class="tname">' + esc(titleHe(f)) + '</bdi></div>'
             : '<div class="t">' + homeLogo + '<bdi dir="rtl" class="tname">' + esc(f.home_he || f.home) + '</bdi><span class="vs">–</span><bdi dir="rtl" class="tname">' + esc(f.away_he || f.away) + '</bdi>' + awayLogo + '</div>') +
         '<div class="s">' + stubTag + (ev ? rangeHtml(f) : f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · ' + venueHtml(f) : '') + detailBtn(f) + '</div></div></div>';
     });
@@ -618,6 +652,8 @@
       return '<div class="drow' + (s.main ? ' main' : '') + '"><span class="dser">' + esc(s.series) + '</span><span class="dname">' + esc(s.name) +
         '</span><span class="dtime"><bdi dir="ltr">' + esc(s.start) + ' - ' + esc(s.end) + '</bdi></span></div>';
     }).join('');
+    var official = /^https?:\/\//.test(f.web_url || '') ? ' <a href="' + esc(f.web_url) + '" target="_blank" rel="noopener">לאתר התחרות</a>' : '';
+    $('#detailOfficial').innerHTML = official;
     detailDialog.showModal();
     track('event_details_open', { sport: f.sport || '', title: f.title || '' });
   });
@@ -631,13 +667,28 @@
   $('#legalClose').addEventListener('click', function () { legalDialog.close(); });
   legalDialog.addEventListener('click', function (e) { if (e.target === legalDialog) legalDialog.close(); });
 
-  // ---------- freshness ----------
+  // ---------- freshness (shown in the footer next to the version) ----------
   (function () {
     var el = $('#fresh');
     if (!DATA.generated) return;
     var ageDays = (Date.now() - Date.parse(DATA.generated)) / 86400000;
     el.textContent = 'הנתונים עודכנו ב-' + new Date(DATA.generated).toLocaleString('he-IL', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    if (ageDays > 2) { el.classList.add('stale'); el.textContent += ' · כדאי להריץ שוב את build_fixtures.py'; }
+    if (ageDays > 2) el.classList.add('stale');
+  })();
+
+  // ---------- back to top ----------
+  (function () {
+    var btn = $('#toTop'), shown = false;
+    function onScroll() {
+      var want = window.scrollY > 700;
+      if (want !== shown) { shown = want; btn.hidden = !want; }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reducedMotion() ? 'auto' : 'smooth' });
+      track('back_to_top_click', {});
+    });
+    onScroll();
   })();
 
   update();

@@ -124,3 +124,35 @@ LOGO_OVERRIDE = {
     "Güímar": "logos/28430.png",
     "Maracena": "logos/28431.png",
 }
+
+
+# ---- non-football events (build_events.merge_events applies these) ----
+# competition label (as AllSportDB / events_manual.json name it) -> local crest in comp_logos/
+EVENT_COMP_LOGO = {
+    "Formula 1": "comp_logos/formula-one.webp",
+    "ATP Tour": "comp_logos/ATP.webp",
+    "ATP Finals": "comp_logos/ATP.webp",
+    "Next Gen ATP Finals": "comp_logos/ATP.webp",
+    "WTA Tour": "comp_logos/WTA.webp",
+    "WTA Finals": "comp_logos/WTA.webp",
+    "Billie Jean King Cup": "comp_logos/Billie_Jean_King_Cup.webp",
+    "Davis Cup Finals": "comp_logos/Davis_Cup.webp",
+    "Laver Cup": "comp_logos/Laver_Cup.png",
+    "Tennis United Cup": "comp_logos/united-cup.png",
+    "PDC Majors": "comp_logos/Professional_Darts_Corporation.webp",
+    "PDC European Tour": "comp_logos/Professional_Darts_Corporation.webp",
+    "PDC Europe Galas": "comp_logos/Professional_Darts_Corporation.webp",
+}
+
+# host country (English, as it appears in event rows) -> flag file code in flags/ (ISO 3166-1
+# alpha-2, or a subdivision like gb-eng). An event whose country is missing here just shows no flag.
+COUNTRY_FLAG = {
+    "Australia": "au", "Austria": "at", "Azerbaijan": "az", "Bahrain": "bh", "Belgium": "be", "Brazil": "br",
+    "Canada": "ca", "China": "cn", "Croatia": "hr", "Czech Republic": "cz", "Denmark": "dk", "England": "gb-eng",
+    "Finland": "fi", "France": "fr", "Germany": "de", "Hungary": "hu", "India": "in", "Ireland": "ie",
+    "Italy": "it", "Japan": "jp", "Kazakhstan": "kz", "Malaysia": "my", "Mexico": "mx", "Monaco": "mc",
+    "Morocco": "ma", "Netherlands": "nl", "Poland": "pl", "Portugal": "pt", "Qatar": "qa", "Saudi Arabia": "sa",
+    "Scotland": "gb-sct", "Singapore": "sg", "South Africa": "za", "South Korea": "kr", "Spain": "es",
+    "Sweden": "se", "Switzerland": "ch", "Thailand": "th", "Turkey": "tr", "Türkiye": "tr", "United Arab Emirates": "ae",
+    "United Kingdom": "gb", "United States": "us", "Wales": "gb-wls",
+}

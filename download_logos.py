@@ -138,6 +138,30 @@ def download_comp_logos():
     print(f"Competition logos: {downloaded} downloaded, {skipped} already had a local copy, {failed} failed.")
 
 
+FLAG_DIR = os.path.join(HERE, "flags")
+_FLAG_CODE = re.compile(r"^[a-z]{2}(-[a-z]{3})?$")  # 'de', 'gb-eng' - also keeps the code safe to use as a filename
+
+
+def download_flags(codes):
+    """Save flags/<code>.svg (from flagcdn.com) for each code we don't have yet, so the site serves
+    them itself instead of depending on an external host. Best effort: a failure only means no flag."""
+    os.makedirs(FLAG_DIR, exist_ok=True)
+    for code in sorted(set(codes)):
+        if not _FLAG_CODE.match(code):
+            print(f"  skipping flag with an unexpected code: {code!r}")
+            continue
+        path = os.path.join(FLAG_DIR, code + ".svg")
+        if os.path.exists(path):
+            continue
+        try:
+            req = urllib.request.Request(f"https://flagcdn.com/{code}.svg", headers={"User-Agent": "sports-trip-planner/1.0"})
+            with urllib.request.urlopen(req, timeout=20) as resp, open(path, "wb") as out:
+                out.write(resp.read())
+            print(f"  flag downloaded: {code}")
+        except Exception as e:
+            print(f"  could not download flag {code}: {e}")
+
+
 if __name__ == "__main__":
     download_logos()
     download_comp_logos()

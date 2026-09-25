@@ -65,7 +65,8 @@ translation/correction file (no need for fresh fixtures from the API), just run
 |---|---|
 | `download_logos.py` | Downloads each team's crest (`download_logos()`) and each competition's crest (`download_comp_logos()`) once, under a readable name (`AFC_Wimbledon.png`, not `1333.png`). Runs automatically at the end of `build_fixtures.py` and `backfill_hebrew.py`. |
 | `logos/` | Team crests, stored locally (not dependent on an external server staying up). |
-| `comp_logos/` | Competition (league/cup) crests. |
+| `comp_logos/` | Competition (league/cup) crests. The tennis/F1/darts ones were added by hand and are mapped in `EVENT_COMP_LOGO` (`overrides.py`). |
+| `flags/` | Host-country flags for non-football events (`<code>.svg`, downloaded by `download_flags()` from flagcdn.com when `build_events.py` runs; the code map is `COUNTRY_FLAG` in `overrides.py`). |
 
 To replace one team's logo: put the file in `logos/`, then add a line to
 `LOGO_OVERRIDE` in `overrides.py` pointing at it (exactly what we did for a few small
@@ -91,7 +92,7 @@ Spanish clubs the API didn't have a crest for).
 | `missing_info.csv` | Working file: every event/team missing a venue, city or pin, with suggestions - fill in the last columns and send back. Delete once ingested. |
 | `MULTISPORT.md` | Design-only doc for adding sports beyond football (Formula 1, Darts, AllSportDB findings) - not implemented yet. |
 | `BRANDING.md` | How to rename the product: one edit in `brand.js`, plus the manual steps in GitHub / Google Analytics / Travelpayouts. |
-| `brand.js` | The product's public name and version - read by `index.html` for the page title, header and footer. |
+| `brand.js` | The product's public name (ToSport), wordmark, tagline and version - read by `app.js` for the page title, header and footer. |
 | `allsportdb_probe.py` | Read-only exploration of the AllSportDB API (needs `ALLSPORTDB_KEY` env var) - writes a git-ignored dump, doesn't touch `fixtures.js`. |
 | `README.md` | This file. |
 
