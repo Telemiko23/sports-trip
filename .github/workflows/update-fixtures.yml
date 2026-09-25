@@ -9,6 +9,11 @@ on:
 permissions:
   contents: write
 
+# never run at the same time as the events update (both push to main)
+concurrency:
+  group: data-update
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -31,4 +36,5 @@ jobs:
           git add fixtures.js cities_cache.json venues_cache.json logos/ comp_logos/ flags/
           git diff --cached --quiet && echo "Nothing changed" && exit 0
           git commit -m "Auto-update fixtures $(date -u +%Y-%m-%d)"
+          git pull --rebase
           git push

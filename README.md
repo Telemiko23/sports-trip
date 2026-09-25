@@ -95,6 +95,8 @@ Spanish clubs the API didn't have a crest for).
 | `BRANDING.md` | How to rename the product: one edit in `brand.js`, plus the manual steps in GitHub / Google Analytics / Travelpayouts. |
 | `brand.js` | The product's public name (ToSport), descriptor and version - read by `app.js` for the page title, logo text and footer. |
 | `brand/` | The logo PNGs (`tosport-logo-blue-white.png` in the header, `tosport-logo-white.png`), `favicon.png` and `apple-touch-icon.png` - prepared from the transparent variants supplied by the user; see BRANDING.md for what was done to them. |
+| `missing_info_report.py` | Regenerates `missing_info.csv` (venues/pins/cities to fill in, keeps my earlier suggestions) and `missing_translations.csv` (names with no reviewed Hebrew). If the CSV is open in Excel it writes `*_UPDATED.csv` instead. | Whenever you want a fresh to-fill list. |
+| `.github/workflows/` | `update-fixtures.yml` (daily, football) and `update-events.yml` (weekly + manual, F1/tennis; opens a GitHub issue when the AllSportDB key has expired). They share a concurrency group so they never push at the same time. | - |
 | `allsportdb_probe.py` | Read-only exploration of the AllSportDB API (needs `ALLSPORTDB_KEY` env var) - writes a git-ignored dump, doesn't touch `fixtures.js`. |
 | `README.md` | This file. |
 

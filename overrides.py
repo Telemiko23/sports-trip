@@ -18,6 +18,8 @@ normal build_fixtures.py run).
 """
 
 TEAM_CITY_OVERRIDE = {
+    "Mallorca": ("Palma", "es"),  # API says "Parma" (geocoded near Seville) - Son Moix is in Palma
+    "Wieczysta Kraków": ("Kraków", "pl"),  # API says Sosnowiec; the stadium the API itself lists is in Kraków
     "Groesbeek": ("Groesbeek", "nl"),
     "Ceuta 6 de Junio": ("Ceuta", "es"),
     "Ribadesella CF": ("Ribadesella", "es"),

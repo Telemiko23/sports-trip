@@ -1,13 +1,23 @@
 name: Update events (F1 / tennis)
 
-# Manual only. AllSportDB's free key expires every 30 days, so this must not run on a schedule:
-# renew the key on allsportdb.com, update the repository secret ALLSPORTDB_KEY
-# (Settings -> Secrets and variables -> Actions), then run this workflow from the Actions tab.
+# Weekly (Mondays 06:00 UTC) + manual. AllSportDB's free key expires every 30 days and can only be
+# renewed by hand on allsportdb.com -> update the repository secret ALLSPORTDB_KEY
+# (Settings -> Secrets and variables -> Actions). When the key has expired this workflow fails and
+# opens a GitHub issue ("AllSportDB key expired?"), which emails the repository owner - so the
+# renewal is a reminder instead of something to remember.
 on:
+  schedule:
+    - cron: '0 6 * * 1'
   workflow_dispatch: {}
 
 permissions:
   contents: write
+  issues: write
+
+# never run at the same time as the daily fixtures update (both push to main)
+concurrency:
+  group: data-update
+  cancel-in-progress: false
 
 jobs:
   update:
@@ -31,4 +41,15 @@ jobs:
           git add events_raw.json events_data.json fixtures.js cities_cache.json venues_cache.json flags/
           git diff --cached --quiet && echo "Nothing changed" && exit 0
           git commit -m "Update events $(date -u +%Y-%m-%d)"
+          git pull --rebase
           git push
+
+      - name: Open an issue if the update failed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="AllSportDB key expired? (events update failed)"
+          if [ -z "$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')" ]; then
+            gh issue create --title "$title" --body "The scheduled events update failed - most likely the AllSportDB key (30-day expiry). Renew it on allsportdb.com, update the ALLSPORTDB_KEY repository secret, then re-run the workflow. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi

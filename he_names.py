@@ -798,6 +798,7 @@ HE_CITIES = {
     "Kleczew|Poland": "קלצ'ב",
     "Kloetinge|Netherlands": "קלוטינחה",
     "Kraków|Poland": "קרקוב",
+    "Palma|Spain": "פלמה דה מיורקה",
     "La Coruña|Spain": "לה קורוניה",
     "Las Palmas|Spain": "לאס פלמאס",
     "Laval|France": "לאבאל",
