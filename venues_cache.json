@@ -164,6 +164,10 @@
   41.3808,
   2.1156
  ],
+ "Campo Cha das Padeiras|Santarem": [
+  39.2296,
+  -8.6927
+ ],
  "Campo Municipal de Fútbol José Martínez Pirri|Ceuta": [
   35.8918,
   -5.2988
@@ -304,6 +308,7 @@
   39.5899,
   2.6301
  ],
+ "Estadi Mallorca Son Moix|Parma": null,
  "Estadi Montilivi|Girona": [
   41.9612,
   2.829
@@ -328,6 +333,7 @@
   39.4946,
   -0.3639
  ],
+ "Estadio EFAPEL Cidade de Coimbra|Coimbra": null,
  "Estadio El Sadar|Pamplona": [
   42.7967,
   -1.6371
@@ -352,6 +358,10 @@
   42.8371,
   -2.6883
  ],
+ "Estadio Municipal 25 de Abril|Penafiel": [
+  41.2118,
+  -8.2772
+ ],
  "Estadio Municipal Alfonso Murube|Ceuta": [
   35.8856,
   -5.328
@@ -368,6 +378,10 @@
   39.9961,
   -0.0386
  ],
+ "Estadio Municipal de Chaves|Chaves": [
+  41.7506,
+  -7.465
+ ],
  "Estadio Municipal de Famalicao|Vila Nova de Famalicao": [
   41.4013,
   -8.5224
@@ -375,6 +389,10 @@
  "Estadio Municipal de Ipurua|Eibar": [
   43.1819,
   -2.4756
+ ],
+ "Estadio Municipal de Mafra|Mafra": [
+  38.9408,
+  -9.3416
  ],
  "Estadio Municipal de Montilivi|Girona": [
   41.9612,
@@ -541,6 +559,10 @@
  "Home Park|Plymouth": [
   50.3881,
   -4.1509
+ ],
+ "Ipurua Municipal Stadium|Eibar": [
+  43.1817,
+  -2.4759
  ],
  "Itaka Arena|Opole": [
   50.6855,
@@ -719,6 +741,8 @@
   40.4778,
   -3.6564
  ],
+ "Municipal Stadium Alpendorada|Alpendorada": null,
+ "Municipal das Laranjeiras|Paredes": null,
  "Municipal de Lebrija|Lebrija": [
   36.9359,
   -6.0595
@@ -751,6 +775,7 @@
   43.3076,
   -0.3252
  ],
+ "Nuevo Carlos Tartiere|Oviedo": null,
  "Oakwell|Barnsley": [
   53.5522,
   -1.4722
@@ -800,6 +825,10 @@
   12.5723
  ],
  "Parque Joaquim de Almeida Freitas|Moreira de Conegos": null,
+ "Parque de Jogos do Brito SC|Brito": [
+  41.4507,
+  -8.3619
+ ],
  "Peninsula Stadium|Salford": [
   53.5137,
   -2.2763
@@ -1216,6 +1245,7 @@
   50.0579,
   19.9215
  ],
+ "Stadion Dr. Machado de Matos|Felgueiras": null,
  "Stadion Galgenwaard|Utrecht": [
   52.0784,
   5.1459
