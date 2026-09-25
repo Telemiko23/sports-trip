@@ -16,7 +16,7 @@ those aren't listed here since we didn't add them and don't control their params
 ### `add_to_trip` / `remove_from_trip`
 - **Params**: `sport` (`"football"` | `"f1"` | `"tennis"` - added in v1.2.0; older events lack
   it), `comp` (competition label, English), `country`, `city`, `days_until_match`
-  (integer, can be negative if oddly in the past), `source` (`"list"` | `"map"` |
+  (integer, can be negative if oddly in the past), `source` (`"list"` | `"map"` | `"smart"` |
   `"trip_panel"`).
 - **Trigger**: clicking "הוסף לטיול" on a match card in the results list, in a map
   popup, or clicking the ✕ remove button on a stub in "הטיול שלי". Fires once per click,
@@ -28,7 +28,7 @@ those aren't listed here since we didn't add them and don't control their params
 ## View & map
 
 ### `view_toggle`
-- **Params**: `view` (`"list"` | `"map"`).
+- **Params**: `view` (`"list"` | `"map"` | `"smart"`).
 - **Trigger**: clicking the רשימה/מפה toggle above the results.
 - **Use**: adoption of the map view vs the original list.
 
@@ -120,6 +120,16 @@ those aren't listed here since we didn't add them and don't control their params
 - **Params**: `category` (`football` | `motorsport` | `tennis` | `darts`), `expanded` (boolean, the new state).
 - **Trigger**: clicking the chevron/name of a sport category in the filter sidebar.
 - **Use**: whether people fold categories away - if many do, the sidebar is too long by default.
+
+### `smart_plan_run`
+- **Params**: `source` (`"text"` free text | `"form"`), `destination`, `month` (YYYY-MM), `days`, `sports` (comma list), `planned_days` (days with an event in the best option).
+- **Trigger**: running the smart planner (v1.7.0).
+- **Use**: what people ask for (destinations, months, lengths), free text vs form, and how often the planner comes up thin (low `planned_days`).
+
+### `smart_plan_add_all`
+- **Params**: `events` (how many were newly added to the trip).
+- **Trigger**: "הוסף את כל המסלול לטיול" in the smart planner.
+- **Use**: whether the recommended trip is actually accepted.
 
 ### `back_to_top_click`
 - **Params**: none.

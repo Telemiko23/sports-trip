@@ -1,9 +1,8 @@
 (function () {
-  var BRAND = window.BRAND || { name: 'ToSport', descriptor: '', version: '' };
+  var BRAND = window.BRAND || { name: 'ToSport', version: '' };
   var APP_VERSION = BRAND.version;
   (function () {
-    document.title = BRAND.name + (BRAND.descriptor ? ' - ' + BRAND.descriptor : '');
-    var d = document.getElementById('brandTag'); if (d) d.textContent = BRAND.descriptor || '';
+    document.title = BRAND.name;
   })();
   var DATA = window.TRIP_DATA;
   var app = document.getElementById('app');
@@ -127,9 +126,10 @@
     return '<bdi dir="rtl">' + homeLogo + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + awayLogo + '</bdi>';
   }
   // one card used by both the list and the map panel, so they can never drift apart
-  function cardHtml(f, withDate) {
+  // noDist: the distance shown is from the base city, which means nothing inside a planned trip
+  function cardHtml(f, withDate, noDist) {
     var picked = S.trip.indexOf(f.id) !== -1;
-    var dist = (S.base && hasPos(f)) ? ' <span class="dist">' + (km(S.base, f) < 3 ? 'בעיר הבסיס' : Math.round(km(S.base, f)) + ' ק״מ') + '</span>' : '';
+    var dist = (!noDist && S.base && hasPos(f)) ? ' <span class="dist">' + (km(S.base, f) < 3 ? 'בעיר הבסיס' : Math.round(km(S.base, f)) + ' ק״מ') + '</span>' : '';
     return '<li class="match' + (picked ? ' picked' : '') + '">' + kickHtml(f, withDate) +
       '<div class="teams">' + titleHtml(f) + '</div>' +
       '<div class="meta">' + tagHtml(f) + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
@@ -292,7 +292,7 @@
       var head = cat.key === 'football' || (groups.length > 1 && byCountry[ct].length > 1);
       return (head ? groupHead(ct, 'ctry') : '') + compRows(ct);
     }).join('');
-    return '<div class="sport-head"><button type="button" class="cat-toggle" data-toggle="' + esc(cat.key) + '" aria-expanded="true" aria-controls="sub-' + esc(cat.key) + '"><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>' + esc(cat.he) + '</button><button type="button" class="linkbtn" data-sport="' + esc(cat.key) + '">הכל / כלום</button></div><div class="sub" id="sub-' + esc(cat.key) + '">' + body + '</div>';
+    return '<div class="sport-head"><button type="button" class="cat-toggle" data-toggle="' + esc(cat.key) + '" aria-expanded="true" aria-controls="sub-' + esc(cat.key) + '">' + esc(cat.he) + '</button><button type="button" class="linkbtn" data-sport="' + esc(cat.key) + '">הכל / כלום</button></div><div class="sub" id="sub-' + esc(cat.key) + '">' + body + '</div>';
   }).join('');
 
   function setBase(place, typedText) {
@@ -418,12 +418,25 @@
   function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
   // A pin's events are shown in a panel under the map (the same cards as the list) instead of a
   // Leaflet popup - normal page flow, one typeface, no nested scrolling, and it survives re-renders.
+  function dayGroupsHtml(list) {
+    var html = '', last = '';
+    list.forEach(function (f) {
+      var d = dayOf(f);
+      if (d !== last) { if (last) html += '</ul></section>'; html += '<section class="day"><h3>' + esc(fmtLong(d)) + '</h3><ul class="matches">'; last = d; }
+      html += cardHtml(f, false);
+    });
+    return html + (last ? '</ul></section>' : '');
+  }
   function renderPanel() {
     var el = $('#mapPanel'), g = mapState.sel && mapState.groups[mapState.sel];
     if (!g) { el.innerHTML = '<p class="panel-empty">לחצו על סיכה במפה כדי לראות את האירועים במקום ולהוסיף אותם לטיול.</p>'; return; }
     var rows = g.list.slice().sort(function (a, b) { return a.dt < b.dt ? -1 : 1; });
-    el.innerHTML = '<div class="panel-head"><div><h3><bdi dir="rtl">' + esc(g.venue || g.cityHe) + '</bdi></h3><p><bdi dir="rtl">' + (g.venue ? esc(g.cityHe) + ' · ' : '') + rows.length + ' אירועים</bdi></p></div>' +
-      '<button type="button" class="panel-close" data-close aria-label="סגור">×</button></div><ul class="matches">' + rows.map(function (f) { return cardHtml(f, true); }).join('') + '</ul>';
+    var here = {}; rows.forEach(function (f) { here[f.id] = 1; });
+    // everything else inside the radius of the base city (the pin's city, set when the pin was clicked)
+    var rest = S.base ? filtered().list.filter(function (f) { return !here[f.id]; }) : [];
+    el.innerHTML = '<div class="panel-head"><div><h3><bdi dir="rtl">' + esc(g.venue || g.cityHe) + '</bdi></h3><p><bdi dir="rtl">' + (g.venue ? esc(g.cityHe) + ' · ' : '') + rows.length + ' אירועים כאן</bdi></p></div>' +
+      '<button type="button" class="panel-close" data-close aria-label="סגור">×</button></div><ul class="matches">' + rows.map(function (f) { return cardHtml(f, true); }).join('') + '</ul>' +
+      (rest.length ? '<h4 class="panel-sub">עוד ' + rest.length + ' אירועים בטווח ' + S.radius + ' ק״מ מ<bdi dir="rtl">' + esc(S.base.cityHe) + '</bdi></h4>' + dayGroupsHtml(rest.sort(function (a, b) { return a.dt < b.dt ? -1 : 1; })) : '');
   }
   function markSelected() {
     Object.keys(mapState.pins).forEach(function (k) {
@@ -506,6 +519,10 @@
     document.querySelectorAll('#viewToggle .vtab').forEach(function (v) { v.setAttribute('aria-pressed', v === b ? 'true' : 'false'); });
     $('#list').style.display = S.view === 'list' ? '' : 'none';
     $('#mapWrap').style.display = S.view === 'map' ? '' : 'none';
+    $('#smartWrap').style.display = S.view === 'smart' ? '' : 'none';
+    $('#summary').style.display = S.view === 'smart' ? 'none' : '';
+    app.classList.toggle('is-smart', S.view === 'smart');
+    if (S.view === 'smart') initSmart();
     if (S.view === 'map') {
       initMap();
       requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); });
@@ -597,6 +614,7 @@
     var lastEnd = list.reduce(function (m, f) { return endDay(f) > m ? endDay(f) : m; }, endDay(list[list.length - 1]));
     var span = Math.round((parseDay(lastEnd) - parseDay(dayOf(list[0]))) / 86400000) + 2;
     html += '<p class="tripsum"><strong>' + list.length + '</strong> אירועים ב-<strong>' + span + '</strong> ימים</p>';
+    html += '<p class="tripnote remind">מומלץ לוודא את זמני ותאריכי האירועים באתרים הרשמיים לפני רכישת טיסות ולינה - חלק מהשעות והתאריכים עדיין לא סופיים.</p>';
     list.forEach(function (f, i) {
       if (i > 0) { var h = hopInfo(list[i - 1], f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + '</div>'; }
       var d = parseDay(dayOf(f));
@@ -645,7 +663,133 @@
     try { document.execCommand('copy'); } catch (e) { }
     document.body.removeChild(ta);
   }
-  function update() { renderResults(); renderTrip(); if (S.view === 'map') renderMap(); }
+  function update() { renderResults(); renderTrip(); if (S.view === 'map') renderMap(); if (S.view === 'smart') renderSmartResult(); }
+
+  // ---------- smart planner view (rules in planner.js; this is only the UI) ----------
+  var smart = { ready: false, result: null, sel: 0, params: null };
+  function destKey(f) { return f.country === 'United Kingdom' ? 'England' : f.country; }
+  function fmtRange(a, b) {
+    var x = parseDay(a), y = parseDay(b), o = { day: 'numeric', month: 'long' };
+    return x.toLocaleDateString('he-IL', o) + ' – ' + y.toLocaleDateString('he-IL', o);
+  }
+  function initSmart() {
+    if (smart.ready) return;
+    smart.ready = true;
+    var count = {}, cities = [];
+    smart.footballLast = fixtures.reduce(function (m, f) { return !isEvent(f) && dayOf(f) > m ? dayOf(f) : m; }, '');
+    fixtures.forEach(function (f) { if (f.country && hasPos(f) && f.country !== 'Europe') count[destKey(f)] = (count[destKey(f)] || 0) + 1; });
+    smart.countries = Object.keys(count).map(function (k) { return { key: k, he: HE_COUNTRY[k] || k, n: count[k] }; })
+      .sort(function (a, b) { return a.he.localeCompare(b.he, 'he'); });
+    $('#smartCountry').innerHTML = '<option value="">בחרו יעד</option>' + smart.countries.map(function (c) { return '<option value="' + esc(c.key) + '">' + esc(c.he) + '</option>'; }).join('');
+    Object.keys(cityMap).forEach(function (l) { cities.push({ he: cityMap[l].cityHe, place: cityMap[l] }); });
+    smart.cities = cities;
+    // months from this month to the last month we have data for
+    var last = fixtures.reduce(function (m, f) { return endDay(f) > m ? endDay(f) : m; }, S.from);
+    var d = new Date(), opts = '';
+    d = new Date(d.getFullYear(), d.getMonth(), 1);
+    while (isoLocal(d).slice(0, 7) <= last.slice(0, 7)) {
+      opts += '<option value="' + isoLocal(d).slice(0, 7) + '">' + esc(d.toLocaleDateString('he-IL', { month: 'long', year: 'numeric' })) + '</option>';
+      d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+    }
+    $('#smartMonth').innerHTML = opts;
+    $('#smartCats').innerHTML = CATEGORIES.map(function (c) {
+      return '<label class="chip"><input type="checkbox" data-cat="' + esc(c.key) + '" checked><span>' + esc(c.he) + '</span></label>';
+    }).join('');
+    $('#smartGo').addEventListener('click', function () { runSmart('form'); });
+    $('#smartText').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runSmartText(); } });
+    // typing in the free-text box + Enter, or leaving the box, fills the form from the text
+    $('#smartText').addEventListener('change', runSmartText);
+    $('#smartResult').addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var add = t.closest('button.add');
+      if (add) { toggleTrip(Number(add.getAttribute('data-id')), 'smart'); return; }
+      var alt = t.closest('[data-alt]');
+      if (alt) { smart.sel = Number(alt.getAttribute('data-alt')); renderSmartResult(); return; }
+      if (t.closest('#planAddAll')) {
+        var o = smart.result && smart.result.options[smart.sel], n = 0;
+        if (!o) return;
+        o.days.forEach(function (d) { if (d.id && S.trip.indexOf(d.id) === -1) { S.trip.push(d.id); n++; } });
+        saveTrip(); update();
+        track('smart_plan_add_all', { events: n });
+      }
+    });
+  }
+  function runSmartText() {
+    var text = $('#smartText').value.trim();
+    if (!text) return;
+    var r = Planner.parse(text, { countries: smart.countries, cities: smart.cities, today: new Date() });
+    var got = [], missing = [];
+    if (r.city) { got.push('יעד: ' + r.city.he); $('#smartCountry').value = ''; smart.city = r.city.place; }
+    else { smart.city = null; }
+    if (r.country && !r.city) { got.push('יעד: ' + (HE_COUNTRY[r.country] || r.country)); $('#smartCountry').value = r.country; }
+    if (!r.country && !r.city) missing.push('יעד');
+    if (r.month) {
+      var ym = r.year + '-' + ('0' + r.month).slice(-2);
+      if ($('#smartMonth').querySelector('option[value="' + ym + '"]')) { $('#smartMonth').value = ym; got.push('חודש: ' + new Date(r.year, r.month - 1, 1).toLocaleDateString('he-IL', { month: 'long' })); }
+      else missing.push('חודש (אין לנו נתונים ל-' + new Date(r.year, r.month - 1, 1).toLocaleDateString('he-IL', { month: 'long' }) + ')');
+    } else missing.push('חודש');
+    $('#smartPart').value = r.part;
+    if (r.part !== 'all') got.push({ start: 'תחילת החודש', mid: 'אמצע החודש', end: 'סוף החודש' }[r.part]);
+    if (r.days) { var opt = Array.prototype.slice.call($('#smartDays').options).map(function (o) { return Number(o.value); }); var nearest = opt.reduce(function (a, b) { return Math.abs(b - r.days) < Math.abs(a - r.days) ? b : a; }); $('#smartDays').value = String(nearest); got.push('אורך: ' + nearest + ' ימים'); }
+    document.querySelectorAll('#smartCats input').forEach(function (i) { i.checked = !r.cats.length || r.cats.indexOf(i.getAttribute('data-cat')) !== -1; });
+    if (r.cats.length) got.push('ענפים: ' + r.cats.map(function (k) { return (CATEGORIES.filter(function (c) { return c.key === k; })[0] || { he: k }).he; }).join(', '));
+    $('#smartUnderstood').textContent = (got.length ? 'הבנתי - ' + got.join(' · ') + '. ' : '') + (missing.length ? 'חסר: ' + missing.join(', ') + ' - השלימו בשדות למטה.' : 'אפשר לתקן בשדות למטה.');
+    if (!missing.length) runSmart('text');
+  }
+  function runSmart(source) {
+    var country = $('#smartCountry').value, ym = $('#smartMonth').value, part = $('#smartPart').value;
+    var D = Number($('#smartDays').value), maxHop = Number($('#smartHop').value);
+    var cats = Array.prototype.slice.call(document.querySelectorAll('#smartCats input:checked')).map(function (i) { return i.getAttribute('data-cat'); });
+    var city = country ? null : smart.city;
+    if (!country && !city) { smart.result = { error: 'בחרו יעד (מדינה) כדי שנוכל להציע מסלול.' }; renderSmartResult(); return; }
+    var y = Number(ym.slice(0, 4)), m = Number(ym.slice(5, 7)), lastD = new Date(y, m, 0).getDate();
+    var from = ym + '-' + (part === 'mid' ? '11' : part === 'end' ? '21' : '01'), to = ym + '-' + (part === 'start' ? '10' : part === 'mid' ? '20' : ('0' + lastD).slice(-2));
+    if (from < S.from) from = S.from;                                   // never plan into the past
+    var items = fixtures.filter(function (f) {
+      if (!hasPos(f) || cats.indexOf(categoryOf(f)) === -1) return false;
+      return city ? km(city, f) <= 120 : destKey(f) === country;
+    }).map(function (f) {
+      var mn = (isEvent(f) || f.status === 'TBD') ? null : minutes(f);
+      return { id: f.id, day: dayOf(f), kick: mn == null ? null : mn / 60,
+        lat: f.venue_lat != null ? f.venue_lat : f.lat, lng: f.venue_lng != null ? f.venue_lng : f.lng };
+    });
+    var res = Planner.plan({ from: from, to: to, days: D, maxHop: maxHop }, items);
+    smart.sel = 0;
+    smart.result = res.options.length ? { options: res.options, D: D, considered: res.considered }
+      : { error: 'לא מצאנו אירועים ביעד ובתקופה האלה. נסו חודש אחר, יעד אחר או יותר ענפים.' };
+    renderSmartResult();
+    track('smart_plan_run', { source: source, destination: country || (city && city.city) || '', month: ym, days: D, sports: cats.join(','),
+      planned_days: res.options.length ? res.options[0].covered : 0 });
+  }
+  function renderSmartResult() {
+    var box = $('#smartResult'), r = smart.result;
+    if (!r) { box.innerHTML = ''; return; }
+    if (r.error) { box.innerHTML = '<p class="empty">' + esc(r.error) + '</p>'; return; }
+    var o = r.options[smart.sel] || r.options[0], html = '';
+    html += '<div class="plan-head"><h3>המסלול המוצע</h3><p><bdi dir="rtl">' + esc(fmtRange(o.start, o.end)) + '</bdi> · אירוע ב-' + o.covered + ' מתוך ' + r.D + ' ימים' +
+      (o.covered > 1 ? (o.km < 3 ? ' · כולם באותה עיר' : ' · כ-' + o.km + ' ק״מ בין האירועים') : '') + '</p></div>';
+    if (r.options.length > 1) {
+      html += '<div class="plan-alts">חלופות: ' + r.options.map(function (x, i) {
+        return '<button type="button" class="plan-alt" data-alt="' + i + '" aria-pressed="' + (i === smart.sel) + '"><bdi dir="rtl">' + esc(fmtRange(x.start, x.end)) + '</bdi> (' + x.covered + '/' + r.D + ')</button>';
+      }).join('') + '</div>';
+    }
+    if (o.end > smart.footballLast) html += '<p class="notice">נתוני משחקי הכדורגל שלנו מגיעים כרגע עד <bdi dir="rtl">' + esc(fmtLong(smart.footballLast)) + '</bdi> - אחרי התאריך הזה ייתכן שיש יותר אירועים ממה שמוצג (משחקים חדשים נוספים כל יום).</p>';
+    var prev = null;
+    o.days.forEach(function (d) {
+      var f = d.id ? byId[d.id] : null;
+      html += '<section class="day"><h3>' + esc(fmtLong(d.date)) + '</h3>';
+      if (f) {
+        if (prev) { var h = hopInfo(prev, f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + (hasPos(prev) && hasPos(f) ? ' · ' + (km(prev, f) < 3 ? 'אותה עיר' : Math.round(km(prev, f)) + ' ק״מ') : '') + '</div>'; }
+        html += '<ul class="matches">' + cardHtml(f, false, true) + '</ul>'; prev = f;
+      } else html += '<p class="plan-empty">אין אירוע מתאים ביום הזה בטווח שביקשתם.</p>';
+      html += '</section>';
+    });
+    var allIn = o.days.every(function (d) { return !d.id || S.trip.indexOf(d.id) !== -1; });
+    html += '<div class="plan-actions"><button type="button" class="btn primary" id="planAddAll"' + (allIn ? ' disabled' : '') + '>' + (allIn ? 'המסלול נוסף לטיול ✓' : 'הוסף את כל המסלול לטיול') + '</button></div>' +
+      '<p class="tripnote">ההצעה מנסה לתת אירוע בכל יום, בלי נסיעות ארוכות בין ערב לבוקר, אבל לא תמיד אפשר. שעות ותאריכים עדיין עשויים להשתנות - מומלץ לוודא באתרים הרשמיים.</p>';
+    box.innerHTML = html;
+  }
 
   // ---------- session-details dialog ("פירוט") ----------
   var detailDialog = $('#detailDialog');

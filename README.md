@@ -31,6 +31,7 @@ translation/correction file (no need for fresh fixtures from the API), just run
 | File | What it is |
 |---|---|
 | `index.html` | The page skeleton (Hebrew, RTL) - loads the files below. |
+| `planner.js` | The smart planner's logic (rule-based Hebrew text parsing + trip planning, one event a day with sane travel). Pure functions, no DOM. |
 | `style.css`, `app.js`, `analytics.js` | The site's styles, logic and the GA4 init - split out of `index.html` in v1.4.0 (no inline scripts, so the CSP forbids them). `app.js` reads `fixtures.js`/`airports.js`. |
 | `fixtures.js` | **Auto-generated - don't edit by hand.** Every fixture, with Hebrew fields, location, logo and stadium already attached. |
 
