@@ -756,7 +756,7 @@
     });
     var res = Planner.plan({ from: from, to: to, days: D, maxHop: maxHop }, items);
     smart.sel = 0;
-    smart.result = res.options.length ? { options: res.options, D: D, considered: res.considered }
+    smart.result = res.options.length ? { options: res.options, D: D, maxHop: maxHop, considered: res.considered }
       : { error: 'לא מצאנו אירועים ביעד ובתקופה האלה. נסו חודש אחר, יעד אחר או יותר ענפים.' };
     renderSmartResult();
     track('smart_plan_run', { source: source, destination: country || (city && city.city) || '', month: ym, days: D, sports: cats.join(','),
@@ -782,7 +782,15 @@
       if (f) {
         if (prev) { var h = hopInfo(prev, f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + (hasPos(prev) && hasPos(f) ? ' · ' + (km(prev, f) < 3 ? 'אותה עיר' : Math.round(km(prev, f)) + ' ק״מ') : '') + '</div>'; }
         html += '<ul class="matches">' + cardHtml(f, false, true) + '</ul>'; prev = f;
-      } else html += '<p class="plan-empty">אין אירוע מתאים ביום הזה בטווח שביקשתם.</p>';
+      } else {
+        // an empty day between two events far apart is a travel day (by road/rail), not a gap in the data
+        var idx = o.days.indexOf(d), nxt = null;
+        for (var q = idx + 1; q < o.days.length && !nxt; q++) if (o.days[q].id) nxt = byId[o.days[q].id];
+        var justAfter = idx > 0 && o.days[idx - 1].id;
+        if (prev && nxt && justAfter && hasPos(prev) && hasPos(nxt) && km(prev, nxt) > r.maxHop) {
+          html += '<p class="plan-travel">יום מעבר: מ<bdi dir="rtl">' + esc(cityHe(prev)) + '</bdi> ל<bdi dir="rtl">' + esc(cityHe(nxt)) + '</bdi> (כ-' + Math.round(km(prev, nxt)) + ' ק״מ)</p>';
+        } else html += '<p class="plan-empty">אין אירוע מתאים ביום הזה בטווח שביקשתם.</p>';
+      }
       html += '</section>';
     });
     var allIn = o.days.every(function (d) { return !d.id || S.trip.indexOf(d.id) !== -1; });

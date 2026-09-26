@@ -50,8 +50,13 @@
 
     // length
     var m = t.match(/(\d+)\s*(ימים|יום|לילות|לילה)/);
-    if (m) out.days = Math.min(21, Math.max(1, Number(m[1])));
+    var wk = t.match(/(\d+)\s*שבועות/);
+    var monthNames = Object.keys(MONTHS).join('|');
+    if (m) out.days = Math.min(30, Math.max(1, Number(m[1])));
+    else if (wk) out.days = Math.min(30, Number(wk[1]) * 7);
     else if (/שבועיים/.test(t)) out.days = 14;
+    else if (/שלושה שבועות/.test(t)) out.days = 21;
+    else if (new RegExp('(^|\\s)ל?חודש(?=\\s|$)(?!\\s+(הבא|' + monthNames + '))').test(t)) out.days = 30;
     else if (/סופ"?ש|סוף שבוע/.test(t)) out.days = 3;
     else if (has(t, 'שבוע')) out.days = 7;
     else {
@@ -75,10 +80,16 @@
   function startH(x) { return x.di * 24 + (x.kick != null ? x.kick : 12); }
   function endH(x) { return x.di * 24 + (x.kick != null ? x.kick + 2.5 : 20); }
 
-  // cost of going from event a to a later-day event b, or null if it is not sensible
+  // Longest transfer we suggest at all: by road/rail in a day. Farther means a flight, which we don't plan.
+  var LAND_KM = 700;
+
+  // cost of going from event a to a later-day event b, or null if it is not sensible.
+  // A transfer longer than the per-day limit is only allowed with free day(s) in between (a travel day).
   function hop(a, b, maxHop) {
     var d = dist(a, b), gap = b.di - a.di;
-    if (d > maxHop * gap) return null;
+    // one free day = a travel day (up to ~450 km by road/rail); two or more free days reach the land limit
+    var limit = gap === 1 ? maxHop : gap === 2 ? Math.max(maxHop * 2, 450) : LAND_KM;
+    if (d > Math.min(limit, LAND_KM)) return null;
     var need = d < 15 ? 0.5 : d / 70 + 1.5;               // travel hours incl. a buffer
     if (startH(b) - endH(a) < need) return null;
     // no long trip straight after an evening event into a morning one

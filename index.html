@@ -8,6 +8,7 @@
 <title>ToSport</title>
 <meta name="theme-color" content="#0B1220">
 <meta name="color-scheme" content="dark">
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="brand/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +22,7 @@
 <body>
 <header class="site-header"><div class="site-header-in">
   <h1 class="brand">
-    <a class="brand-logo" href="./"><img src="brand/tosport-logo-blue-white.png" width="165" height="36" alt="ToSport - דף הבית"></a>
+    <a class="brand-logo" href="./"><img src="brand/tosport-logo-blue-white.svg" width="166" height="36" alt="ToSport - דף הבית"></a>
   </h1>
   <a class="jump" href="#trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b id="tripCount">0</b>)</a>
 </div></header>
@@ -68,7 +69,7 @@
         <label class="field"><span>ספרו לנו מה אתם מחפשים</span>
           <input id="smartText" type="text" autocomplete="off" placeholder="למשל: שבוע באנגליה סביב סוף נובמבר">
         </label>
-        <p class="hint" id="smartUnderstood">הבנה של ניסוח חופשי מבוססת על כללים פשוטים (יעד, חודש, אורך הטיול, ענף) - לא על בינה מלאכותית. אפשר תמיד למלא את השדות ידנית.</p>
+        <p class="hint" id="smartUnderstood"></p>
         <div class="smart-grid">
           <label class="field"><span>יעד</span><select id="smartCountry"></select></label>
           <label class="field"><span>חודש</span><select id="smartMonth"></select></label>
@@ -76,7 +77,7 @@
             <option value="all">כל החודש</option><option value="start">תחילת החודש</option><option value="mid">אמצע החודש</option><option value="end">סוף החודש</option></select></label>
           <label class="field"><span>לכמה זמן</span><select id="smartDays">
             <option value="3">סוף שבוע (3 ימים)</option><option value="4">4 ימים</option><option value="5">5 ימים</option>
-            <option value="7">שבוע</option><option value="10">10 ימים</option><option value="14">שבועיים</option></select></label>
+            <option value="7">שבוע</option><option value="10">10 ימים</option><option value="14">שבועיים</option><option value="21">3 שבועות</option><option value="30">חודש</option></select></label>
           <label class="field"><span>מרחק מקסימלי בין ימים</span><select id="smartHop">
             <option value="60">עד 60 ק״מ (כמעט באותה עיר)</option><option value="150" selected>עד 150 ק״מ</option><option value="300">עד 300 ק״מ</option></select></label>
         </div>

@@ -254,3 +254,5 @@ dialog#detailDialog .detail-note{margin:16px 0 0;padding:12px;background:var(--s
 .plan-actions .btn{display:inline-block;width:auto;padding-inline:24px}
 .panel-sub{font:700 16px/1.3 var(--sans);margin:24px 0 8px;color:var(--text-muted)}
 .tripnote.remind{margin:0 0 16px;padding:8px 12px;border:1px solid var(--border-subtle);border-inline-start:3px solid var(--link);border-radius:var(--radius-sm);background:var(--surface)}
+.hint:empty{display:none}
+.plan-travel{margin:0;padding:14px 16px;border:1px dashed var(--link);border-radius:var(--radius);color:var(--text);font-size:14px}

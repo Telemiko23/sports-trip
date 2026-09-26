@@ -2,5 +2,5 @@
 // spelling and capitalization: ToSport. `version` is shown small in the footer.
 window.BRAND = {
   name: 'ToSport',
-  version: '1.7.0'
+  version: '1.8.0'
 };
