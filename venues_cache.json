@@ -160,6 +160,7 @@
   51.0996,
   -0.1947
  ],
+ "Bursa Büyükşehir Stadyumu|Bursa": null,
  "Butlin's Minehead|Minehead": null,
  "Camp Nou|Barcelona": [
   41.3808,
@@ -258,6 +259,10 @@
   52.2237,
   5.499
  ],
+ "De Geusselt|Maastricht": [
+  50.8564,
+  5.7182
+ ],
  "De Grolsch Veste|Enschede": [
   52.2364,
   6.8378
@@ -265,6 +270,10 @@
  "De Kuip|Rotterdam": [
   51.8939,
   4.5232
+ ],
+ "De Zwaaier|Werkendam": [
+  51.8087,
+  4.9084
  ],
  "Deepdale|Preston": [
   53.7722,
@@ -530,6 +539,7 @@
   51.3977,
   -0.0054
  ],
+ "Hein Koning Stadion|Volendam": null,
  "Heinz-von-Heiden-Arena|Hannover": [
   52.36,
   9.731
@@ -581,6 +591,10 @@
  "Jan Breydel Stadion|Brugge": [
   51.1933,
   3.1806
+ ],
+ "Jan Louwers Stadion|Eindhoven": [
+  51.4122,
+  5.4786
  ],
  "Johan Cruijff Arena|Amsterdam": [
   52.3144,
@@ -762,6 +776,10 @@
   39.0781,
   -0.2566
  ],
+ "MySteel Stadion|Helmond": [
+  51.4874,
+  5.6792
+ ],
  "National Stadium Vasil Levski|Sofia": [
   42.6883,
   23.3351
@@ -831,6 +849,10 @@
   55.7027,
   12.5723
  ],
+ "Parkstad Limburg Stadion|Kerkrade": [
+  50.857,
+  6.0058
+ ],
  "Parque Joaquim de Almeida Freitas|Moreira de Conegos": null,
  "Parque de Jogos do Brito SC|Brito": [
   41.4507,
@@ -892,6 +914,10 @@
   48.2936,
   14.2766
  ],
+ "Rajko Mitić Stadion|Belgrade": [
+  44.7832,
+  20.4647
+ ],
  "Rams Park|Istanbul": [
   41.1034,
   28.991
@@ -919,6 +945,10 @@
  "Rodney Parade|Newport": [
   51.589,
   -2.9905
+ ],
+ "Roi Baudouin|Brussels": [
+  50.8964,
+  4.3278
  ],
  "Rudolf-Harbig-Stadion|Dresden": [
   51.0408,
@@ -949,6 +979,7 @@
   41.3207,
   -1.4059
  ],
+ "Seacon - De Koel|Venlo": null,
  "Select Car Leasing Stadium|Reading": [
   51.4223,
   -0.9831
@@ -989,6 +1020,11 @@
   52.2579,
   5.3779
  ],
+ "Sportpark Denoek|Hoek": null,
+ "Sportpark Dijkpolder|Maassluis": [
+  51.9269,
+  4.2594
+ ],
  "Sportpark Drieburg|Amsterdam": [
   52.3407,
   4.9324
@@ -997,13 +1033,29 @@
   52.0008,
   4.4737
  ],
+ "Sportpark ICT Specialist|Assen": null,
+ "Sportpark Middelmors|Rijnsburg": null,
+ "Sportpark Nieuw Zuid|Katwijk": null,
  "Sportpark Noord|Groesbeek": [
   51.7913,
   5.9112
  ],
+ "Sportpark Panhuis|Veenendaal": [
+  52.0284,
+  5.5394
+ ],
  "Sportpark Ronhof Thomas Sommer|Fürth": [
   49.4871,
   10.9989
+ ],
+ "Sportpark Spanjaardslaan|Haarlem": null,
+ "Sportpark Zuid|Groesbeek": [
+  51.7681,
+  5.9447
+ ],
+ "Sports Centre de Bongerd|Barendrecht": [
+  51.8607,
+  4.5429
  ],
  "Spotland Stadium|Rochdale": [
   53.6208,
@@ -1330,6 +1382,7 @@
   51.4817,
   -0.191
  ],
+ "Strawberry Arena|Solna": null,
  "Superbet Arena - Giulesti|Beer Sheva": null,
  "Swansea.com Stadium|Swansea": [
   51.6428,
@@ -1418,6 +1471,10 @@
  "Tynecastle Park|Edinburgh": [
   55.939,
   -3.2323
+ ],
+ "Ullevaal Stadion|Oslo": [
+  59.9491,
+  10.7343
  ],
  "Unipol Domus|Cagliari": [
   39.1992,
