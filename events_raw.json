@@ -1,52 +1,5 @@
 [
  {
-  "id": 19809,
-  "name": "2026 Formula 1 - Azerbaijan Grand Prix",
-  "year": 2026,
-  "date": "24 - 26 September 2026",
-  "dateFrom": "2026-09-24T00:00:00",
-  "dateTo": "2026-09-26T00:00:00",
-  "sportId": 11,
-  "sport": "Motor Sports",
-  "emoji": null,
-  "competitionId": 65,
-  "competition": "Formula 1",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-Formula-1-Azerbaijan-Grand-Prix-19809",
-  "webUrl": "https://www.formula1.com",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/Formula1",
-  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%40bakucitycircuit%20OR%20%23AzerbaijanGP%20OR%20%23F1Baku",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-22T14:37:06.029",
-  "location": [
-   {
-    "id": 1,
-    "regionId": null,
-    "name": "Azerbaijan",
-    "continent": "Europe",
-    "continentId": 3,
-    "code": "az",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3407,
-      "name": "Baku",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
   "id": 20922,
   "name": "2026 Formula 1 - Bahrain Grand Prix",
   "year": 2026,
@@ -65,13 +18,13 @@
   "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/Formula1",
-  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23BahrainGP%20OR%20%40BAH_Int_Circuit",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23BahrainGP",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-01T14:06:28.312",
+  "dateModified": "2026-09-28T12:31:35.952",
   "location": [
    {
     "id": 50,
@@ -423,147 +376,6 @@
   ]
  },
  {
-  "id": 19583,
-  "name": "2026 WTA Tour - Singapore Tennis Open",
-  "year": 2026,
-  "date": "21 - 27 September 2026",
-  "dateFrom": "2026-09-21T00:00:00",
-  "dateTo": "2026-09-27T00:00:00",
-  "sportId": 17,
-  "sport": "Tennis",
-  "emoji": null,
-  "competitionId": 295,
-  "competition": "WTA Tour",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-WTA-Tour-Singapore-Tennis-Open-19583",
-  "webUrl": "https://www.wtatennis.com/tournaments/1152/singapore/2026",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Singapore_Tennis_Open_–_Singles#Draw",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/WTA",
-  "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40sgtennisopen",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-21T10:02:59.272",
-  "location": [
-   {
-    "id": 53,
-    "regionId": null,
-    "name": "Singapore",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "sg",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3774,
-      "name": "Singapore",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
-  "id": 19742,
-  "name": "2026 Billie Jean King Cup - Finals",
-  "year": 2026,
-  "date": "22 - 27 September 2026",
-  "dateFrom": "2026-09-22T00:00:00",
-  "dateTo": "2026-09-27T00:00:00",
-  "sportId": 17,
-  "sport": "Tennis",
-  "emoji": null,
-  "competitionId": 294,
-  "competition": "Billie Jean King Cup",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-Billie-Jean-King-Cup-Finals-19742",
-  "webUrl": "https://www.billiejeankingcup.com",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Billie_Jean_King_Cup",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/BillieJeanKingCup",
-  "twitterUrl": "https://twitter.com/search?q=%40BJKCup%20OR%20%23BJKCupFinals",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-21T10:02:35.317",
-  "location": [
-   {
-    "id": 49,
-    "regionId": null,
-    "name": "China",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "cn",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 5323,
-      "name": "Shenzhen",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
-  "id": 19744,
-  "name": "2026 Laver Cup",
-  "year": 2026,
-  "date": "25 - 27 September 2026",
-  "dateFrom": "2026-09-25T00:00:00",
-  "dateTo": "2026-09-27T00:00:00",
-  "sportId": 17,
-  "sport": "Tennis",
-  "emoji": null,
-  "competitionId": 687,
-  "competition": "Laver Cup",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-Laver-Cup-19744",
-  "webUrl": "https://lavercup.com",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Laver_Cup",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/LaverCup",
-  "twitterUrl": "https://twitter.com/search?q=%40LaverCup%20OR%20%40TheO2",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-22T14:34:28.01",
-  "location": [
-   {
-    "id": 34,
-    "regionId": null,
-    "name": "United Kingdom",
-    "continent": "Europe",
-    "continentId": 3,
-    "code": "gb",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3423,
-      "name": "London",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
   "id": 19585,
   "name": "2026 WTA Tour - China Open",
   "year": 2026,
@@ -579,7 +391,7 @@
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-WTA-Tour-China-Open-19585",
   "webUrl": "https://www.wtatennis.com/tournaments/1020/beijing/2026",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_(tennis)",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_–_Women's_singles#Finals",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/WTA",
   "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40ChinaOpen",
@@ -588,7 +400,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-23T07:09:50.447",
+  "dateModified": "2026-09-28T11:21:02.759",
   "location": [
    {
     "id": 49,
@@ -626,7 +438,7 @@
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-ATP-Tour-Japan-Open-19764",
   "webUrl": "https://japanopentennis.com/atp/en/",
-  "wikiUrl": "https://en.wikipedia.org/wiki/Japan_Open_(tennis)",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Japan_Open_Tennis_Championships_–_Singles#Finals",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/japanopentennis/",
   "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40japanopentennis",
@@ -635,7 +447,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-01T14:18:56.19",
+  "dateModified": "2026-09-28T11:21:41.015",
   "location": [
    {
     "id": 15,
@@ -673,7 +485,7 @@
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-ATP-Tour-China-Open-19765",
   "webUrl": "https://www.atptour.com/en/tournaments/beijing/327/overview",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_(tennis)",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_–_Men's_singles#Finals",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/ATPTour",
   "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40ChinaOpen",
@@ -682,7 +494,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-23T07:09:23.686",
+  "dateModified": "2026-09-28T11:21:18.53",
   "location": [
    {
     "id": 49,
