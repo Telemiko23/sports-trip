@@ -64,9 +64,19 @@ def download_logos():
                 local_name = f"{slug(team)}.png"
                 local_path = os.path.join(LOGO_DIR, local_name)
                 src_path = os.path.join(HERE, override)
-                if not os.path.exists(local_path) and os.path.exists(src_path):
-                    with open(src_path, "rb") as sf, open(local_path, "wb") as df:
-                        df.write(sf.read())
+                if not os.path.exists(local_path):
+                    if os.path.exists(src_path):
+                        with open(src_path, "rb") as sf, open(local_path, "wb") as df:
+                            df.write(sf.read())
+                    else:
+                        # the override's source file was never placed - warn and clear the field
+                        # instead of silently leaving/pointing the site at a path that 404s (this
+                        # happened before, unnoticed, since nothing ever cleared the stale value)
+                        print(f"  LOGO_OVERRIDE for {team!r} points at missing file {override!r} - skipped")
+                        resolved[team] = None
+                        r[logo_key] = None
+                        failed += 1
+                        continue
                 resolved[team] = "logos/" + local_name
                 r[logo_key] = resolved[team]
                 continue

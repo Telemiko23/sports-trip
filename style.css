@@ -86,7 +86,6 @@ input[type=range]{width:100%;accent-color:var(--brand-primary)}
 .chip span{display:block;text-align:center;padding:8px 2px;border:1px solid var(--border-control);border-radius:var(--radius-sm);background:var(--surface-2);font-weight:500;transition:background .12s,border-color .12s}
 .chip input:checked+span{background:var(--brand-primary);border-color:var(--link);color:var(--on-primary);font-weight:700}
 .chip input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
-.check{display:flex;gap:8px;align-items:center;margin:0 0 16px}
 .ctry{display:flex;justify-content:space-between;align-items:center;margin:12px 0 4px;font-weight:600;font-size:14px;color:var(--text-muted)}
 .linkbtn{background:none;border:0;color:var(--link);cursor:pointer;padding:4px;font-size:13px;text-decoration:underline;font-weight:500}
 .comp{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:15px}

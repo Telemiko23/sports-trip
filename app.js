@@ -135,9 +135,6 @@
       '<div class="meta">' + tagHtml(f) + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
       '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
   }
-  function longRange(f) {
-    return dayOf(f) === endDay(f) ? fmtLong(dayOf(f)) : parseDay(dayOf(f)).toLocaleDateString('he-IL', { day: 'numeric', month: 'long' }) + ' – ' + parseDay(endDay(f)).toLocaleDateString('he-IL', { day: 'numeric', month: 'long' });
-  }
   function weekday(s) { return parseDay(s).getDay(); }
   function minutes(f) { return f.status === 'TBD' ? null : Number(f.dt.slice(11, 13)) * 60 + Number(f.dt.slice(14, 16)); }
   function km(a, b) {
@@ -367,8 +364,12 @@
     return { list: out, hiddenNoPos: hiddenNoPos };
   }
 
-  function renderResults() {
-    var r = filtered(), list = r.list, html = '', lastDay = '';
+  // r: the already-filtered() result, when the caller (update()) has just computed one - avoids
+  // filtering the whole fixture list a second time in the same update cycle; falls back to
+  // computing it here when called on its own.
+  function renderResults(r) {
+    r = r || filtered();
+    var list = r.list, html = '', lastDay = '';
     var days = {};
     list.forEach(function (f) { days[dayOf(f)] = 1; });
     var nDays = Object.keys(days).length;
@@ -427,13 +428,16 @@
     });
     return html + (last ? '</ul></section>' : '');
   }
-  function renderPanel() {
+  // allList: the already-filtered fixture list, when the caller (renderMap) has just computed one -
+  // avoids running filtered() a second time on every map render; falls back to computing it here
+  // when called on its own (selecting/closing a pin, outside a full renderMap pass).
+  function renderPanel(allList) {
     var el = $('#mapPanel'), g = mapState.sel && mapState.groups[mapState.sel];
     if (!g) { el.innerHTML = '<p class="panel-empty">לחצו על סיכה במפה כדי לראות את האירועים במקום ולהוסיף אותם לטיול.</p>'; return; }
     var rows = g.list.slice().sort(function (a, b) { return a.dt < b.dt ? -1 : 1; });
     var here = {}; rows.forEach(function (f) { here[f.id] = 1; });
     // everything else inside the radius of the base city (the pin's city, set when the pin was clicked)
-    var rest = S.base ? filtered().list.filter(function (f) { return !here[f.id]; }) : [];
+    var rest = S.base ? (allList || filtered().list).filter(function (f) { return !here[f.id]; }) : [];
     el.innerHTML = '<div class="panel-head"><div><h3><bdi dir="rtl">' + esc(g.venue || g.cityHe) + '</bdi></h3><p><bdi dir="rtl">' + (g.venue ? esc(g.cityHe) + ' · ' : '') + rows.length + ' אירועים כאן</bdi></p></div>' +
       '<button type="button" class="panel-close" data-close aria-label="סגור">×</button></div><ul class="matches">' + rows.map(function (f) { return cardHtml(f, true); }).join('') + '</ul>' +
       (rest.length ? '<h4 class="panel-sub">עוד ' + rest.length + ' אירועים בטווח ' + S.radius + ' ק״מ מ<bdi dir="rtl">' + esc(S.base.cityHe) + '</bdi></h4>' + dayGroupsHtml(rest.sort(function (a, b) { return a.dt < b.dt ? -1 : 1; })) : '');
@@ -470,7 +474,9 @@
       $('#map').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
     }
   });
-  function renderMap() {
+  // list: the already-filtered() fixtures, when the caller (update()) has just computed them -
+  // avoids a second full pass over the fixture list in the same update cycle.
+  function renderMap(list) {
     if (!mapState.map) return;
     var key = mapFilterKey();
     var keyChanged = key !== mapState.lastKey;
@@ -478,7 +484,7 @@
     mapState.markers.clearLayers();
     mapState.pins = {}; mapState.groups = {};
     if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
-    var list = filtered().list;
+    list = list || filtered().list;
     var byCity = mapState.groups;
     // pin by the exact stadium when we know it (so e.g. Real Madrid's Bernabéu and
     // Atlético's Metropolitano get separate pins, not one shared city dot), falling back
@@ -504,7 +510,7 @@
         .addTo(mapState.markers);
     });
     if (mapState.sel && !byCity[mapState.sel]) mapState.sel = null;
-    renderPanel(); markSelected();
+    renderPanel(list); markSelected();
     if (S.base) {
       mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#2454E6', weight: 2, fillOpacity: .1 }).addTo(mapState.map);
       if (keyChanged) mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
@@ -663,7 +669,13 @@
     try { document.execCommand('copy'); } catch (e) { }
     document.body.removeChild(ta);
   }
-  function update() { renderResults(); renderTrip(); if (S.view === 'map') renderMap(); if (S.view === 'smart') renderSmartResult(); }
+  function update() {
+    var r = filtered();   // computed once and reused below, instead of each render re-filtering
+    renderResults(r);
+    renderTrip();
+    if (S.view === 'map') renderMap(r.list);
+    if (S.view === 'smart') renderSmartResult();
+  }
 
   // ---------- smart planner view (rules in planner.js; this is only the UI) ----------
   var smart = { ready: false, result: null, sel: 0, params: null };

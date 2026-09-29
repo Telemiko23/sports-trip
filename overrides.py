@@ -227,14 +227,13 @@ EVENT_VENUE_OVERRIDE = {
 }
 
 LOGO_OVERRIDE = {
-    "Ceuta 6 de Junio": "logos/28424.png",
-    "Anaitasuna": "logos/28425.png",
-    "Tedeón": "logos/28426.png",
-    "Baztán": "logos/28427.png",
-    "Ribadesella CF": "logos/28428.png",
-    "Atlético Melilla": "logos/28429.png",
-    "Güímar": "logos/28430.png",
-    "Maracena": "logos/28431.png",
+    # -- 8 entries removed here 2026-09-30 (Ceuta 6 de Junio, Anaitasuna, Tedeón, Baztán,
+    # Ribadesella CF, Atlético Melilla, Güímar, Maracena): each pointed at a "logos/<numeric-id>.png"
+    # file that was never actually placed in logos/, so the crest 404'd on the live site since
+    # whenever these were added. download_logos.py now warns instead of silently no-op'ing when
+    # this happens again. All 8 are early-round Copa del Rey amateur clubs; not worth sourcing a
+    # crest for a team that drops out of the rolling window within days - if one comes back and
+    # still has no crest, add a real local file + an entry here.
 }
 
 
