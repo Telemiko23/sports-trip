@@ -24,20 +24,24 @@
   <h1 class="brand">
     <a class="brand-logo" href="./"><img src="brand/tosport-logo-blue-white.svg" width="166" height="36" alt="ToSport - דף הבית"></a>
   </h1>
-  <a class="jump" href="#trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b id="tripCount">0</b>)</a>
+  <button type="button" class="jump" data-tab="trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b class="js-trip-count">0</b>)</button>
 </div></header>
 
 <div class="viewbar">
-  <div class="viewToggle" id="viewToggle" role="tablist">
-      <button type="button" class="vtab" data-view="list" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>רשימה</button>
-      <button type="button" class="vtab" data-view="smart" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg>תכנון חכם</button>
-      <button type="button" class="vtab" data-view="map" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v14L9 18l6 2.5 6-2.5v-14L15 6.5zM9 4v14M15 6.5v14"/></svg>מפה</button>
-    </div>
+  <div class="tabbar" id="tabbar" role="tablist">
+    <button type="button" class="ttab" data-tab="discover" role="tab" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>גילוי אירועים</button>
+    <button type="button" class="ttab" data-tab="plan" role="tab" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg>תכנון טיול</button>
+    <button type="button" class="ttab" data-tab="trip" role="tab" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b class="js-trip-count">0</b>)</button>
+  </div>
 </div>
 
-<div id="app" class="layout">
+<div id="app" class="layout" data-tab="discover">
+  <div class="sheet-backdrop" id="filtersBackdrop" hidden></div>
   <aside id="filters" aria-label="סינון אירועים">
-    <h2><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h11"/></svg>סינון</h2>
+    <div class="sheet-head">
+      <h2><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h11"/></svg>סינון</h2>
+      <button type="button" class="sheet-close" id="filtersClose" aria-label="סגור סינון">×</button>
+    </div>
     <label class="field"><span>עיר בסיס</span>
       <div class="combo-wrap">
         <input id="base" type="text" autocomplete="off" placeholder="לדוגמה: לונדון">
@@ -59,13 +63,28 @@
       <button type="button" class="linkbtn" id="allComps">הכל / כלום (כל התחרויות)</button>
       <div id="comps"></div>
     </details>
+    <div class="sheet-actions">
+      <button type="button" class="btn" id="filtersReset">איפוס סינון</button>
+      <button type="button" class="btn primary" id="filtersApply">הצג <span id="filtersApplyCount"></span> אירועים</button>
+    </div>
   </aside>
+  <button type="button" class="filter-trigger" id="filterTrigger"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h11"/></svg>סינון<span class="filter-badge" id="filterBadge" hidden></span></button>
 
   <main id="results" aria-live="polite">
+    <div class="discoverToggle" id="discoverToggle" role="tablist" aria-label="רשימה או מפה">
+      <button type="button" class="dtab" data-mode="list" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>רשימה</button>
+      <button type="button" class="dtab" data-mode="map" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v14L9 18l6 2.5 6-2.5v-14L15 6.5zM9 4v14M15 6.5v14"/></svg>מפה</button>
+    </div>
     <p id="summary"></p>
     <p class="hint tz-hint" id="tzHint">השעות המוצגות הן <b>שעון מקומי באתר האירוע</b> (לא שעון ישראל) - כדאי להתחשב בהפרש השעות בתכנון הטיסה.</p>
     <div id="list"></div>
-    <section id="smartWrap" style="display:none" aria-label="תכנון חכם">
+    <div id="mapWrap" style="display:none">
+      <div id="map"></div>
+      <section id="mapPanel" class="map-panel" aria-live="polite"></section>
+    </div>
+  </main>
+
+  <section id="smartWrap" style="display:none" aria-label="תכנון טיול" aria-live="polite">
       <div class="smart-card">
         <label class="field"><span>ספרו לנו מה אתם מחפשים</span>
           <input id="smartText" type="text" autocomplete="off" placeholder="למשל: שבוע באנגליה סביב סוף נובמבר">
@@ -86,18 +105,19 @@
         <button type="button" class="btn primary smart-go" id="smartGo">הצע לי מסלול</button>
       </div>
       <div id="smartResult" aria-live="polite"></div>
-    </section>
-    <div id="mapWrap" style="display:none">
-      <div id="map"></div>
-      <section id="mapPanel" class="map-panel" aria-live="polite"></section>
-    </div>
-  </main>
+  </section>
 
   <aside id="trip" aria-label="הטיול שלי">
     <h2><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-7h14l2 7M5 12v7h14v-7M9 21v-4h6v4"/></svg>הטיול שלי</h2>
     <div id="tripBody"></div>
   </aside>
 </div>
+
+<nav class="bottom-nav" id="bottomNav" aria-label="ניווט ראשי">
+  <button type="button" class="bnav-btn" data-tab="discover" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg><span>גילוי</span></button>
+  <button type="button" class="bnav-btn" data-tab="plan" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><span>תכנון</span></button>
+  <button type="button" class="bnav-btn" data-tab="trip" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>הטיול שלי</span><b class="bnav-badge js-trip-count">0</b></button>
+</nav>
 
 <footer class="credits">
   נתוני משחקים: <a href="https://www.api-football.com" target="_blank" rel="noopener">API-Football</a> ·

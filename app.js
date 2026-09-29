@@ -66,6 +66,7 @@
 
   // ---------- helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function debounce(fn, ms) { var t; return function () { clearTimeout(t); var a = arguments; t = setTimeout(function () { fn.apply(null, a); }, ms); }; }
   // analytics events - never throws (an ad-blocker or offline gtag must not break the site)
   function track(name, params) {
     try {
@@ -213,7 +214,9 @@
     days: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1},
     comps: {},
     trip: [], origin: 'Ben Gurion International Airport – Tel Aviv, ישראל (TLV)',
-    view: 'list'
+    tab: 'discover',       // top-level destination: discover | plan | trip (trip is mobile-only as a
+                            // dedicated screen - on desktop the trip panel is always visible, see applyTab())
+    discoverMode: 'list'   // inside Discover: list | map
   };
   comps.forEach(function (c) { S.comps[c.id] = true; });
   try {
@@ -518,23 +521,97 @@
       mapState.map.fitBounds(keys.map(function (k) { return [byCity[k].lat, byCity[k].lng]; }), { padding: [30, 30], maxZoom: 6 });
     }
   }
-  $('#viewToggle').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('button.vtab') : null;
+  // ---------- top-level navigation: Discover / Plan / My trip ----------
+  // "My trip" is a real dedicated screen only on mobile - on desktop the trip panel is a permanent
+  // sidebar (as it always was), so selecting it there just scrolls it into view instead of hiding
+  // Discover/Plan. This is the one place mobile and desktop genuinely diverge in what a tab means.
+  function isMobile() { return window.matchMedia('(max-width:760px)').matches; }
+  function setTabPressed(tab) {
+    document.querySelectorAll('[data-tab]').forEach(function (b) {
+      var on = b.getAttribute('data-tab') === tab;
+      if (b.hasAttribute('aria-selected')) b.setAttribute('aria-selected', String(on));
+    });
+  }
+  function applyTab() {
+    if (!$('#filterTrigger')) return;   // defensive: skip if the page is mid-navigation/teardown
+    var mobile = isMobile();
+    $('#results').style.display = S.tab === 'discover' ? '' : 'none';
+    $('#smartWrap').style.display = S.tab === 'plan' ? '' : 'none';
+    $('#trip').style.display = (mobile && S.tab !== 'trip') ? 'none' : '';
+    // the filter-sheet trigger lives outside #results (so it isn't hidden along with it) - only
+    // meaningful in Discover, and only exists at all on mobile (hidden by CSS above 760px)
+    $('#filterTrigger').style.display = S.tab === 'discover' ? '' : 'none';
+    if (S.tab !== 'discover') closeFilters();
+    app.classList.toggle('is-plan', S.tab === 'plan');
+    setTabPressed(S.tab);
+  }
+  function goTab(tab, source) {
+    if (tab === 'trip' && !isMobile()) {
+      $('#trip').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+      return;
+    }
+    if (S.tab === tab) return;
+    S.tab = tab;
+    applyTab();   // also closes the filter sheet when leaving Discover
+    if (tab === 'plan') { initSmart(); renderSmartResult(); }
+    if (tab === 'discover' && S.discoverMode === 'map') { initMap(); requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); }); }
+    if (isMobile()) window.scrollTo({ top: 0, behavior: 'auto' });
+    track('tab_change', { tab: tab, source: source || 'unknown' });
+  }
+  document.querySelectorAll('#tabbar, #bottomNav').forEach(function (nav) {
+    nav.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-tab]') : null;
+      if (b) goTab(b.getAttribute('data-tab'), nav.id);
+    });
+  });
+  $('.jump').addEventListener('click', function () { goTab('trip', 'header'); });
+  applyTab();
+  window.addEventListener('resize', debounce(applyTab, 150));
+
+  // ---------- Discover-internal: List / Map ----------
+  $('#discoverToggle').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button.dtab') : null;
     if (!b) return;
-    S.view = b.getAttribute('data-view');
-    document.querySelectorAll('#viewToggle .vtab').forEach(function (v) { v.setAttribute('aria-pressed', v === b ? 'true' : 'false'); });
-    $('#list').style.display = S.view === 'list' ? '' : 'none';
-    $('#mapWrap').style.display = S.view === 'map' ? '' : 'none';
-    $('#smartWrap').style.display = S.view === 'smart' ? '' : 'none';
-    $('#summary').style.display = S.view === 'smart' ? 'none' : '';
-    $('#tzHint').style.display = S.view === 'smart' ? 'none' : '';
-    app.classList.toggle('is-smart', S.view === 'smart');
-    if (S.view === 'smart') initSmart();
-    if (S.view === 'map') {
+    S.discoverMode = b.getAttribute('data-mode');
+    document.querySelectorAll('#discoverToggle .dtab').forEach(function (v) { v.setAttribute('aria-pressed', v === b ? 'true' : 'false'); });
+    $('#list').style.display = S.discoverMode === 'list' ? '' : 'none';
+    $('#mapWrap').style.display = S.discoverMode === 'map' ? '' : 'none';
+    if (S.discoverMode === 'map') {
       initMap();
       requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); });
     }
-    track('view_toggle', { view: S.view });
+    track('view_toggle', { view: S.discoverMode });
+  });
+
+  // ---------- mobile filter sheet ----------
+  // Filters apply live (same as desktop) rather than through a separate draft copy - simpler and
+  // consistent with how every other control on the site already behaves. "Apply" is mainly a clear,
+  // reachable way to close the sheet and see the (already up to date) result count; "Reset" is the
+  // one true undo, back to the site's defaults.
+  function openFilters() {
+    $('#filters').classList.add('sheet-open'); $('#filtersBackdrop').hidden = false;
+    document.body.classList.add('sheet-locked');
+    $('#filters').querySelector('input,button,select,a').focus();
+  }
+  function closeFilters() {
+    $('#filters').classList.remove('sheet-open'); $('#filtersBackdrop').hidden = true;
+    document.body.classList.remove('sheet-locked');
+  }
+  $('#filterTrigger').addEventListener('click', function () { openFilters(); track('filters_sheet_open', {}); });
+  $('#filtersClose').addEventListener('click', closeFilters);
+  $('#filtersBackdrop').addEventListener('click', closeFilters);
+  $('#filtersApply').addEventListener('click', closeFilters);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('#filters').classList.contains('sheet-open')) closeFilters(); });
+  $('#filtersReset').addEventListener('click', function () {
+    $('#base').value = ''; setBase(null, '');
+    S.radius = 150; $('#radius').value = 150; $('#radiusOut').textContent = 150;
+    S.from = isoLocal(today); S.to = addDays(isoLocal(today), 45); $('#from').value = S.from; $('#to').value = S.to;
+    Object.keys(S.days).forEach(function (k) { S.days[k] = 1; });
+    document.querySelectorAll('#days input').forEach(function (i) { i.checked = true; });
+    comps.forEach(function (c) { S.comps[c.id] = true; });
+    document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = true; });
+    update();
+    track('filters_reset', {});
   });
 
   // ---------- trip ----------
@@ -617,7 +694,7 @@
 
   function renderTrip() {
     var list = tripSorted(), body = $('#tripBody');
-    $('#tripCount').textContent = list.length;
+    document.querySelectorAll('.js-trip-count').forEach(function (el) { el.textContent = list.length; });
     if (!list.length) {
       body.innerHTML = '<p class="empty">עוד אין אירועים בטיול. לחץ על "הוסף לטיול" ליד אירוע, והוא יופיע כאן עם המרחקים בין האירועים.</p>';
       return;
@@ -679,12 +756,19 @@
     try { document.execCommand('copy'); } catch (e) { }
     document.body.removeChild(ta);
   }
+  // small live counters on the mobile filter sheet trigger/apply button, so closing the sheet (or
+  // deciding not to open it) still tells you how many events your current filters match
+  function updateFilterBadge(n) {
+    var badge = $('#filterBadge'); badge.textContent = n; badge.hidden = false;
+    $('#filtersApplyCount').textContent = n;
+  }
   function update() {
     var r = filtered();   // computed once and reused below, instead of each render re-filtering
     renderResults(r);
     renderTrip();
-    if (S.view === 'map') renderMap(r.list);
-    if (S.view === 'smart') renderSmartResult();
+    if (S.tab === 'discover' && S.discoverMode === 'map') renderMap(r.list);
+    if (S.tab === 'plan') renderSmartResult();
+    updateFilterBadge(r.list.length);
   }
 
   // ---------- smart planner view (rules in planner.js; this is only the UI) ----------

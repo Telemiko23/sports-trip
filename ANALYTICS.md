@@ -25,11 +25,33 @@ those aren't listed here since we didn't add them and don't control their params
   trips (not just views) - the strongest "real interest" signal on the site. `source`
   shows whether people build trips from the list or the map.
 
+## Navigation
+
+### `tab_change`
+- **Params**: `tab` (`"discover"` | `"plan"` | `"trip"`), `source` (`"tabbar"` | `"bottomNav"` | `"header"`).
+- **Trigger**: switching between the three top-level destinations (v1.10.0). On desktop, selecting
+  "trip" only scrolls the always-visible trip panel into view and does **not** fire this event
+  (nothing actually changed) - only a real destination switch counts.
+- **Use**: how people move between discovering, planning and reviewing their trip, and whether
+  mobile (bottomNav) vs desktop (tabbar) usage differs.
+
+### `filters_sheet_open`
+- **Params**: none.
+- **Trigger**: opening the mobile filter sheet (the "סינון" button, shown only below 760px).
+- **Use**: how often filters are touched at all on mobile, vs. desktop where they're always visible.
+
+### `filters_reset`
+- **Params**: none.
+- **Trigger**: "איפוס סינון" in the filter sheet - clears base city, radius, dates, weekdays and
+  competition selection back to their defaults.
+- **Use**: how often people give up refining filters and start over, vs. adjusting one at a time.
+
 ## View & map
 
 ### `view_toggle`
-- **Params**: `view` (`"list"` | `"map"` | `"smart"`).
-- **Trigger**: clicking the רשימה/מפה toggle above the results.
+- **Params**: `view` (`"list"` | `"map"`).
+- **Trigger**: clicking the רשימה/מפה toggle inside Discover (v1.10.0: moved out from beside "תכנון
+  חכם" - list/map is now its own control, not a third option alongside planning).
 - **Use**: adoption of the map view vs the original list.
 
 ### `map_marker_click`

@@ -52,16 +52,58 @@ h1.brand{margin:0;line-height:0}
 .jump .ico{width:18px;height:18px}
 @media (max-width:760px){ .site-header-in{padding:12px 12px} .brand-logo img{height:30px} }
 
+/* three regions that share the center/end columns by named area, not fixed indices, so hiding one
+   (Discover vs Plan; filters on/off) never leaves the grid guessing where the others belong */
 .layout{max-width:1400px;margin:0 auto;padding:16px 20px 64px;display:grid;
-  grid-template-columns:290px minmax(0,1fr) 400px;gap:24px;align-items:start}
-@media (max-width:1150px){ .layout{grid-template-columns:270px minmax(0,1fr)} #trip{grid-column:1 / -1} }
-@media (max-width:760px){ .layout{grid-template-columns:1fr;padding-inline:12px} }
+  grid-template-columns:290px minmax(0,1fr) 400px;grid-template-areas:"filters main trip";gap:24px;align-items:start}
+#filters{grid-area:filters}
+#results,#smartWrap{grid-area:main}
+#trip{grid-area:trip}
+#app.is-plan{grid-template-columns:minmax(0,1fr) 400px;grid-template-areas:"main trip"}
+#app.is-plan #filters{display:none}
+@media (max-width:1150px){
+  .layout{grid-template-columns:270px minmax(0,1fr);grid-template-areas:"filters main" "trip trip"}
+  #app.is-plan{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "trip"}
+}
+@media (max-width:760px){
+  /* one active screen at a time (JS toggles display:none on the other two) - plain block flow,
+     no grid needed once only a single region is ever visible */
+  .layout{display:block;padding-inline:12px;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+}
 
 h2{font:700 18px/1.2 var(--sans);margin:0 0 16px;display:flex;align-items:center;gap:8px}
 h2 .ico{width:20px;height:20px;flex:none;color:var(--link)}
 aside{background:transparent}
 #filters{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius);padding:20px 16px;box-shadow:var(--shadow)}
-@media (max-width:760px){ #filters{position:static;max-height:none} }
+.sheet-head{display:none}
+.sheet-actions{display:none}
+.filter-trigger{display:none}
+@media (max-width:760px){
+  /* the filter sheet: a full-height panel that slides up from the bottom, independent of which
+     top-level tab is active (you can filter while in Discover; it never affects Plan/My trip) */
+  #filters{position:fixed;inset-inline:0;bottom:0;top:auto;z-index:60;max-height:88vh;height:auto;
+    border-radius:16px 16px 0 0;transform:translateY(105%);transition:transform .25s ease;
+    padding:0 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(0,0,0,.5)}
+  #filters.sheet-open{transform:translateY(0)}
+  .sheet-backdrop{position:fixed;inset:0;background:rgba(2,6,15,.6);z-index:55}
+  .sheet-backdrop[hidden]{display:none}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;
+    background:var(--surface);padding:14px 0 10px;margin:0;border-bottom:1px solid var(--border-subtle);z-index:1}
+  .sheet-head h2{margin:0}
+  .sheet-close{width:44px;height:44px;flex:none;border:0;background:var(--surface-2);color:var(--text);
+    border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+  .sheet-actions{display:flex;gap:10px;position:sticky;bottom:0;background:var(--surface);
+    padding:12px 0 calc(12px + env(safe-area-inset-bottom));margin-top:8px;border-top:1px solid var(--border-subtle)}
+  .sheet-actions .btn{flex:1;min-height:46px}
+  .filter-trigger{display:flex;align-items:center;gap:8px;width:100%;justify-content:center;
+    min-height:46px;margin:0 0 16px;border:1px solid var(--border-control);border-radius:var(--radius-sm);
+    background:var(--surface);color:var(--text);font-weight:600;cursor:pointer;position:relative}
+  .filter-trigger .ico{width:18px;height:18px;flex:none}
+  .filter-badge{background:var(--brand-primary);color:var(--on-primary);border-radius:999px;
+    min-width:22px;height:22px;padding:0 6px;font-size:12px;font-weight:700;display:inline-flex;
+    align-items:center;justify-content:center}
+  body.sheet-locked{overflow:hidden}
+}
 .field{display:block;margin:0 0 16px;position:relative}
 .field>span,legend{display:block;font-weight:600;font-size:14px;margin-bottom:8px;padding:0;color:var(--text-muted)}
 fieldset{border:0;padding:0;margin:0 0 16px;min-width:0}
@@ -72,7 +114,7 @@ summary::before,.cat-toggle::before{content:"";flex:none;width:8px;height:8px;bo
 details[open] summary::before,.cat-toggle[aria-expanded=true]::before{transform:rotate(-45deg)}
 select{width:100%;padding:10px 12px;border:1px solid var(--border-control);border-radius:var(--radius-sm);background:var(--surface-2);color:var(--text);font-size:16px}
 select:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
-input[type=text],input[type=date],input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--border-control);border-radius:var(--radius-sm);background:var(--surface-2);transition:border-color .15s;font-size:16px}
+input[type=text],input[type=date],input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--border-control);border-radius:var(--radius-sm);background:var(--surface-2);transition:border-color .15s;font-size:16px;text-overflow:ellipsis}
 input[type=text]:focus-visible,input[type=date]:focus-visible,input[type=number]:focus-visible{border-color:var(--focus);outline:2px solid var(--focus);outline-offset:1px}
 input[type=date]::-webkit-calendar-picker-indicator{opacity:.75;cursor:pointer}
 input[type=range]{width:100%;accent-color:var(--brand-primary)}
@@ -106,11 +148,13 @@ input[type=range]{width:100%;accent-color:var(--brand-primary)}
 #summary strong{color:var(--text);font-size:18px;font-weight:700}
 .viewbar{max-width:1400px;margin:0 auto;padding:16px 20px 0}
 @media (max-width:760px){ .viewbar{padding-inline:12px} }
-.viewToggle{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:4px;margin:0}
-.vtab{display:inline-flex;align-items:center;gap:8px;border:0;background:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--text-muted);transition:background .15s,color .15s}
-.vtab:hover{color:var(--text)}
-.vtab[aria-pressed=true]{background:var(--brand-primary);color:var(--on-primary);box-shadow:inset 0 0 0 1px var(--link)}
-.vtab .ico{width:17px;height:17px}
+.tabbar,.discoverToggle{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:4px;margin:0}
+.discoverToggle{margin:0 0 16px}
+.ttab,.dtab{display:inline-flex;align-items:center;gap:8px;border:0;background:none;padding:8px 16px;min-height:44px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--text-muted);transition:background .15s,color .15s}
+.ttab:hover,.dtab:hover{color:var(--text)}
+.ttab[aria-selected=true],.dtab[aria-pressed=true]{background:var(--brand-primary);color:var(--on-primary);box-shadow:inset 0 0 0 1px var(--link)}
+.ttab .ico,.dtab .ico{width:17px;height:17px}
+@media (max-width:760px){ .viewbar{display:none} }  /* mobile navigates via the bottom nav instead */
 #mapWrap{margin:0 0 16px}
 #map{height:min(65vh,560px);border-radius:var(--radius);border:1px solid var(--border-subtle);background:var(--surface)}
 .map-pin{width:28px;height:28px;border-radius:50% 50% 50% 0;background:var(--brand-primary);transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.5);border:2px solid #fff}
@@ -157,13 +201,13 @@ input[type=range]{width:100%;accent-color:var(--brand-primary)}
 .stub .num{display:block;font:700 26px/1 var(--sans);color:var(--text)}
 .stub .mon,.stub .wd{display:block;font-size:12.5px;color:var(--text-muted)}
 .stub .body{padding:12px 14px;min-width:0;position:relative}
-.stub .t{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;font-size:15px;padding-inline-end:24px}
+.stub .t{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;font-size:15px;padding-inline-end:40px}
 .stub .t .tname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:0 1 auto}
 .stub .t .vs{flex:none;color:var(--text-muted);font-weight:400}
 .stub .crest{width:18px;height:18px;margin:0 2px;flex:none}
 .stub .flag{width:20px;height:14px}
 .stub .s{color:var(--text-muted);font-size:13px;margin-top:8px;display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px}
-.stub .rm{position:absolute;inset-block-start:6px;inset-inline-end:8px;background:none;border:0;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;padding:2px 6px;border-radius:6px}
+.stub .rm{position:absolute;inset-block-start:0;inset-inline-end:0;background:none;border:0;color:var(--text-muted);cursor:pointer;font-size:22px;line-height:1;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:0 var(--radius) 0 var(--radius)}
 .stub .rm:hover{color:var(--warn);background:var(--warn-soft)}
 .hop{margin:0;padding:8px 0;padding-inline-start:80px;font-size:13px;color:var(--text-muted);min-height:20px;display:flex;align-items:center;gap:6px}
 .hop::before{content:"↓";color:var(--border-control);font-weight:700}
@@ -197,7 +241,7 @@ dialog#detailDialog h3{margin:0 0 4px}
 dialog#legalDialog p{font-size:14px;line-height:1.65;color:var(--text-muted);margin:0 0 12px}
 dialog#legalDialog p:last-child{margin-bottom:0}
 dialog#detailDialog p{font-size:14px;color:var(--text-muted);margin:0 0 12px}
-.dialog-close{position:absolute;top:12px;left:12px;background:none;border:0;color:var(--text-muted);font-size:24px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:8px}
+.dialog-close{position:absolute;top:6px;left:6px;background:none;border:0;color:var(--text-muted);font-size:24px;line-height:1;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .dialog-close:hover{color:var(--warn);background:var(--warn-soft)}
 .drow{display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid var(--border-subtle);font-size:14px;color:var(--text-muted)}
 .drow.main{color:var(--text);font-weight:700}
@@ -217,7 +261,7 @@ dialog#detailDialog .detail-note{margin:16px 0 0;padding:12px;background:var(--s
 .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
 .panel-head h3{font:700 20px/1.2 var(--sans);margin:0}
 .panel-head p{margin:4px 0 0;color:var(--text-muted);font-size:14px}
-.panel-close{flex:none;background:none;border:0;color:var(--text-muted);font-size:24px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:8px}
+.panel-close{flex:none;background:none;border:0;color:var(--text-muted);font-size:24px;line-height:1;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .panel-close:hover{color:var(--warn);background:var(--warn-soft)}
 .map-panel .matches{margin-bottom:8px}
 
@@ -235,9 +279,6 @@ dialog#detailDialog .detail-note{margin:16px 0 0;padding:12px;background:var(--s
 }
 
 /* ---------- smart planner view ---------- */
-#app.is-smart{grid-template-columns:minmax(0,1fr) 400px}
-#app.is-smart #filters{display:none}
-@media (max-width:1150px){ #app.is-smart{grid-template-columns:minmax(0,1fr)} }
 .smart-card{background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius);padding:20px;margin-bottom:16px}
 .smart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0 12px}
 .chips.wrap{display:flex;flex-wrap:wrap;gap:8px}
@@ -255,3 +296,21 @@ dialog#detailDialog .detail-note{margin:16px 0 0;padding:12px;background:var(--s
 .tripnote.remind{margin:0 0 16px;padding:8px 12px;border:1px solid var(--border-subtle);border-inline-start:3px solid var(--link);border-radius:var(--radius-sm);background:var(--surface)}
 .hint:empty{display:none}
 .plan-travel{margin:0;padding:14px 16px;border:1px dashed var(--link);border-radius:var(--radius);color:var(--text);font-size:14px}
+
+/* ---------- bottom navigation (mobile only) ---------- */
+.bottom-nav{display:none}
+@media (max-width:760px){
+  .bottom-nav{display:flex;position:fixed;inset-inline:0;bottom:0;z-index:50;background:var(--surface);
+    border-top:1px solid var(--border-subtle);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    min-height:48px;border:0;background:none;color:var(--text-muted);font-size:11px;font-weight:600;
+    cursor:pointer;border-radius:10px;position:relative}
+  .bnav-btn .ico{width:22px;height:22px}
+  .bnav-btn[aria-selected=true]{color:var(--link)}
+  .bnav-badge{position:absolute;top:2px;inset-inline-end:calc(50% - 26px);background:var(--brand-primary);
+    color:var(--on-primary);border-radius:999px;min-width:16px;height:16px;padding:0 4px;font-size:10px;
+    line-height:16px;font-weight:700}
+  /* the header's own "my trip" pill is redundant once the bottom nav covers the same destination */
+  .jump{display:none}
+}
+
