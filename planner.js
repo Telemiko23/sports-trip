@@ -26,8 +26,13 @@
   function has(text, w) { return wordRe(w).test(text); }
 
   function parse(raw, ctx) {
-    var t = norm(raw), out = { country: null, city: null, month: null, year: null, part: 'all', days: null, cats: [], assumed: [] };
+    var t = norm(raw), out = { country: null, city: null, month: null, year: null, part: 'all', days: null, cats: [], team: null, weekend: false, assumed: [] };
     var today = ctx.today || new Date();
+
+    // team name (checked first/independently of destination - "with an Arsenal match" is a
+    // preference layered on top of wherever the trip ends up, not a replacement for the destination)
+    var teams = (ctx.teams || []).slice().sort(function (a, b) { return b.he.length - a.he.length; });
+    for (var ti = 0; ti < teams.length; ti++) if (teams[ti].he.length >= 3 && has(t, teams[ti].he)) { out.team = teams[ti]; break; }
 
     // city first (more specific than a country), longest name first so "New York" beats "York"
     var cities = (ctx.cities || []).slice().sort(function (a, b) { return b.he.length - a.he.length; });
@@ -57,7 +62,7 @@
     else if (/שבועיים/.test(t)) out.days = 14;
     else if (/שלושה שבועות/.test(t)) out.days = 21;
     else if (new RegExp('(^|\\s)ל?חודש(?=\\s|$)(?!\\s+(הבא|' + monthNames + '))').test(t)) out.days = 30;
-    else if (/סופ"?ש|סוף שבוע/.test(t)) out.days = 3;
+    else if (/סופ"?ש|סוף שבוע/.test(t)) { out.days = 3; out.weekend = true; }
     else if (has(t, 'שבוע')) out.days = 7;
     else {
       Object.keys(NUMS).forEach(function (w) { if (!out.days && new RegExp('(^|\\s)' + esc(w) + '(\\s+(ימים|לילות))?(\\s|$)').test(t) && (w === 'יומיים' || /ימים|לילות/.test(t))) out.days = NUMS[w]; });
@@ -97,11 +102,14 @@
     return { km: d, cost: d / 10 + (d > 15 ? 5 : 0) };
   }
 
-  function solve(list, s, D, maxHop) {
+  function solve(list, s, D, maxHop, preferIds) {
     list.sort(function (a, b) { return a.di - b.di || (a.kick == null ? 12 : a.kick) - (b.kick == null ? 12 : b.kick); });
     var n = list.length, best = [], prev = [], hopKm = [];
     for (var i = 0; i < n; i++) {
-      var val = 100 + (list[i].kick != null ? 3 : 0);
+      // a preferred event (e.g. "with an Arsenal match") outweighs any ordinary day, so the solver
+      // includes it whenever the travel math allows - it's a strong bias, not a hard requirement:
+      // if no route can reach it, the rest of the trip is still scored and returned normally
+      var val = 100 + (list[i].kick != null ? 3 : 0) + (preferIds && preferIds[list[i].id] ? 500 : 0);
       best[i] = val; prev[i] = -1; hopKm[i] = 0;
       for (var j = 0; j < i; j++) {
         if (list[j].di >= list[i].di) continue;
@@ -119,15 +127,31 @@
     return { start: isoOf(s), end: isoOf(s + D - 1), days: days, covered: covered, km: Math.round(kmTotal), score: top < 0 ? 0 : best[top] };
   }
 
-  // params: {from, to (ISO, the window the user asked for), days, maxHop}; items: [{id, day (ISO), kick (hours|null), lat, lng}]
+  // params: {from, to (ISO, the window the user asked for), days, maxHop, startWeekday (0=Sun..6=Sat,
+  // optional - anchors the window to start on that weekday, e.g. a "weekend" trip always starting on a
+  // Friday, instead of sliding to whichever 3-day stretch scores highest), preferIds (optional array of
+  // fixture ids to strongly favor, e.g. a team mentioned by name)}; items: [{id, day (ISO), kick
+  // (hours|null), lat, lng}]
   function plan(p, items) {
     var rs = dayNum(p.from), re = dayNum(p.to), D = p.days;
     var last = Math.max(rs, re - D + 1);          // window shorter than the trip: start at its beginning
     var pool = items.map(function (x) { return { id: x.id, di: dayNum(x.day), kick: x.kick, lat: x.lat, lng: x.lng }; });
+    var preferIds = null;
+    if (p.preferIds && p.preferIds.length) { preferIds = {}; p.preferIds.forEach(function (id) { preferIds[id] = 1; }); }
     var opts = [];
     for (var s = rs; s <= last; s++) {
+      if (p.startWeekday != null && new Date(s * 86400000).getUTCDay() !== p.startWeekday) continue;
       var inWin = pool.filter(function (x) { return x.di >= s && x.di <= s + D - 1; });
-      if (inWin.length) opts.push(solve(inWin, s, D, p.maxHop));
+      if (inWin.length) opts.push(solve(inWin, s, D, p.maxHop, preferIds));
+    }
+    // a weekday anchor can legitimately find nothing in range (e.g. only 2 Fridays fit) - fall back
+    // to an unanchored search so the planner still returns its best effort, with the empty-anchored
+    // result never shown since opts stays empty and the fallback below always outscores "nothing"
+    if (p.startWeekday != null && !opts.length) {
+      for (var s2 = rs; s2 <= last; s2++) {
+        var inWin2 = pool.filter(function (x) { return x.di >= s2 && x.di <= s2 + D - 1; });
+        if (inWin2.length) opts.push(solve(inWin2, s2, D, p.maxHop, preferIds));
+      }
     }
     opts.sort(function (a, b) { return b.score - a.score || (a.start < b.start ? -1 : 1); });
     // alternatives that are just the same trip shifted by a day are not useful: keep distinct event sets

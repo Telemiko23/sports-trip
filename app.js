@@ -295,7 +295,7 @@
   function setBase(place, typedText) {
     S.base = place;
     $('#baseHint').textContent = !typedText.trim()
-      ? 'בלי עיר בסיס מוצגים משחקים מכל היעדים.'
+      ? 'בלי עיר בסיס מוצגים אירועים מכל היעדים.'
       : (place ? 'המרחק מחושב מהעיר ' + place.cityHe + '.' : 'העיר לא נמצאה ברשימה. בחר עיר מההצעות.');
     update();
   }
@@ -373,12 +373,12 @@
     var days = {};
     list.forEach(function (f) { days[dayOf(f)] = 1; });
     var nDays = Object.keys(days).length;
-    $('#summary').innerHTML = list.length ? '<strong>' + list.length + '</strong> משחקים ב-<strong>' + nDays + '</strong> ימים' : '';
+    $('#summary').innerHTML = list.length ? '<strong>' + list.length + '</strong> אירועים ב-<strong>' + nDays + '</strong> ימים' : '';
     if (!list.length) {
-      $('#list').innerHTML = '<p class="empty">לא נמצאו משחקים. הגדל את הרדיוס, הרחב את טווח התאריכים או סמן עוד תחרויות.</p>';
+      $('#list').innerHTML = '<p class="empty">לא נמצאו אירועים. הגדל את הרדיוס, הרחב את טווח התאריכים או סמן עוד תחרויות.</p>';
       return;
     }
-    if (r.hiddenNoPos) html += '<p class="notice">' + r.hiddenNoPos + ' משחקים בלי מיקום מזוהה לא נכללים בסינון לפי מרחק.</p>';
+    if (r.hiddenNoPos) html += '<p class="notice">' + r.hiddenNoPos + ' אירועים בלי מיקום מזוהה לא נכללים בסינון לפי מרחק.</p>';
     var open = false;
     list.forEach(function (f) {
       var d = dayOf(f);
@@ -527,6 +527,7 @@
     $('#mapWrap').style.display = S.view === 'map' ? '' : 'none';
     $('#smartWrap').style.display = S.view === 'smart' ? '' : 'none';
     $('#summary').style.display = S.view === 'smart' ? 'none' : '';
+    $('#tzHint').style.display = S.view === 'smart' ? 'none' : '';
     app.classList.toggle('is-smart', S.view === 'smart');
     if (S.view === 'smart') initSmart();
     if (S.view === 'map') {
@@ -561,7 +562,7 @@
     } else if (sameDay) {
       var a = minutes(prev), b = minutes(cur);
       if (a == null || b == null) { parts.push('אותו יום, שעה לא ידועה'); cls = 'clash'; }
-      else if (b - a < 180) { parts.push('חפיפה בין המשחקים'); cls = 'clash'; }
+      else if (b - a < 180) { parts.push('חפיפה בין האירועים'); cls = 'clash'; }
       else { parts.push('אותו יום'); }
     } else if (gap === 1) parts.push('למחרת');
     else parts.push(gap + ' ימים אחר כך');
@@ -592,6 +593,11 @@
       if (!seen[f.city]) { seen[f.city] = { city: f.city, cityHe: f.city_he || f.city, a: dayOf(f), b: endDay(f), lat: f.venue_lat, lng: f.venue_lng }; cities.push(seen[f.city]); }
       else { if (endDay(f) > seen[f.city].b) seen[f.city].b = endDay(f); if (seen[f.city].lat == null && f.venue_lat != null) { seen[f.city].lat = f.venue_lat; seen[f.city].lng = f.venue_lng; } }
     });
+    // the return flight always covers the trip's true last day (d2), even for an event whose city
+    // is unknown (excluded from `cities` above) - if that leaves the last known hotel checking out
+    // before the flight home, stretch it to match, so the two links never disagree on when the
+    // trip actually ends
+    if (cities.length && cities[cities.length - 1].b < d2) cities[cities.length - 1].b = d2;
     // when we know a stadium's exact spot, centre the hotel search there (< 3km) instead of
     // just searching the city name - closer results for the actual match, not just downtown
     var hotels = cities.map(function (c) {
@@ -613,14 +619,18 @@
     var list = tripSorted(), body = $('#tripBody');
     $('#tripCount').textContent = list.length;
     if (!list.length) {
-      body.innerHTML = '<p class="empty">עוד אין משחקים בטיול. לחץ על "הוסף לטיול" ליד משחק, והוא יופיע כאן עם המרחקים בין המשחקים.</p>';
+      body.innerHTML = '<p class="empty">עוד אין אירועים בטיול. לחץ על "הוסף לטיול" ליד אירוע, והוא יופיע כאן עם המרחקים בין האירועים.</p>';
       return;
     }
     var html = '';
+    // inclusive calendar-day span from the first event's day to the last event's last day - e.g.
+    // three events on 9/10/11 October is a 3-day span, not 4 (a stray "+2" here used to overcount
+    // by a day; this number is also what bookingLinks() below books as hotel nights, so it must
+    // match: arrive the first event's day, leave the day after the last one = span nights).
     var lastEnd = list.reduce(function (m, f) { return endDay(f) > m ? endDay(f) : m; }, endDay(list[list.length - 1]));
-    var span = Math.round((parseDay(lastEnd) - parseDay(dayOf(list[0]))) / 86400000) + 2;
+    var span = Math.round((parseDay(lastEnd) - parseDay(dayOf(list[0]))) / 86400000) + 1;
     html += '<p class="tripsum"><strong>' + list.length + '</strong> אירועים ב-<strong>' + span + '</strong> ימים</p>';
-    html += '<p class="tripnote remind">מומלץ לוודא את זמני ותאריכי האירועים באתרים הרשמיים לפני רכישת טיסות ולינה - חלק מהשעות והתאריכים עדיין לא סופיים.</p>';
+    html += '<p class="tripnote remind">השעות המוצגות הן שעון מקומי באתר כל אירוע (לא שעון ישראל). מומלץ לוודא את זמני ותאריכי האירועים באתרים הרשמיים לפני רכישת טיסות ולינה - חלק מהשעות והתאריכים עדיין לא סופיים.</p>';
     list.forEach(function (f, i) {
       if (i > 0) { var h = hopInfo(list[i - 1], f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + '</div>'; }
       var d = parseDay(dayOf(f));
@@ -641,7 +651,7 @@
       links.hotels.map(function (h) { return '<a class="btn" target="_blank" rel="noopener" href="' + esc(h.url) + '">חיפוש לינה: <bdi dir="rtl">' + esc(h.city) + '</bdi></a>'; }).join('') +
       '<button type="button" class="btn" id="copyTrip">העתק את הטיול כטקסט</button>' +
       '<button type="button" class="btn" id="clearTrip">נקה את הטיול</button>' +
-      '</div><p class="tripnote">קישורי הטיסה והלינה פותחים חיפוש כללי לפי התאריכים של המשחקים (חיפוש הלינה ממוקד סביב האצטדיון עצמו כשהמיקום המדויק שלו ידוע, לא רק מרכז העיר). כשהעיר הראשונה והאחרונה בטיול שונות, מוצגות שתי טיסות חד-כיווניות (הלוך לעיר הראשונה, חזור מהעיר האחרונה) במקום טיסת הלוך-חזור רגילה - ותאריכי הטיסה כדאי להתאים ידנית.</p>';
+      '</div><p class="tripnote">קישורי הטיסה והלינה פותחים חיפוש כללי לפי התאריכים של האירועים (חיפוש הלינה ממוקד סביב האצטדיון עצמו כשהמיקום המדויק שלו ידוע, לא רק מרכז העיר). כשהעיר הראשונה והאחרונה בטיול שונות, מוצגות שתי טיסות חד-כיווניות (הלוך לעיר הראשונה, חזור מהעיר האחרונה) במקום טיסת הלוך-חזור רגילה - ותאריכי הטיסה כדאי להתאים ידנית.</p>';
     body.innerHTML = html;
     combobox($('#origin'), $('#originMenu'), airportItems, {
       onSelect: function (it) { S.origin = it.label; renderTrip(); track('origin_airport_selected', { airport: it.label }); }
@@ -687,9 +697,17 @@
   function initSmart() {
     if (smart.ready) return;
     smart.ready = true;
-    var count = {}, cities = [];
+    var count = {}, cities = [], teams = {};
     smart.footballLast = fixtures.reduce(function (m, f) { return !isEvent(f) && dayOf(f) > m ? dayOf(f) : m; }, '');
     fixtures.forEach(function (f) { if (f.country && hasPos(f) && f.country !== 'Europe') count[destKey(f)] = (count[destKey(f)] || 0) + 1; });
+    // team names for the free-text "with an X match" preference (football only - the other sports
+    // are individual/national events, not club-team fixtures)
+    fixtures.forEach(function (f) {
+      if (f.sport) return;
+      if (f.home_he && !teams[f.home]) teams[f.home] = f.home_he;
+      if (f.away_he && !teams[f.away]) teams[f.away] = f.away_he;
+    });
+    smart.teams = Object.keys(teams).map(function (en) { return { en: en, he: teams[en] }; });
     smart.countries = Object.keys(count).map(function (k) { return { key: k, he: HE_COUNTRY[k] || k, n: count[k] }; })
       .sort(function (a, b) { return a.he.localeCompare(b.he, 'he'); });
     $('#smartCountry').innerHTML = '<option value="">בחרו יעד</option>' + smart.countries.map(function (c) { return '<option value="' + esc(c.key) + '">' + esc(c.he) + '</option>'; }).join('');
@@ -730,8 +748,9 @@
   function runSmartText() {
     var text = $('#smartText').value.trim();
     if (!text) return;
-    var r = Planner.parse(text, { countries: smart.countries, cities: smart.cities, today: new Date() });
+    var r = Planner.parse(text, { countries: smart.countries, cities: smart.cities, teams: smart.teams, today: new Date() });
     var got = [], missing = [];
+    smart.team = r.team;
     if (r.city) { got.push('יעד: ' + r.city.he); $('#smartCountry').value = ''; smart.city = r.city.place; }
     else { smart.city = null; }
     if (r.country && !r.city) { got.push('יעד: ' + (HE_COUNTRY[r.country] || r.country)); $('#smartCountry').value = r.country; }
@@ -743,7 +762,14 @@
     } else missing.push('חודש');
     $('#smartPart').value = r.part;
     if (r.part !== 'all') got.push({ start: 'תחילת החודש', mid: 'אמצע החודש', end: 'סוף החודש' }[r.part]);
-    if (r.days) { var opt = Array.prototype.slice.call($('#smartDays').options).map(function (o) { return Number(o.value); }); var nearest = opt.reduce(function (a, b) { return Math.abs(b - r.days) < Math.abs(a - r.days) ? b : a; }); $('#smartDays').value = String(nearest); got.push('אורך: ' + nearest + ' ימים'); }
+    if (r.weekend) { $('#smartDays').value = 'weekend'; got.push('סוף שבוע (שישי–ראשון)'); }
+    else if (r.days) {
+      // "weekend" isn't a plain day-count option, so it's excluded from the nearest-length match below
+      var opt = Array.prototype.slice.call($('#smartDays').options).map(function (o) { return Number(o.value); }).filter(function (n) { return !isNaN(n); });
+      var nearest = opt.reduce(function (a, b) { return Math.abs(b - r.days) < Math.abs(a - r.days) ? b : a; });
+      $('#smartDays').value = String(nearest); got.push('אורך: ' + nearest + ' ימים');
+    }
+    if (r.team) got.push('כולל משחק של ' + r.team.he);
     document.querySelectorAll('#smartCats input').forEach(function (i) { i.checked = !r.cats.length || r.cats.indexOf(i.getAttribute('data-cat')) !== -1; });
     if (r.cats.length) got.push('ענפים: ' + r.cats.map(function (k) { return (CATEGORIES.filter(function (c) { return c.key === k; })[0] || { he: k }).he; }).join(', '));
     $('#smartUnderstood').textContent = (got.length ? 'הבנתי - ' + got.join(' · ') + '. ' : '') + (missing.length ? 'חסר: ' + missing.join(', ') + ' - השלימו בשדות למטה.' : 'אפשר לתקן בשדות למטה.');
@@ -751,36 +777,49 @@
   }
   function runSmart(source) {
     var country = $('#smartCountry').value, ym = $('#smartMonth').value, part = $('#smartPart').value;
-    var D = Number($('#smartDays').value), maxHop = Number($('#smartHop').value);
+    var durationVal = $('#smartDays').value, weekend = durationVal === 'weekend';
+    var D = weekend ? 3 : Number(durationVal), startWeekday = weekend ? 5 : null;   // Friday=5
+    var maxHop = Number($('#smartHop').value);
     var cats = Array.prototype.slice.call(document.querySelectorAll('#smartCats input:checked')).map(function (i) { return i.getAttribute('data-cat'); });
     var city = country ? null : smart.city;
     if (!country && !city) { smart.result = { error: 'בחרו יעד (מדינה) כדי שנוכל להציע מסלול.' }; renderSmartResult(); return; }
     var y = Number(ym.slice(0, 4)), m = Number(ym.slice(5, 7)), lastD = new Date(y, m, 0).getDate();
     var from = ym + '-' + (part === 'mid' ? '11' : part === 'end' ? '21' : '01'), to = ym + '-' + (part === 'start' ? '10' : part === 'mid' ? '20' : ('0' + lastD).slice(-2));
     if (from < S.from) from = S.from;                                   // never plan into the past
-    var items = fixtures.filter(function (f) {
+    var matched = fixtures.filter(function (f) {
       if (!hasPos(f) || cats.indexOf(categoryOf(f)) === -1) return false;
       return city ? km(city, f) <= 120 : destKey(f) === country;
-    }).map(function (f) {
+    });
+    var items = matched.map(function (f) {
       var mn = (isEvent(f) || f.status === 'TBD') ? null : minutes(f);
       return { id: f.id, day: dayOf(f), kick: mn == null ? null : mn / 60,
         lat: f.venue_lat != null ? f.venue_lat : f.lat, lng: f.venue_lng != null ? f.venue_lng : f.lng };
     });
-    var res = Planner.plan({ from: from, to: to, days: D, maxHop: maxHop }, items);
+    // a team mentioned by name is a strong preference, not a hard filter (section 7): we still
+    // propose the best trip even if that team has no match in range, and say so explicitly below
+    var preferIds = smart.team ? matched.filter(function (f) { return f.home === smart.team.en || f.away === smart.team.en; }).map(function (f) { return f.id; }) : [];
+    var res = Planner.plan({ from: from, to: to, days: D, maxHop: maxHop, startWeekday: startWeekday, preferIds: preferIds }, items);
     smart.sel = 0;
-    smart.result = res.options.length ? { options: res.options, D: D, maxHop: maxHop, considered: res.considered }
-      : { error: 'לא מצאנו אירועים ביעד ובתקופה האלה. נסו חודש אחר, יעד אחר או יותר ענפים.' };
+    if (res.options.length) {
+      smart.result = { options: res.options, D: D, maxHop: maxHop, weekend: weekend, considered: res.considered, team: smart.team, preferIds: preferIds };
+    } else {
+      smart.result = { error: 'לא מצאנו אירועים ביעד ובתקופה האלה. נסו חודש אחר, יעד אחר או יותר ענפים.' };
+    }
     renderSmartResult();
-    track('smart_plan_run', { source: source, destination: country || (city && city.city) || '', month: ym, days: D, sports: cats.join(','),
-      planned_days: res.options.length ? res.options[0].covered : 0 });
+    track('smart_plan_run', { source: source, destination: country || (city && city.city) || '', month: ym, days: D, weekend: weekend, sports: cats.join(','),
+      team: smart.team ? smart.team.en : '', planned_days: res.options.length ? res.options[0].covered : 0 });
   }
   function renderSmartResult() {
     var box = $('#smartResult'), r = smart.result;
     if (!r) { box.innerHTML = ''; return; }
     if (r.error) { box.innerHTML = '<p class="empty">' + esc(r.error) + '</p>'; return; }
     var o = r.options[smart.sel] || r.options[0], html = '';
-    html += '<div class="plan-head"><h3>המסלול המוצע</h3><p><bdi dir="rtl">' + esc(fmtRange(o.start, o.end)) + '</bdi> · אירוע ב-' + o.covered + ' מתוך ' + r.D + ' ימים' +
+    html += '<div class="plan-head"><h3>המסלול המוצע' + (r.weekend ? ' (סוף שבוע: שישי–ראשון)' : '') + '</h3><p><bdi dir="rtl">' + esc(fmtRange(o.start, o.end)) + '</bdi> · אירוע ב-' + o.covered + ' מתוך ' + r.D + ' ימים' +
       (o.covered > 1 ? (o.km < 3 ? ' · כולם באותה עיר' : ' · כ-' + o.km + ' ק״מ בין האירועים') : '') + '</p></div>';
+    if (r.team) {
+      var teamFound = o.days.some(function (d) { return r.preferIds.indexOf(d.id) !== -1; });
+      html += '<p class="notice">' + (teamFound ? '✓ כולל משחק של <bdi dir="rtl">' + esc(r.team.he) + '</bdi>.' : 'לא הצלחנו לשלב משחק של <bdi dir="rtl">' + esc(r.team.he) + '</bdi> במסלול הזה - ' + (r.preferIds.length ? 'יש לה משחק בטווח, אבל המרחק/התאריך לא הסתדרו עם שאר המסלול.' : 'אין לה משחק ידוע בטווח שביקשתם.')) + '</p>';
+    }
     if (r.options.length > 1) {
       html += '<div class="plan-alts">חלופות: ' + r.options.map(function (x, i) {
         return '<button type="button" class="plan-alt" data-alt="' + i + '" aria-pressed="' + (i === smart.sel) + '"><bdi dir="rtl">' + esc(fmtRange(x.start, x.end)) + '</bdi> (' + x.covered + '/' + r.D + ')</button>';
@@ -807,7 +846,7 @@
     });
     var allIn = o.days.every(function (d) { return !d.id || S.trip.indexOf(d.id) !== -1; });
     html += '<div class="plan-actions"><button type="button" class="btn primary" id="planAddAll"' + (allIn ? ' disabled' : '') + '>' + (allIn ? 'המסלול נוסף לטיול ✓' : 'הוסף את כל המסלול לטיול') + '</button></div>' +
-      '<p class="tripnote">ההצעה מנסה לתת אירוע בכל יום, בלי נסיעות ארוכות בין ערב לבוקר, אבל לא תמיד אפשר. שעות ותאריכים עדיין עשויים להשתנות - מומלץ לוודא באתרים הרשמיים.</p>';
+      '<p class="tripnote">ההצעה מנסה לתת אירוע בכל יום, בלי נסיעות ארוכות בין ערב לבוקר, אבל לא תמיד אפשר. השעות הן שעון מקומי באתר כל אירוע (לא שעון ישראל), ועדיין עשויות להשתנות יחד עם התאריכים - מומלץ לוודא באתרים הרשמיים.</p>';
     box.innerHTML = html;
   }
 
