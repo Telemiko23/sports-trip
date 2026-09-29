@@ -159,7 +159,7 @@ HE_TEAMS = {
     "Bayern München": "באיירן מינכן",
     "Baztán": "בסטן",
     "Benevento": "בנוונטו",
-    "Birmingham": "בירמינגהם",
+    "Birmingham": "ברמינגהאם סיטי",  # corrected by the user via missing_info.csv (2026-09-29)
     "Blackburn": "בלקברן",
     "Blackpool": "בלקפול",
     "Bologna": "בולוניה",

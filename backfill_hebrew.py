@@ -21,7 +21,7 @@ import json
 import os
 
 from he_names import he_team, he_city, he_comp
-from overrides import TEAM_CITY_OVERRIDE, VENUE_OVERRIDE, LOGO_OVERRIDE
+from overrides import TEAM_CITY_OVERRIDE, VENUE_OVERRIDE, LOGO_OVERRIDE, NATION_MATCH_VENUE
 from download_logos import download_comp_logos
 from build_fixtures import geocode, geocode_any, CC_TO_OUR_COUNTRY, CC_COUNTRY_NAME, UEFA_COMPETITIONS, NATIONAL_COMPETITIONS
 
@@ -66,7 +66,12 @@ def main():
             continue  # other sports are rebuilt by build_events.py, which owns their translation/geocoding
         home = r["home"]
 
-        if VENUE_OVERRIDE.get(home):
+        nl_key = f"{home}|{r['dt'][:10]}"
+        nl_override = NATION_MATCH_VENUE.get(nl_key)
+
+        if nl_override:
+            r["venue"] = nl_override[0]
+        elif VENUE_OVERRIDE.get(home):
             r["venue"] = VENUE_OVERRIDE[home]
 
         if LOGO_OVERRIDE.get(r["home"]):
@@ -76,7 +81,9 @@ def main():
 
         overridden = home in TEAM_CITY_OVERRIDE
         is_uefa = r["comp"] in UEFA_LABELS
-        if overridden:
+        if nl_override:
+            r["city"], cc = nl_override[1], nl_override[2]
+        elif overridden:
             r["city"], cc = TEAM_CITY_OVERRIDE[home]
         elif is_uefa:
             cc = None  # not a fixed domestic country - resolve/reuse below
@@ -88,7 +95,7 @@ def main():
         # without an override always re-resolves too, cheaply, via cache reuse - so a fix
         # to geocode_any() (e.g. Scotland vs England) gets picked up on old data as well
         needs_resolve = r.get("city") and (
-            overridden or is_uefa or r.get("lat") is None or r.get("lng") is None
+            nl_override or overridden or is_uefa or r.get("lat") is None or r.get("lng") is None
         )
         if needs_resolve:
             coords = None
