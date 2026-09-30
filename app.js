@@ -225,6 +225,16 @@
   } catch (e) { /* no storage: fine */ }
   function saveTrip() { try { localStorage.setItem('tripIds_v1', JSON.stringify(S.trip)); } catch (e) { } }
 
+  // returning visitors resume their base city/dates instead of seeing onboarding again (brief section 3)
+  function saveFilterCtx() { try { localStorage.setItem('filterCtx_v1', JSON.stringify({ base: S.base, from: S.from, to: S.to })); } catch (e) { } }
+  var restoredCtx = null;
+  try { restoredCtx = JSON.parse(localStorage.getItem('filterCtx_v1') || 'null'); } catch (e) { }
+  if (restoredCtx) {
+    if (restoredCtx.base && restoredCtx.base.lat != null) S.base = restoredCtx.base;
+    if (restoredCtx.from) S.from = restoredCtx.from;
+    if (restoredCtx.to) S.to = restoredCtx.to;
+  }
+
   // ---------- cities for the base-city box ----------
   function cityHe(f) { return f.city_he || f.city; }
   var cityMap = {};
@@ -260,6 +270,7 @@
   // ---------- filter UI ----------
   if (window.matchMedia && window.matchMedia('(max-width:760px)').matches) $('#compsBox').removeAttribute('open');
   $('#from').value = S.from; $('#to').value = S.to;
+  if (S.base) { $('#base').value = S.base.cityHe; $('#baseHint').textContent = 'המרחק מחושב מהעיר ' + S.base.cityHe + '.'; }
   $('#days').innerHTML = HE_DAYS.map(function (d, i) {
     return '<label class="chip" title="יום ' + HE_DAYS_FULL[i] + '"><input type="checkbox" data-day="' + i + '" checked><span>' + d + '</span></label>';
   }).join('');
@@ -300,6 +311,7 @@
     $('#baseHint').textContent = !typedText.trim()
       ? 'בלי עיר בסיס מוצגים אירועים מכל היעדים.'
       : (place ? 'המרחק מחושב מהעיר ' + place.cityHe + '.' : 'העיר לא נמצאה ברשימה. בחר עיר מההצעות.');
+    saveFilterCtx();
     update();
   }
   combobox($('#base'), $('#baseMenu'), cityItems, {
@@ -308,8 +320,8 @@
   });
   $('#radius').addEventListener('input', function (e) { S.radius = Number(e.target.value); $('#radiusOut').textContent = S.radius; update(); });
   $('#radius').addEventListener('change', function (e) { track('radius_change', { radius_km: Number(e.target.value) }); });
-  $('#from').addEventListener('change', function (e) { S.from = e.target.value; update(); track('date_range_change', { field: 'from', value: S.from }); });
-  $('#to').addEventListener('change', function (e) { S.to = e.target.value; update(); track('date_range_change', { field: 'to', value: S.to }); });
+  $('#from').addEventListener('change', function (e) { S.from = e.target.value; saveFilterCtx(); update(); track('date_range_change', { field: 'from', value: S.from }); });
+  $('#to').addEventListener('change', function (e) { S.to = e.target.value; saveFilterCtx(); update(); track('date_range_change', { field: 'to', value: S.to }); });
   $('#days').addEventListener('change', function (e) { var d = e.target.getAttribute('data-day'); if (d != null) { S.days[d] = e.target.checked ? 1 : 0; update(); } });
   $('#comps').addEventListener('change', function (e) {
     var id = e.target.getAttribute('data-comp');
@@ -610,6 +622,7 @@
     document.querySelectorAll('#days input').forEach(function (i) { i.checked = true; });
     comps.forEach(function (c) { S.comps[c.id] = true; });
     document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = true; });
+    saveFilterCtx();
     update();
     track('filters_reset', {});
   });
@@ -984,6 +997,61 @@
       track('back_to_top_click', {});
     });
     onScroll();
+  })();
+
+  // ---------- first-visit onboarding (destination-first, brief section 3) ----------
+  // Shown only when nobody has ever completed/skipped it and there is no saved context (no base
+  // city, no trip) to resume - a returning visitor goes straight into Discover as before.
+  (function () {
+    var obPlace = null;
+    function obHint(place, typedText) {
+      $('#obBaseHint').textContent = !typedText.trim()
+        ? 'אפשר גם בלי יעד - יוצגו אירועים מכל העולם.'
+        : (place ? 'היעד: ' + place.cityHe + '.' : 'היעד לא נמצא - בחרו אחת מההצעות מהרשימה.');
+    }
+    combobox($('#obBase'), $('#obBaseMenu'), cityItems, {
+      onSelect: function (it) { obPlace = it.place; obHint(it.place, it.label); },
+      onInput: function (text) { obPlace = findBase(text); obHint(obPlace, text); }
+    });
+    document.querySelectorAll('input[name="obDateMode"]').forEach(function (r) {
+      r.addEventListener('change', function () { $('#obDates').style.display = (this.value === 'exact') ? '' : 'none'; });
+    });
+    function finishOnboarding() {
+      try { localStorage.setItem('onboarded_v1', '1'); } catch (e) { }
+      document.body.classList.remove('onboarding-active');
+      $('#onboarding').hidden = true;
+    }
+    function showOnboarding() {
+      document.body.classList.add('onboarding-active');
+      $('#onboarding').hidden = false;
+      $('#obFrom').value = S.from; $('#obTo').value = S.to;
+      obHint(null, '');
+      $('#obBase').focus();
+    }
+    $('#onboarding').addEventListener('keydown', function (e) { if (e.key === 'Escape') { finishOnboarding(); track('onboarding_skip', {}); } });
+    $('#obGo').addEventListener('click', function () {
+      var text = $('#obBase').value;
+      if (text.trim() && !obPlace) { obHint(null, text); $('#obBase').focus(); return; }
+      var mode = document.querySelector('input[name="obDateMode"]:checked').value;
+      if (obPlace) { $('#base').value = obPlace.cityHe; setBase(obPlace, obPlace.cityHe); }
+      if (mode === 'exact') {
+        var f = $('#obFrom').value, t = $('#obTo').value;
+        if (f) S.from = f;
+        if (t) S.to = (f && t < f) ? f : t;
+        $('#from').value = S.from; $('#to').value = S.to;
+        saveFilterCtx();
+      }
+      finishOnboarding();
+      update();
+      track('onboarding_complete', { destination: !!obPlace, date_mode: mode });
+    });
+    $('#obSkip').addEventListener('click', function () { finishOnboarding(); track('onboarding_skip', {}); });
+
+    var onboarded = false;
+    try { onboarded = !!localStorage.getItem('onboarded_v1'); } catch (e) { }
+    var hasSavedContext = !!S.base || S.trip.length > 0;
+    if (!onboarded && !hasSavedContext) showOnboarding();
+    else if (!onboarded) { try { localStorage.setItem('onboarded_v1', '1'); } catch (e) { } }
   })();
 
   update();

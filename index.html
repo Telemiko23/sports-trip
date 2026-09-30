@@ -27,6 +27,32 @@
   <button type="button" class="jump" data-tab="trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b class="js-trip-count">0</b>)</button>
 </div></header>
 
+<main id="onboarding" class="onboarding" hidden aria-label="ברוכים הבאים">
+  <div class="onboarding-card">
+    <h2>גלו אירועי ספורט ביעד שלכם</h2>
+    <p>בחרו יעד ותאריכים, גלו מה קורה באזור והרכיבו את הטיול שלכם.</p>
+    <label class="field"><span>יעד</span>
+      <div class="combo-wrap">
+        <input id="obBase" type="text" autocomplete="off" placeholder="לדוגמה: לונדון">
+        <div class="combo-menu" id="obBaseMenu"></div>
+      </div>
+      <p class="hint" id="obBaseHint"></p>
+    </label>
+    <fieldset class="ob-datemode"><legend>תאריכים</legend>
+      <div class="chips wrap">
+        <label class="chip"><input type="radio" name="obDateMode" value="exact" checked><span>יש לי תאריכים</span></label>
+        <label class="chip"><input type="radio" name="obDateMode" value="flex"><span>התאריכים שלי גמישים</span></label>
+      </div>
+      <div class="row2" id="obDates">
+        <label>מתאריך <input id="obFrom" type="date"></label>
+        <label>עד תאריך <input id="obTo" type="date"></label>
+      </div>
+    </fieldset>
+    <button type="button" class="btn primary" id="obGo">מצאו אירועים</button>
+    <button type="button" class="linkbtn" id="obSkip">עיינו בכל האירועים בלי לבחור יעד</button>
+  </div>
+</main>
+
 <div class="viewbar">
   <div class="tabbar" id="tabbar" role="tablist">
     <button type="button" class="ttab" data-tab="discover" role="tab" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>גילוי אירועים</button>

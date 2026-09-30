@@ -25,6 +25,22 @@ those aren't listed here since we didn't add them and don't control their params
   trips (not just views) - the strongest "real interest" signal on the site. `source`
   shows whether people build trips from the list or the map.
 
+## Onboarding
+
+### `onboarding_complete`
+- **Params**: `destination` (boolean - whether a base city was resolved), `date_mode` (`"exact"` | `"flex"`).
+- **Trigger**: clicking "מצאו אירועים" on the first-visit screen (v1.11.0), successfully (an
+  unresolved destination blocks submission and does not fire this event).
+- **Use**: how often first-time visitors search by destination vs. leave it blank, and whether
+  they enter exact dates or stay flexible.
+
+### `onboarding_skip`
+- **Params**: none.
+- **Trigger**: clicking "עיינו בכל האירועים בלי לבחור יעד" on the first-visit screen, or pressing
+  Escape there.
+- **Use**: how many first-time visitors opt straight into worldwide browsing instead of narrowing
+  to a destination up front.
+
 ## Navigation
 
 ### `tab_change`
