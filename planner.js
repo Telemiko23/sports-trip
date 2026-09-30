@@ -118,8 +118,11 @@
     for (var i = 0; i < n; i++) {
       // a preferred event (e.g. "with an Arsenal match") outweighs any ordinary day, so the solver
       // includes it whenever the travel math allows - it's a strong bias, not a hard requirement:
-      // if no route can reach it, the rest of the trip is still scored and returned normally
-      var val = 100 + (list[i].kick != null ? 3 : 0) + (preferIds && preferIds[list[i].id] ? 500 : 0);
+      // if no route can reach it, the rest of the trip is still scored and returned normally.
+      // `tier` (0-3, set by the caller from a real competition-prestige table, not invented per
+      // event) nudges the solver toward the more notable of two otherwise-similar same-day options,
+      // without ever overriding a sane, reachable schedule the way a missing/unreachable day would.
+      var val = 100 + (list[i].kick != null ? 3 : 0) + (preferIds && preferIds[list[i].id] ? 500 : 0) + (list[i].tier || 0) * 10;
       best[i] = val; prev[i] = -1; hopKm[i] = 0;
       for (var j = 0; j < i; j++) {
         if (list[j].di >= list[i].di) continue;
@@ -141,11 +144,11 @@
   // optional - anchors the window to start on that weekday, e.g. a "weekend" trip always starting on a
   // Friday, instead of sliding to whichever 3-day stretch scores highest), preferIds (optional array of
   // fixture ids to strongly favor, e.g. a team mentioned by name)}; items: [{id, day (ISO), kick
-  // (hours|null), lat, lng}]
+  // (hours|null), lat, lng, tier (optional 0-3 competition-prestige bonus, see solve())}]
   function plan(p, items) {
     var rs = dayNum(p.from), re = dayNum(p.to), D = p.days;
     var last = Math.max(rs, re - D + 1);          // window shorter than the trip: start at its beginning
-    var pool = items.map(function (x) { return { id: x.id, di: dayNum(x.day), kick: x.kick, lat: x.lat, lng: x.lng }; });
+    var pool = items.map(function (x) { return { id: x.id, di: dayNum(x.day), kick: x.kick, lat: x.lat, lng: x.lng, tier: x.tier }; });
     var preferIds = null;
     if (p.preferIds && p.preferIds.length) { preferIds = {}; p.preferIds.forEach(function (id) { preferIds[id] = 1; }); }
     var opts = [];

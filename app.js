@@ -948,6 +948,40 @@
     $('#smartUnderstood').textContent = (got.length ? 'הבנתי - ' + got.join(' · ') + '. ' : '') + (missing.length ? 'חסר: ' + missing.join(', ') + ' - השלימו בשדות למטה.' : 'אפשר לתקן בשדות למטה.');
     if (!missing.length) runSmart('text');
   }
+  // competition prestige (real, structural fact from the data - which league/cup an event belongs
+  // to - not an invented "excitement" score) so the planner can prefer the more notable of two
+  // otherwise-similar same-day options. 0-3, higher = more prestigious. Unlisted competitions (lower
+  // domestic divisions, regular ATP/WTA/PDC tour stops) default to 0 - not a penalty, just no bonus.
+  var COMP_TIER = {
+    'Champions League': 3, 'Premier League': 3, 'La Liga': 3, 'Bundesliga': 3, 'Serie A': 3, 'Ligue 1': 3,
+    'ATP Finals': 3, 'WTA Finals': 3, 'Davis Cup Finals': 3, 'Next Gen ATP Finals': 3, 'PDC Majors': 3,
+    'Europa League': 2, 'Conference League': 2, 'Eredivisie': 2, 'Primeira Liga': 2, 'Championship': 2, 'UEFA Nations League': 2,
+    'FA Cup': 1, 'Copa del Rey': 1, 'DFB-Pokal': 1, 'Coupe de France': 1, 'Coppa Italia': 1, 'KNVB Beker': 1, 'Puchar Polski': 1, 'Taça de Portugal': 1,
+    'Segunda': 1, '2. Bundesliga': 1, 'Serie B': 1, 'Ligue 2': 1, 'Ekstraklasa': 1, 'League One': 1
+  };
+  function compTier(f) { return COMP_TIER[f.comp] || 0; }
+  // a short, honest title for a proposed option - derived from real computed facts about the chosen
+  // events (same city/country/competition, all-European club competitions, sport mix), never an
+  // invented "how exciting" judgment. Returns null when nothing distinctive stands out.
+  function planLabel(days) {
+    var evs = days.filter(function (d) { return d.id; }).map(function (d) { return byId[d.id]; });
+    if (evs.length < 2) return null;
+    var cities = {}, countries = {}, sports = {}, comps = {}, allEurope = true;
+    evs.forEach(function (f) {
+      if (f.city_he || f.city) cities[f.city_he || f.city] = 1;
+      if (f.country) countries[f.country] = 1;
+      sports[sportIdOf(f.sport)] = 1;
+      comps[f.comp_he || f.comp] = 1;
+      if (f.country !== 'Europe') allEurope = false;
+    });
+    var cityKeys = Object.keys(cities), countryKeys = Object.keys(countries), sportKeys = Object.keys(sports), compKeys = Object.keys(comps);
+    if (allEurope) return 'על טהרת אירופה' + (cityKeys.length === 1 ? ' ב' + cityKeys[0] : '');
+    if (compKeys.length === 1) return 'כולו ' + compKeys[0];
+    if (sportKeys.length > 1) return 'שילוב ענפים: ' + sportKeys.map(function (k) { return SPORT_REGISTRY[k].he; }).join(' ו');
+    if (cityKeys.length === 1) return 'הכול ב' + cityKeys[0];
+    if (countryKeys.length === 1) return 'סיור ב' + (HE_COUNTRY[countryKeys[0]] || countryKeys[0]);
+    return null;
+  }
   // single part -> [firstDay, lastDay]; a hyphenated compound ("mid-end") spans from the first
   // part's start to the second part's end - see the matching parse() fix in planner.js
   function monthPartRange(part, lastD) {
@@ -976,7 +1010,7 @@
     var items = matched.map(function (f) {
       var mn = (isEvent(f) || f.status === 'TBD') ? null : minutes(f);
       return { id: f.id, day: dayOf(f), kick: mn == null ? null : mn / 60,
-        lat: f.venue_lat != null ? f.venue_lat : f.lat, lng: f.venue_lng != null ? f.venue_lng : f.lng };
+        lat: f.venue_lat != null ? f.venue_lat : f.lat, lng: f.venue_lng != null ? f.venue_lng : f.lng, tier: compTier(f) };
     });
     // a team mentioned by name is a strong preference, not a hard filter (section 7): we still
     // propose the best trip even if that team has no match in range, and say so explicitly below
@@ -997,7 +1031,8 @@
     if (!r) { box.innerHTML = ''; return; }
     if (r.error) { box.innerHTML = '<p class="empty">' + esc(r.error) + '</p>'; return; }
     var o = r.options[smart.sel] || r.options[0], html = '';
-    html += '<div class="plan-head"><h3>המסלול המוצע' + (r.weekend ? ' (סוף שבוע: שישי–ראשון)' : '') + '</h3><p><bdi dir="rtl">' + esc(fmtRange(o.start, o.end)) + '</bdi> · אירוע ב-' + o.covered + ' מתוך ' + r.D + ' ימים' +
+    var label = planLabel(o.days);
+    html += '<div class="plan-head"><h3>' + (label ? 'המסלול המוצע: ' + esc(label) : 'המסלול המוצע') + (r.weekend ? ' (סוף שבוע: שישי–ראשון)' : '') + '</h3><p><bdi dir="rtl">' + esc(fmtRange(o.start, o.end)) + '</bdi> · אירוע ב-' + o.covered + ' מתוך ' + r.D + ' ימים' +
       (o.covered > 1 ? (o.km < 3 ? ' · כולם באותה עיר' : ' · כ-' + o.km + ' ק״מ בין האירועים') : '') + '</p></div>';
     if (r.team) {
       var teamFound = o.days.some(function (d) { return r.preferIds.indexOf(d.id) !== -1; });
@@ -1005,7 +1040,8 @@
     }
     if (r.options.length > 1) {
       html += '<div class="plan-alts">חלופות: ' + r.options.map(function (x, i) {
-        return '<button type="button" class="plan-alt" data-alt="' + i + '" aria-pressed="' + (i === smart.sel) + '"><bdi dir="rtl">' + esc(fmtRange(x.start, x.end)) + '</bdi> (' + x.covered + '/' + r.D + ')</button>';
+        var xLabel = planLabel(x.days);
+        return '<button type="button" class="plan-alt" data-alt="' + i + '" aria-pressed="' + (i === smart.sel) + '"><bdi dir="rtl">' + esc(fmtRange(x.start, x.end)) + '</bdi> (' + x.covered + '/' + r.D + ')' + (xLabel ? ' · <bdi dir="rtl">' + esc(xLabel) + '</bdi>' : '') + '</button>';
       }).join('') + '</div>';
     }
     if (o.end > smart.footballLast) html += '<p class="notice">נתוני משחקי הכדורגל שלנו מגיעים כרגע עד <bdi dir="rtl">' + esc(fmtLong(smart.footballLast)) + '</bdi> - אחרי התאריך הזה ייתכן שיש יותר אירועים ממה שמוצג (משחקים חדשים נוספים כל יום).</p>';
