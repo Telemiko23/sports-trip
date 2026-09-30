@@ -49,9 +49,19 @@
     Object.keys(MONTHS).forEach(function (m) { if (!out.month && has(t, m)) out.month = MONTHS[m]; });
     if (!out.month && /החודש הבא/.test(t)) out.month = (today.getMonth() + 1) % 12 + 1;
     if (out.month) out.year = out.month >= today.getMonth() + 1 ? today.getFullYear() : today.getFullYear() + 1;
-    if (/(^|\s)[בל]?(תחילת|התחלת|ראשית)(\s|$)/.test(t)) out.part = 'start';
-    else if (/(^|\s)[בל]?אמצע(\s|$)/.test(t)) out.part = 'mid';
-    else if (/(^|\s)[בל]?(סוף|קראת סוף)(?!\s*שבוע)(\s|$)/.test(t)) out.part = 'end';
+    // each part-of-month keyword checked independently (not else-if) so a hyphenated compound like
+    // "אמצע-סוף ינואר" (mid-to-end) is recognized as BOTH, not silently dropped to "all month"
+    // because the hyphen isn't whitespace - boundaries include "-" for the same reason wordRe() does.
+    var partHits = [];
+    if (/(^|[\s\-])[בל]?(תחילת|התחלת|ראשית)(?=$|[\s\-])/.test(t)) partHits.push('start');
+    if (/(^|[\s\-])[בל]?אמצע(?=$|[\s\-])/.test(t)) partHits.push('mid');
+    if (/(^|[\s\-])[בל]?(סוף|קראת סוף)(?!\s*שבוע)(?=$|[\s\-])/.test(t)) partHits.push('end');
+    if (partHits.length) {
+      var partOrder = ['start', 'mid', 'end'];
+      partHits.sort(function (a, b) { return partOrder.indexOf(a) - partOrder.indexOf(b); });
+      var lo = partHits[0], hi = partHits[partHits.length - 1];
+      out.part = lo === hi ? lo : lo + '-' + hi;
+    }
 
     // length
     var m = t.match(/(\d+)\s*(ימים|יום|לילות|לילה)/);

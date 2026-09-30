@@ -849,11 +849,13 @@
     smart.footballLast = fixtures.reduce(function (m, f) { return !isEvent(f) && dayOf(f) > m ? dayOf(f) : m; }, '');
     fixtures.forEach(function (f) { if (f.country && hasPos(f) && f.country !== 'Europe') count[destKey(f)] = (count[destKey(f)] || 0) + 1; });
     // team names for the free-text "with an X match" preference (football only - the other sports
-    // are individual/national events, not club-team fixtures)
+    // are individual/national events, not club-team fixtures). A national team's fixtures use the
+    // country's own name ("England" vs. "France") - excluded here, since otherwise just naming a
+    // destination country (e.g. "5 days in England") would be mistaken for "with an England match".
     fixtures.forEach(function (f) {
       if (f.sport) return;
-      if (f.home_he && !teams[f.home]) teams[f.home] = f.home_he;
-      if (f.away_he && !teams[f.away]) teams[f.away] = f.away_he;
+      if (f.home_he && !teams[f.home] && !HE_COUNTRY[f.home]) teams[f.home] = f.home_he;
+      if (f.away_he && !teams[f.away] && !HE_COUNTRY[f.away]) teams[f.away] = f.away_he;
     });
     smart.teams = Object.keys(teams).map(function (en) { return { en: en, he: teams[en] }; });
     smart.countries = Object.keys(count).map(function (k) { return { key: k, he: HE_COUNTRY[k] || k, n: count[k] }; })
@@ -920,7 +922,8 @@
       else missing.push('חודש (אין לנו נתונים ל-' + new Date(r.year, r.month - 1, 1).toLocaleDateString('he-IL', { month: 'long' }) + ')');
     } else missing.push('חודש');
     $('#smartPart').value = r.part;
-    if (r.part !== 'all') got.push({ start: 'תחילת החודש', mid: 'אמצע החודש', end: 'סוף החודש' }[r.part]);
+    var PART_LABEL = { start: 'תחילת החודש', mid: 'אמצע החודש', end: 'סוף החודש', 'start-mid': 'תחילת עד אמצע החודש', 'mid-end': 'אמצע עד סוף החודש' };
+    if (r.part !== 'all') got.push(PART_LABEL[r.part] || r.part);
     if (r.weekend) { $('#smartDays').value = 'weekend'; got.push('סוף שבוע (שישי–ראשון)'); }
     else if (r.days) {
       // "weekend" isn't a plain day-count option, so it's excluded from the nearest-length match below
@@ -934,6 +937,13 @@
     $('#smartUnderstood').textContent = (got.length ? 'הבנתי - ' + got.join(' · ') + '. ' : '') + (missing.length ? 'חסר: ' + missing.join(', ') + ' - השלימו בשדות למטה.' : 'אפשר לתקן בשדות למטה.');
     if (!missing.length) runSmart('text');
   }
+  // single part -> [firstDay, lastDay]; a hyphenated compound ("mid-end") spans from the first
+  // part's start to the second part's end - see the matching parse() fix in planner.js
+  function monthPartRange(part, lastD) {
+    var R = { start: [1, 10], mid: [11, 20], end: [21, lastD] };
+    var keys = part.split('-'), a = R[keys[0]] || [1, lastD], b = R[keys[keys.length - 1]] || a;
+    return [a[0], b[1]];
+  }
   function runSmart(source) {
     var country = $('#smartCountry').value, ym = $('#smartMonth').value, part = $('#smartPart').value;
     var durationVal = $('#smartDays').value, weekend = durationVal === 'weekend';
@@ -943,11 +953,14 @@
     var city = country ? null : smart.city;
     if (!country && !city) { smart.result = { error: 'בחרו יעד (מדינה) כדי שנוכל להציע מסלול.' }; renderSmartResult(); return; }
     var y = Number(ym.slice(0, 4)), m = Number(ym.slice(5, 7)), lastD = new Date(y, m, 0).getDate();
-    var from = ym + '-' + (part === 'mid' ? '11' : part === 'end' ? '21' : '01'), to = ym + '-' + (part === 'start' ? '10' : part === 'mid' ? '20' : ('0' + lastD).slice(-2));
+    var pr = monthPartRange(part, lastD);
+    var from = ym + '-' + ('0' + pr[0]).slice(-2), to = ym + '-' + ('0' + pr[1]).slice(-2);
     if (from < S.from) from = S.from;                                   // never plan into the past
+    // a city search reuses the SAME base-city radius the visitor already set in Discover (S.radius)
+    // instead of a second, hidden distance - changing it there now actually changes plan candidates
     var matched = fixtures.filter(function (f) {
       if (!hasPos(f) || cats.indexOf(categoryOf(f)) === -1) return false;
-      return city ? km(city, f) <= 120 : destKey(f) === country;
+      return city ? km(city, f) <= S.radius : destKey(f) === country;
     });
     var items = matched.map(function (f) {
       var mn = (isEvent(f) || f.status === 'TBD') ? null : minutes(f);
