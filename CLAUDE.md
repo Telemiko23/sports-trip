@@ -46,6 +46,17 @@ the short, durable core. Detailed guidance lives in its own file; don't duplicat
   state. `localStorage` is single-device only, not sync - never claim otherwise.
 - A city-level destination must not silently broaden to its whole country (or vice versa).
 
+## Accessibility (standing, every UI change - 2026-09-30)
+- Keep keyboard operability, visible focus (the global `:focus-visible` outline - don't override
+  it away), accessible labels, and contrast/readability at zoom for anything touched, not just
+  new features.
+- In any form/input, check typing, **paste** (wire to the `input` event, not `keydown` - paste
+  doesn't fire keydown), and both **button-click and Enter** activation - especially once free
+  text gets translated into filters/results (`#smartText`, the destination combobox, onboarding).
+- When a control's state changes silently (e.g. a filter stays applied while typed text is
+  invalid), say so in visible text near the control - don't leave the visible state looking
+  broken/empty when the system actually still knows and is using a value.
+
 ## Workflow
 - Inspect the current code/`git status` before changing something - don't assume a feature is
   missing without checking; don't re-litigate settled product decisions from `ROADMAP.md`.

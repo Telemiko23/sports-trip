@@ -375,7 +375,10 @@
       if (!text.trim()) { setBase(null, text); return; }
       var match = findBase(text);
       if (match) { setBase(match, text); return; }
-      $('#baseHint').textContent = 'העיר לא נמצאה ברשימה. בחר עיר מההצעות, או נקה את השדה כדי לראות את כל היעדים.';
+      // make the (correct, from R1) silent no-op explicit: the field looking "broken" while results
+      // keep showing the last applied city is exactly the disconnect that needed spelling out
+      $('#baseHint').textContent = 'העיר לא נמצאה ברשימה. בחר עיר מההצעות, או נקה את השדה כדי לראות את כל היעדים.' +
+        (S.base ? ' מוצגות עדיין התוצאות עבור ' + S.base.cityHe + ', עד לבחירת יעד תקין.' : '');
     }
   });
   $('#radius').addEventListener('input', function (e) { S.radius = Number(e.target.value); $('#radiusOut').textContent = S.radius; update(); });
@@ -853,6 +856,16 @@
     var x = parseDay(a), y = parseDay(b), o = { day: 'numeric', month: 'long' };
     return x.toLocaleDateString('he-IL', o) + ' – ' + y.toLocaleDateString('he-IL', o);
   }
+  // the "יעד" select's empty placeholder looks the same whether nothing is chosen or a CITY is
+  // active (city search doesn't use this dropdown at all) - makes an active city destination look
+  // like something's missing. Show it explicitly, and call the control "change destination" instead
+  // of "choose destination" while a destination is in fact already active.
+  function updateSmartDestUI() {
+    var active = !$('#smartCountry').value && smart.city;
+    $('#smartDestLabel').textContent = active ? 'שינוי יעד' : 'יעד';
+    $('#smartActiveDest').hidden = !active;
+    if (active) $('#smartActiveDest').textContent = 'יעד פעיל: ' + smart.city.cityHe;
+  }
   function initSmart() {
     if (smart.ready) return;
     smart.ready = true;
@@ -892,6 +905,8 @@
       if ($('#smartMonth').querySelector('option[value="' + fromMonth + '"]')) $('#smartMonth').value = fromMonth;
       $('#smartUnderstood').textContent = 'יעד מ"חיפוש אירועים": ' + S.base.cityHe + ' (אפשר לשנות למטה, או להזין טקסט חדש).';
     }
+    updateSmartDestUI();
+    $('#smartCountry').addEventListener('change', updateSmartDestUI);
     $('#smartCats').innerHTML = CATEGORIES.map(function (c) {
       return '<label class="chip"><input type="checkbox" data-cat="' + esc(c.key) + '" checked><span>' + esc(c.he) + '</span></label>';
     }).join('');
@@ -919,7 +934,7 @@
     var text = $('#smartText').value.trim();
     // clearing the free-text box must drop any preference it set (e.g. a team) - not leave it
     // silently applied to whatever gets generated next from the form fields alone
-    if (!text) { smart.team = null; $('#smartUnderstood').textContent = ''; return; }
+    if (!text) { smart.team = null; $('#smartUnderstood').textContent = ''; updateSmartDestUI(); return; }
     var r = Planner.parse(text, { countries: smart.countries, cities: smart.cities, teams: smart.teams, today: new Date() });
     var got = [], missing = [];
     smart.team = r.team;
@@ -946,6 +961,7 @@
     document.querySelectorAll('#smartCats input').forEach(function (i) { i.checked = !r.cats.length || r.cats.indexOf(i.getAttribute('data-cat')) !== -1; });
     if (r.cats.length) got.push('ענפים: ' + r.cats.map(function (k) { return (CATEGORIES.filter(function (c) { return c.key === k; })[0] || { he: k }).he; }).join(', '));
     $('#smartUnderstood').textContent = (got.length ? 'הבנתי - ' + got.join(' · ') + '. ' : '') + (missing.length ? 'חסר: ' + missing.join(', ') + ' - השלימו בשדות למטה.' : 'אפשר לתקן בשדות למטה.');
+    updateSmartDestUI();
     if (!missing.length) runSmart('text');
   }
   // competition prestige (real, structural fact from the data - which league/cup an event belongs
@@ -1150,7 +1166,13 @@
       obHint(null, '');
       $('#obBase').focus();
     }
-    $('#onboarding').addEventListener('keydown', function (e) { if (e.key === 'Escape') { finishOnboarding(); track('onboarding_skip', {}); } });
+    $('#onboarding').addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { finishOnboarding(); track('onboarding_skip', {}); }
+      // Enter submits like the button does, from any field (date inputs, or the destination box
+      // once its own suggestion list is closed) - except the button itself, which already gets a
+      // native Enter-triggered click and would otherwise fire twice
+      else if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') { e.preventDefault(); $('#obGo').click(); }
+    });
     $('#obGo').addEventListener('click', function () {
       var text = $('#obBase').value;
       if (text.trim() && !obPlace) { obHint(null, text); $('#obBase').focus(); return; }
