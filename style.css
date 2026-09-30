@@ -188,6 +188,10 @@ input[type=range]{width:100%;accent-color:var(--brand-primary)}
 .crest{width:24px;height:24px;object-fit:contain;flex:none;vertical-align:middle;margin:0 6px}
 .flag{width:24px;height:16px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.25);flex:none}
 .meta{grid-column:2;color:var(--text-muted);font-size:14px;display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px}
+/* sport identity (guardrails review section B): plain metadata, not a filter pill - same quiet
+   treatment for every sport, text is the real identifier (icon is decorative/aria-hidden) */
+.sport-label{display:inline-flex;align-items:center;gap:5px;font-weight:500}
+.sport-label .ico{width:16px;height:16px;flex:none}
 /* competition label: neutral chip - identification by name + logo, not by a saturated colour */
 .tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-control);border-radius:8px;padding-block:3px;padding-inline:3px 10px;font-size:13px;font-weight:500;color:var(--text);background:var(--surface-2)}
 .tag img{height:20px;width:auto;max-width:38px;object-fit:contain;border-radius:5px;background:#fff;padding:2px 4px;flex:none}
@@ -214,8 +218,8 @@ input[type=range]{width:100%;accent-color:var(--brand-primary)}
 .stub .num{display:block;font:700 26px/1 var(--sans);color:var(--text)}
 .stub .mon,.stub .wd{display:block;font-size:12.5px;color:var(--text-muted)}
 .stub .body{padding:12px 14px;min-width:0;position:relative}
-.stub .t{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;font-size:15px;padding-inline-end:40px}
-.stub .t .tname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:0 1 auto}
+.stub .t{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:15px;padding-inline-end:40px}
+.stub .t .tname{overflow-wrap:break-word;min-width:0;flex:0 1 auto}
 .stub .t .vs{flex:none;color:var(--text-muted);font-weight:400}
 .stub .crest{width:18px;height:18px;margin:0 2px;flex:none}
 .stub .flag{width:20px;height:14px}

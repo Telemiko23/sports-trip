@@ -78,6 +78,50 @@
     var days = Math.round((parseDay(f.dt.slice(0, 10)) - parseDay(isoLocal(new Date()))) / 86400000);
     return { sport: f.sport || 'football', comp: f.comp, country: f.country || '', city: f.city || '', days_until_match: days };
   }
+
+  // ---------- sport identity (guardrails review, section B) ----------
+  // One canonical id per sport, resolved once here - never inferred from a competition's translated
+  // name or an event title elsewhere. Every place that summarizes an event calls sportLabelHtml() so
+  // the badge can't drift between the list, plan, itinerary and map (one renderer, adapted by CSS
+  // density only). Icons are small inline line-art matching the site's existing .ico stroke style -
+  // no emoji, no per-sport color (color stays reserved for selection/warning meaning).
+  var SPORT_REGISTRY = {
+    football: {
+      he: 'כדורגל', en: 'Football',
+      icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5l3.5 2.5-1.3 4h-4.4L8.5 10z"/><path d="M12 3v4.5M4.8 8.6L8.5 10M19.2 8.6L15.5 10M7.3 19l1.5-4.5M16.7 19l-1.5-4.5"/>'
+    },
+    motorsport: {
+      he: 'ספורט מוטורי', en: 'Motorsport',
+      icon: '<path d="M6 21V4"/><path d="M6 4.5h12l-3 3.5 3 3.5H6"/>'
+    },
+    tennis: {
+      he: 'טניס', en: 'Tennis',
+      icon: '<circle cx="12" cy="12" r="9"/><path d="M6.5 4.8C9 8 9 16 6.5 19.2M17.5 4.8c-2.5 3.2-2.5 11.2 0 14.4"/>'
+    },
+    darts: {
+      he: 'דארטס', en: 'Darts',
+      icon: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3"/>'
+    },
+    // honest fallback for a sport code the registry doesn't know yet - never silently shown as football
+    unknown: {
+      he: 'ענף לא מסווג', en: 'Sport unspecified',
+      icon: '<circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/>'
+    }
+  };
+  // raw provider/competition sport code -> canonical registry id. A fixture/competition with no
+  // `sport` field at all is the original football-only data (no code was ever needed for it).
+  var SPORT_CATEGORY = { f1: 'motorsport' };
+  function sportIdOf(rawSport) {
+    if (!rawSport) return 'football';
+    var id = SPORT_CATEGORY[rawSport] || rawSport;
+    if (!SPORT_REGISTRY[id]) { if (window.console && console.warn) console.warn('[sport] unmapped sport code from data:', rawSport); return 'unknown'; }
+    return id;
+  }
+  function categoryOf(c) { return sportIdOf(c.sport); }
+  function sportLabelHtml(rawSport) {
+    var s = SPORT_REGISTRY[sportIdOf(rawSport)];
+    return '<span class="sport-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + s.icon + '</svg>' + esc(s.he) + '</span>';
+  }
   // delegated on document since venue links render inside #list, #trip and map popups alike
   document.addEventListener('click', function (e) {
     var v = e.target.closest ? e.target.closest('a.venue-link') : null;
@@ -112,7 +156,7 @@
   // "פירוט" opens the day's session schedule - only rendered when we actually have one
   function detailBtn(f) { return f.sessions && f.sessions.length ? ' <button type="button" class="detail-btn" data-detail="' + f.id + '">פירוט</button>' : ''; }
   function tagHtml(f) {
-    return '<span class="tag">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
+    return sportLabelHtml(f.sport) + '<span class="tag">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
   }
   function kickHtml(f, withDate) {
     var d0 = parseDay(dayOf(f));
@@ -286,15 +330,13 @@
   }
   // two levels: a category (sport family), then - where a category has several groups - its groups.
   // Football's groups are countries; motorsport is the umbrella for F1 now and bikes/horses later.
-  var CATEGORIES = [
-    { key: 'football', he: 'כדורגל' }, { key: 'motorsport', he: 'ספורט מוטורי' },
-    { key: 'tennis', he: 'טניס' }, { key: 'darts', he: 'דארטס' }
-  ];
-  var SPORT_CATEGORY = { f1: 'motorsport' };
-  function categoryOf(c) { return c.sport ? (SPORT_CATEGORY[c.sport] || c.sport) : 'football'; }
+  // Labels/order come from the canonical SPORT_REGISTRY, not a second hardcoded list - adding a
+  // sport to the registry is enough for it to show up here too.
+  var CATEGORIES = Object.keys(SPORT_REGISTRY).filter(function (k) { return k !== 'unknown'; })
+    .map(function (k) { return { key: k, he: SPORT_REGISTRY[k].he }; });
   comps.forEach(function (c) {
     var k = categoryOf(c);
-    if (!CATEGORIES.some(function (x) { return x.key === k; })) CATEGORIES.push({ key: k, he: k });
+    if (!CATEGORIES.some(function (x) { return x.key === k; })) CATEGORIES.push({ key: k, he: SPORT_REGISTRY[k].he });
   });
   $('#comps').innerHTML = CATEGORIES.map(function (cat) {
     var groups = order.filter(function (ct) { return byCountry[ct].some(function (c) { return categoryOf(c) === cat.key; }); });
@@ -316,7 +358,14 @@
   }
   combobox($('#base'), $('#baseMenu'), cityItems, {
     onSelect: function (it) { setBase(it.place, it.label); track('base_city_set', { city: it.place ? it.place.city : it.label }); },
-    onInput: function (text) { setBase(findBase(text), text); }
+    // draft text vs. applied destination (R1): unresolved text while typing must not silently widen
+    // results to "worldwide" - only an explicit match or a fully cleared field change what's applied.
+    onInput: function (text) {
+      if (!text.trim()) { setBase(null, text); return; }
+      var match = findBase(text);
+      if (match) { setBase(match, text); return; }
+      $('#baseHint').textContent = 'העיר לא נמצאה ברשימה. בחר עיר מההצעות, או נקה את השדה כדי לראות את כל היעדים.';
+    }
   });
   $('#radius').addEventListener('input', function (e) { S.radius = Number(e.target.value); $('#radiusOut').textContent = S.radius; update(); });
   $('#radius').addEventListener('change', function (e) { track('radius_change', { radius_km: Number(e.target.value) }); });
@@ -673,8 +722,11 @@
         { label: 'טיסת חזור: ' + (last.city_he || last.city) + ' ← ' + origin, url: flightSearch('Flights from ' + last.city + ' to ' + origin + ' on ' + addDays(d2, 1)) }
       ];
     } else {
+      // return the day AFTER the last event (same as the multi-city case below and the hotel
+      // checkout math) - a same-day flight right after an evening event isn't realistic, and
+      // disagreeing with the hotel link on the trip's last night is the actual bug (R3)
       flights = [
-        { label: 'חיפוש טיסות', url: flightSearch('Flights from ' + origin + ' to ' + (first.city || '') + ' on ' + d1 + ' through ' + d2) }
+        { label: 'חיפוש טיסות', url: flightSearch('Flights from ' + origin + ' to ' + (first.city || '') + ' on ' + d1 + ' through ' + addDays(d2, 1)) }
       ];
     }
     var cities = [], seen = {};
@@ -727,12 +779,11 @@
       var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
       var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
       var ev = isEvent(f), endD = parseDay(endDay(f));
-      var stubTag = '<span class="tag">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
       html += '<div class="stub"><div class="date"><span class="num">' + d.getDate() + '</span><span class="mon">' + esc(d.toLocaleDateString('he-IL', { month: 'short' })) + '</span><span class="wd">' + (ev && endDay(f) !== dayOf(f) ? 'עד ' + endD.getDate() + '.' + (endD.getMonth() + 1) : HE_DAYS_FULL[d.getDay()]) + '</span></div>' +
         '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
         (ev ? '<div class="t">' + flagHtml(f) + '<bdi dir="rtl" class="tname">' + esc(titleHe(f)) + '</bdi></div>'
             : '<div class="t">' + homeLogo + '<bdi dir="rtl" class="tname">' + esc(f.home_he || f.home) + '</bdi><span class="vs">–</span><bdi dir="rtl" class="tname">' + esc(f.away_he || f.away) + '</bdi>' + awayLogo + '</div>') +
-        '<div class="s">' + stubTag + (ev ? rangeHtml(f) : f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · ' + venueHtml(f) : '') + detailBtn(f) + '</div></div></div>';
+        '<div class="s">' + tagHtml(f) + (ev ? rangeHtml(f) : f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · ' + venueHtml(f) : '') + detailBtn(f) + '</div></div></div>';
     });
     var links = bookingLinks(list);
     html += '<div class="tools">' +
@@ -819,6 +870,15 @@
       d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
     }
     $('#smartMonth').innerHTML = opts;
+    // reuse Discover's resolved destination/month as Plan's starting point (R4) - a city stays a
+    // city (never widened to its whole country), and this only runs once so it can't clobber a
+    // draft the visitor has already started typing into the plan form
+    if (S.base) {
+      smart.city = S.base;
+      var fromMonth = S.from.slice(0, 7);
+      if ($('#smartMonth').querySelector('option[value="' + fromMonth + '"]')) $('#smartMonth').value = fromMonth;
+      $('#smartUnderstood').textContent = 'יעד מ"גילוי אירועים": ' + S.base.cityHe + ' (אפשר לשנות למטה, או להזין טקסט חדש).';
+    }
     $('#smartCats').innerHTML = CATEGORIES.map(function (c) {
       return '<label class="chip"><input type="checkbox" data-cat="' + esc(c.key) + '" checked><span>' + esc(c.he) + '</span></label>';
     }).join('');
@@ -844,7 +904,9 @@
   }
   function runSmartText() {
     var text = $('#smartText').value.trim();
-    if (!text) return;
+    // clearing the free-text box must drop any preference it set (e.g. a team) - not leave it
+    // silently applied to whatever gets generated next from the form fields alone
+    if (!text) { smart.team = null; $('#smartUnderstood').textContent = ''; return; }
     var r = Planner.parse(text, { countries: smart.countries, cities: smart.cities, teams: smart.teams, today: new Date() });
     var got = [], missing = [];
     smart.team = r.team;
@@ -955,7 +1017,7 @@
     var f = byId[Number(b.getAttribute('data-detail'))];
     if (!f || !f.sessions) return;
     $('#detailTitle').textContent = titleHe(f);
-    $('#detailSub').textContent = fmtLong(dayOf(f)) + (f.sessions_note ? ' · ' + f.sessions_note : '');
+    $('#detailSub').innerHTML = sportLabelHtml(f.sport) + ' · ' + esc(fmtLong(dayOf(f))) + (f.sessions_note ? ' · ' + esc(f.sessions_note) : '');
     $('#detailRows').innerHTML = f.sessions.map(function (s) {
       return '<div class="drow' + (s.main ? ' main' : '') + '"><span class="dser">' + esc(s.series) + '</span><span class="dname">' + esc(s.name) +
         '</span><span class="dtime"><bdi dir="ltr">' + esc(s.start ? (s.end ? s.start + ' - ' + s.end : s.start) : '') + '</bdi></span></div>';

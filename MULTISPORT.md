@@ -1,3 +1,12 @@
+# Multi-sport architecture
+
+**Update 2026-09-30**: the title below ("design, not implemented yet") is now only true for the
+*data pipeline* sections (F1/Darts sourcing). The frontend **sport-identity layer** (registry,
+canonical ids, the shared label component) is implemented - see "Sport identity registry -
+implemented (v1.12.0)" near the end of this file for the current, authoritative version of that
+piece. Everything below this note is the original design writeup, kept for the still-open pipeline
+questions.
+
 # Multi-sport architecture - design (not implemented yet)
 
 This is a **design document only** - nothing here is built. Written 2026-09-24 per an
@@ -222,3 +231,43 @@ appear to cover Darts, but a quick search tonight turned up real, structured Dar
 if its coverage/data quality is good enough, that's a far better foundation than scraping
 either site above, with none of the ToS ambiguity. Only fall back to pdc-europe.tv (with
 its permission question actually resolved, not assumed) if no licensed option pans out.
+
+## Sport identity registry - implemented (v1.12.0, 2026-09-30, guardrails review section B)
+
+Unlike the sections above, this part is real and live in `app.js`. It answers a narrower
+question than the rest of this file: not "how do we ingest a new sport's data" (still open,
+see above) but "given a fixture already has a `sport` field, how does the UI say what it is,
+consistently, everywhere."
+
+- **`SPORT_REGISTRY`** (`app.js`, right after `fixtureTrackParams`): the canonical list -
+  `football` / `motorsport` / `tennis` / `darts` / `unknown`, each with `{he, en, icon}`. `en`
+  is stored now for when English localization ships (`ROADMAP.md`) even though nothing reads
+  it yet. Icons are inline SVG path data (24x24 viewBox, `stroke=currentColor stroke-width=2`,
+  no fill) matching the site's existing `.ico` line-icon style - no emoji, no per-sport color.
+- **`sportIdOf(rawSport)`**: the one mapping layer. A raw code from data (`f.sport`/`c.sport`,
+  e.g. `f1`) goes through `SPORT_CATEGORY` (raw code -> registry id) and must land on a real
+  registry entry, or it becomes `unknown` (with a `console.warn` diagnostic, not a raw code
+  shown to users) - never inferred from a competition's translated name or an event title. No
+  `sport` field at all means the original football-only data, so it resolves to `football`.
+- **`sportLabelHtml(rawSport)`**: the one renderer - icon + Hebrew label, `aria-hidden` icon,
+  plain text otherwise (no pointer cursor, not a filter control). Used inside `tagHtml(f)` -
+  which is itself already shared by the discovery list, the map panel and plan proposals via
+  `cardHtml()` - plus the itinerary stub (`renderTrip`) and the session-details dialog.
+- `categoryOf(c)` (filter-sidebar grouping) and `CATEGORIES` (the sidebar's category list) now
+  both derive from the same registry instead of a second hardcoded Hebrew-label list - adding
+  a sport to `SPORT_REGISTRY` is enough for it to appear correctly in the filter sidebar too.
+
+### Adding a new sport - checklist
+Once that sport's fixtures exist in `fixtures.js` with a real `sport` code:
+1. Add an entry to `SPORT_REGISTRY` in `app.js` (`he`/`en` label + an inline SVG icon in the
+   same visual style as the existing four).
+2. If the data's raw code differs from the registry id you want (like `f1` -> `motorsport`),
+   add that mapping to `SPORT_CATEGORY`.
+3. Nothing else - filtering (`CATEGORIES`), the card/plan/itinerary/detail label, and the
+   `unknown` fallback are all already wired through `sportIdOf`/`sportLabelHtml`. Don't
+   special-case a new sport branch in `cardHtml`/`renderTrip`/etc.
+4. If the sport is genuinely not two-team (a race, a tournament day, an exhibition), confirm
+   `isEvent(f)`/`titleHe(f)`/`expandDays()` already produce something sensible for it, or extend
+   those - the shared card code branches on `isEvent(f)`, not on the specific sport.
+5. Verify with real fixtures for that sport, not a fabricated screenshot - only turn on a new
+   filter category in production once its feed/coverage genuinely exists.
