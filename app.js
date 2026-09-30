@@ -170,11 +170,22 @@
     var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
     return '<bdi dir="rtl">' + homeLogo + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + awayLogo + '</bdi>';
   }
-  // one card used by both the list and the map panel, so they can never drift apart
-  // noDist: the distance shown is from the base city, which means nothing inside a planned trip
-  function cardHtml(f, withDate, noDist) {
+  // one card used by the list, the map panel and plan proposals, so they can never drift apart.
+  // refCity: the point distance/"same city"/country-mismatch is measured from - omitted means the
+  // Discover base city (S.base), an explicit city object measures from that instead (e.g. the plan's
+  // own target city), and null suppresses the badge entirely (no single reference point, e.g. a
+  // whole-country plan).
+  function distBadge(ref, f) {
+    if (!hasPos(f)) return '';
+    var d = km(ref, f);
+    if (d < 3) return ' <span class="dist">באותה עיר</span>';
+    var countryNote = (ref.country && f.country && ref.country !== f.country) ? ' · ' + (HE_COUNTRY[f.country] || f.country) : '';
+    return ' <span class="dist">' + Math.round(d) + ' ק״מ' + countryNote + '</span>';
+  }
+  function cardHtml(f, withDate, refCity) {
     var picked = S.trip.indexOf(f.id) !== -1;
-    var dist = (!noDist && S.base && hasPos(f)) ? ' <span class="dist">' + (km(S.base, f) < 3 ? 'בעיר הבסיס' : Math.round(km(S.base, f)) + ' ק״מ') + '</span>' : '';
+    var ref = refCity === undefined ? S.base : refCity;
+    var dist = ref ? distBadge(ref, f) : '';
     return '<li class="match' + (picked ? ' picked' : '') + '">' + kickHtml(f, withDate) +
       '<div class="teams">' + titleHtml(f) + '</div>' +
       '<div class="meta">' + tagHtml(f) + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
@@ -286,7 +297,7 @@
     if (f.city && hasPos(f)) {
       var lblCountry = f.country === 'United Kingdom' ? 'England' : f.country; // so an event in London merges with football's London
       var label = cityHe(f) + ' (' + (HE_COUNTRY[lblCountry] || lblCountry) + ')';
-      if (!cityMap[label]) cityMap[label] = { city: f.city, cityHe: cityHe(f), lat: f.lat, lng: f.lng };
+      if (!cityMap[label]) cityMap[label] = { city: f.city, cityHe: cityHe(f), lat: f.lat, lng: f.lng, country: lblCountry };
     }
   });
   var cityLabels = Object.keys(cityMap).sort();
@@ -879,7 +890,7 @@
       smart.city = S.base;
       var fromMonth = S.from.slice(0, 7);
       if ($('#smartMonth').querySelector('option[value="' + fromMonth + '"]')) $('#smartMonth').value = fromMonth;
-      $('#smartUnderstood').textContent = 'יעד מ"גילוי אירועים": ' + S.base.cityHe + ' (אפשר לשנות למטה, או להזין טקסט חדש).';
+      $('#smartUnderstood').textContent = 'יעד מ"חיפוש אירועים": ' + S.base.cityHe + ' (אפשר לשנות למטה, או להזין טקסט חדש).';
     }
     $('#smartCats').innerHTML = CATEGORIES.map(function (c) {
       return '<label class="chip"><input type="checkbox" data-cat="' + esc(c.key) + '" checked><span>' + esc(c.he) + '</span></label>';
@@ -1004,7 +1015,7 @@
       html += '<section class="day"><h3>' + esc(fmtLong(d.date)) + '</h3>';
       if (f) {
         if (prev) { var h = hopInfo(prev, f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + (hasPos(prev) && hasPos(f) ? ' · ' + (km(prev, f) < 3 ? 'אותה עיר' : Math.round(km(prev, f)) + ' ק״מ') : '') + '</div>'; }
-        html += '<ul class="matches">' + cardHtml(f, false, true) + '</ul>'; prev = f;
+        html += '<ul class="matches">' + cardHtml(f, false, smart.city) + '</ul>'; prev = f;
       } else {
         // an empty day between two events far apart is a travel day (by road/rail), not a gap in the data
         var idx = o.days.indexOf(d), nxt = null;

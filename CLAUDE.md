@@ -8,9 +8,11 @@ the short, durable core. Detailed guidance lives in its own file; don't duplicat
 1. **Destination-first, not team-first.** ToSport starts with a destination and dates; sports
    are optional discovery preferences. Support both fixed dates and flexible-date/destination
    planning. Do not turn this into a football-only or team-first tool.
-2. **Three fixed top-level destinations**: Discover (`גילוי אירועים`) / Plan (`תכנון טיול`) /
-   My trip (`הטיול שלי`). Discover owns its own List/Map switch - planning is not a third
-   display mode alongside them. Keep this naming and structure stable.
+2. **Three fixed top-level destinations**: Discover (`חיפוש אירועים` - the Hebrew label was
+   `גילוי אירועים` through v1.13.0; renamed 2026-09-30, the user doesn't want an evocative verb
+   for a functional search/nav label, only for onboarding-style marketing copy) / Plan
+   (`תכנון טיול`) / My trip (`הטיול שלי`). Discover owns its own List/Map switch - planning is
+   not a third display mode alongside them. Keep this naming and structure stable.
 3. Preserve working capabilities, stable fixture IDs, `localStorage` key compatibility
    (`tripIds_v1`, `filterCtx_v1`, `onboarded_v1`), and the `/sports-trip/` GitHub Pages base path.
 
