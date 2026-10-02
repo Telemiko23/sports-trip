@@ -1123,6 +1123,8 @@ HE_CITIES = {
     "Bucharest|Romania": "בוקרשט",
     "Belgrade|Serbia": "בלגרד",
     "Thessaloniki|Greece": "סלוניקי",
+    # from the user's filled-in missing_info.csv (2026-10-02), applied exactly as written
+    "Fazendas de Almeirim|Portugal": "פאזנדנסה",
 }
 
 _CONS = {
