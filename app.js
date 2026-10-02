@@ -618,6 +618,7 @@
   document.addEventListener('click', function (e) {
     var el = e.target.closest ? e.target : null; if (!el) return;
     var b;
+    if ((b = el.closest('a.venue-link'))) { track('venue_maps_click', { venue: b.textContent.trim().slice(0, 80) }); return; }
     if ((b = el.closest('[data-add]'))) { toggleTrip(Number(b.getAttribute('data-add')), sourceOf(b)); return; }
     if ((b = el.closest('[data-open]'))) { openEvent(Number(b.getAttribute('data-open')), b); return; }
     if ((b = el.closest('[data-replace]'))) { openReplace(Number(b.getAttribute('data-replace')), b); return; }
@@ -638,7 +639,7 @@
     if ((b = el.closest('[data-act]'))) { handleAct(b.getAttribute('data-act'), b); return; }
     if (el.closest('#filterBtn')) { openFilters(el.closest('#filterBtn')); return; }
     if (el.closest('#ctxEdit')) { openContextDialog(el.closest('#ctxEdit'), false); return; }
-    if (el.closest('#legalBtn')) { var ld = $('#legalDialog'); ld.innerHTML = '<div class="dlg-head"><h2 id="legalTitle">' + esc(t('legal.title')) + '</h2><button type="button" class="dialog-close" data-close aria-label="' + esc(t('dialog.close')) + '">' + U.icon('x') + '</button></div>' + ['p1', 'p2', 'p3', 'p4', 'p5'].map(function (p) { return '<p>' + esc(t('legal.' + p)) + '</p>'; }).join(''); openDialog(ld, el.closest('#legalBtn')); return; }
+    if (el.closest('#legalBtn')) { track('legal_dialog_open', {}); var ld = $('#legalDialog'); ld.innerHTML = '<div class="dlg-head"><h2 id="legalTitle">' + esc(t('legal.title')) + '</h2><button type="button" class="dialog-close" data-close aria-label="' + esc(t('dialog.close')) + '">' + U.icon('x') + '</button></div>' + ['p1', 'p2', 'p3', 'p4', 'p5'].map(function (p) { return '<p>' + esc(t('legal.' + p)) + '</p>'; }).join(''); openDialog(ld, el.closest('#legalBtn')); return; }
     if (el.closest('#legalDialog [data-close]')) { $('#legalDialog').close(); return; }
     if (el.closest('#copyTrip')) { copyTrip(el.closest('#copyTrip')); return; }
     if (el.closest('#exportTrip')) { exportTrip(); return; }
