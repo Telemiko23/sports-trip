@@ -1,1210 +1,683 @@
+/* ToSport v2 - controller. Wires the pure layers (model, store, ui) to the DOM: one store owns every transition; this file
+   only reads state, renders regions, and turns DOM events into actions. Search/trip/plan share ONE context and ONE trip. */
 (function () {
+  'use strict';
+  var TS = window.ToSport, M = TS.model, S = TS.store, I = TS.i18n, U = TS.ui, combo = TS.combo;
+  var t = I.t, tn = I.tn, esc = M.esc;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var BRAND = window.BRAND || { name: 'ToSport', version: '' };
-  var APP_VERSION = BRAND.version;
-  (function () {
-    document.title = BRAND.name;
-  })();
+  var UI_VERSION = '2';
   var DATA = window.TRIP_DATA;
-  var app = document.getElementById('app');
-  if (!DATA || !Array.isArray(DATA.fixtures)) {
-    app.innerHTML = '<p class="empty">לא נמצא קובץ הנתונים fixtures.js. הרץ קודם את build_fixtures.py בתיקייה הזו, ואז פתח מחדש את הדף.</p>';
-    return;
-  }
-  var $ = function (s) { return document.querySelector(s); };
-  var HE_COUNTRY = {
-    England: 'אנגליה', Spain: 'ספרד', Germany: 'גרמניה', France: 'צרפת', Netherlands: 'הולנד', Italy: 'איטליה', Poland: 'פולין',
-    Europe: 'אירופה (בין־לאומי)', Portugal: 'פורטוגל', Ukraine: 'אוקראינה', Belgium: 'בלגיה', Austria: 'אוסטריה',
-    Switzerland: 'שוויץ', Turkey: 'טורקיה', Greece: 'יוון', Czechia: "צ'כיה", Denmark: 'דנמרק', Norway: 'נורווגיה',
-    Sweden: 'שוודיה', Serbia: 'סרביה', Croatia: 'קרואטיה', Slovakia: 'סלובקיה', Hungary: 'הונגריה', Romania: 'רומניה',
-    Bulgaria: 'בולגריה', Scotland: 'סקוטלנד', Ireland: 'אירלנד', Cyprus: 'קפריסין', Israel: 'ישראל',
-    Azerbaijan: "אזרבייג'ן", Georgia: 'גאורגיה', Kazakhstan: 'קזחסטן',
-    Armenia: 'ארמניה', 'Bosnia and Herzegovina': 'בוסניה והרצגובינה', Latvia: 'לטביה', Lithuania: 'ליטא',
-    Albania: 'אלבניה', Andorra: 'אנדורה', Belarus: 'בלארוס', Estonia: 'אסטוניה', 'Faroe Islands': 'איי פרו',
-    Finland: 'פינלנד', Gibraltar: 'גיברלטר', Iceland: 'איסלנד', Kosovo: 'קוסובו', Liechtenstein: 'ליכטנשטיין',
-    Luxembourg: 'לוקסמבורג', Malta: 'מלטה', Moldova: 'מולדובה', Monaco: 'מונקו', Montenegro: 'מונטנגרו',
-    'North Macedonia': 'צפון מקדוניה', Russia: 'רוסיה', 'San Marino': 'סן מרינו', Slovenia: 'סלובניה',
-    Wales: 'ויילס', 'Northern Ireland': 'צפון אירלנד',
-    'Formula 1': 'פורמולה 1', Tennis: 'טניס', Darts: 'דארטס',
-    Singapore: 'סינגפור', China: 'סין', Japan: 'יפן', Malaysia: 'מלזיה', 'United States': 'ארצות הברית', Mexico: 'מקסיקו',
-    Brazil: 'ברזיל', Qatar: 'קטאר', 'United Arab Emirates': 'איחוד האמירויות', Australia: 'אוסטרליה', 'United Kingdom': 'הממלכה המאוחדת'
-  };
-  var HE_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
-  var HE_DAYS_FULL = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+  var main = $('#main');
+  if (!DATA || !Array.isArray(DATA.fixtures)) { main.innerHTML = '<p class="empty">' + esc(t('app.loadError')) + '</p>'; return; }
+  document.title = BRAND.name;
 
-  // A multi-day event (a Grand Prix weekend, a tournament) is shown as one item per day - each
-  // day can be added to a trip on its own, and carries that day's session schedule if we have one.
-  // ids stay unique: day n of event E is E*100+n (event ids are all >= 1e9, football ids far smaller).
-  function expandDays(rows) {
-    var out = [];
-    rows.forEach(function (r) {
-      var s = r.dt.slice(0, 10), e = r.date_to || s, isEv = r.sport && r.sport !== 'football';
-      if (!isEv) { out.push(r); return; }
-      var total = Math.round((parseDay(e) - parseDay(s)) / 86400000) + 1, n = 0;
-      for (var d = s; d <= e; d = addDays(d, 1)) {
-        n++;
-        var c = {}; for (var k in r) c[k] = r[k];
-        c.sessions = r.sessions ? (r.sessions[d] || null) : null;
-        if (total > 1) {
-          c.id = r.id * 100 + n; c.dt = d + 'T00:00'; c.date_to = d; c.day_no = n; c.day_total = total;
-          c.title = (r.title || '') + ' - Day ' + n; c.title_he = (r.title_he || r.title) + ' - יום ' + n;
-        }
-        out.push(c);
-      }
-    });
-    return out;
-  }
-  var fixtures = expandDays(DATA.fixtures).sort(function (a, b) { return a.dt < b.dt ? -1 : a.dt > b.dt ? 1 : 0; });
-  var byId = {};
-  fixtures.forEach(function (f) { byId[f.id] = f; });
-  var comps = (DATA.competitions && DATA.competitions.length) ? DATA.competitions : (function () {
-    var seen = {}, out = [];
-    fixtures.forEach(function (f) { if (!seen[f.comp_id]) { seen[f.comp_id] = 1; out.push({ id: f.comp_id, label: f.comp, country: f.country }); } });
-    return out;
-  })();
-  var compLogoById = {};
-  comps.forEach(function (c) { if (c.logo) compLogoById[c.id] = c.logo; });
+  var cat = M.buildCatalog(DATA), dests = M.buildDestinations(cat);
+  var AIRPORTS = window.AIRPORTS_DATA || [];
+  var originCity = {}; AIRPORTS.forEach(function (a) { originCity[a.l] = a.c; });
+  var airportItems = AIRPORTS.map(function (a) { return { label: a.l, sub: a.grp ? '🌐' : a.c, search: String(a.s || '').toLowerCase() }; });
+  function resolveOrigin(text) { var x = String(text || '').trim(); return originCity[x] || x; }
+  function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  function isMobile() { return !!(window.matchMedia && window.matchMedia('(max-width:760px)').matches); }
+  function today() { return M.todayISO(); }
 
-  // ---------- helpers ----------
-  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function debounce(fn, ms) { var t; return function () { clearTimeout(t); var a = arguments; t = setTimeout(function () { fn.apply(null, a); }, ms); }; }
-  // analytics events - never throws (an ad-blocker or offline gtag must not break the site)
+  /* ---------- analytics (non-sensitive, structured; never raw text or whole trips) ---------- */
   function track(name, params) {
     try {
-      if (typeof gtag === 'function') gtag('event', name, params || {});
-      if (window.console && console.debug) console.debug('[analytics]', name, params || {});
+      var p = params || {}; p.ui_version = UI_VERSION;
+      if (typeof gtag === 'function' && !window.TOSPORT_ANALYTICS_OFF) gtag('event', name, p);
+      if (window.console && console.debug) console.debug('[analytics]', name, p);
     } catch (e) { }
   }
-  function fixtureTrackParams(f) {
-    var days = Math.round((parseDay(f.dt.slice(0, 10)) - parseDay(isoLocal(new Date()))) / 86400000);
-    return { sport: f.sport || 'football', comp: f.comp, country: f.country || '', city: f.city || '', days_until_match: days };
+
+  /* ---------- storage + store ---------- */
+  var storage = (function () {
+    try { var s = window.localStorage; s.setItem('__tosport_probe', '1'); s.removeItem('__tosport_probe'); return s; }
+    catch (e) { return { getItem: function () { throw new Error('unavailable'); }, setItem: function () { throw new Error('unavailable'); } }; }
+  })();
+  var loaded = S.load(storage, cat);
+  var store = S.createStore(loaded.state);
+  var bootReport = loaded.report;
+  var retDismissed = false;
+
+  /* ---------- derived context ---------- */
+  function effectiveCtx() {
+    var st = store.get(), c = st.context, f = st.filters;
+    var dates = c.dates || { mode: 'fixed', from: today(), to: M.addDays(today(), 30) };
+    return { dest: c.dest, dates: dates, range: { from: dates.from, to: dates.to }, radiusKm: c.radiusKm, sports: f.sports, excludedComps: f.excludedComps, excludedWeekdays: f.excludedWeekdays };
+  }
+  function runQuery(ctx, sports) {
+    return M.query(cat, { dest: ctx.dest, dates: ctx.range, radiusKm: ctx.radiusKm, sports: sports === undefined ? ctx.sports : sports, excludedComps: ctx.excludedComps, excludedWeekdays: ctx.excludedWeekdays });
+  }
+  function pickedMap() { var m = {}; store.get().trip.entries.forEach(function (e) { m[e.id] = true; }); return m; }
+
+  /* ---------- live region + toasts ---------- */
+  var liveTimer = null;
+  function announce(text) {
+    var el = $('#live'); if (!el) return;
+    clearTimeout(liveTimer); el.textContent = '';
+    liveTimer = setTimeout(function () { el.textContent = text; }, 60);
+  }
+  function showToast(text, o) {
+    o = o || {};
+    var box = $('#toasts'), el = document.createElement('div'); el.className = 'toast';
+    el.innerHTML = '<span class="toast-text"></span>' + (o.actionLabel ? '<button type="button" class="toast-act"></button>' : '') + '<button type="button" class="toast-x" aria-label="' + esc(t('toast.close')) + '">' + U.icon('x') + '</button>';
+    $('.toast-text', el).textContent = text;
+    var done = false;
+    function close(byAction) { if (done) return; done = true; clearTimeout(tm); if (el.parentNode) el.parentNode.removeChild(el); if (o.onClose) o.onClose(byAction); }
+    if (o.actionLabel) { var b = $('.toast-act', el); b.textContent = o.actionLabel; b.addEventListener('click', function () { if (o.onAction) o.onAction(); close(true); }); }
+    $('.toast-x', el).addEventListener('click', function () { close(false); });
+    var tm = setTimeout(function () { close(false); }, o.timeout || 8000);
+    box.appendChild(el);
+    return close;
   }
 
-  // ---------- sport identity (guardrails review, section B) ----------
-  // One canonical id per sport, resolved once here - never inferred from a competition's translated
-  // name or an event title elsewhere. Every place that summarizes an event calls sportLabelHtml() so
-  // the badge can't drift between the list, plan, itinerary and map (one renderer, adapted by CSS
-  // density only). Icons are small inline line-art matching the site's existing .ico stroke style -
-  // no emoji, no per-sport color (color stays reserved for selection/warning meaning).
-  var SPORT_REGISTRY = {
-    football: {
-      he: 'כדורגל', en: 'Football',
-      icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5l3.5 2.5-1.3 4h-4.4L8.5 10z"/><path d="M12 3v4.5M4.8 8.6L8.5 10M19.2 8.6L15.5 10M7.3 19l1.5-4.5M16.7 19l-1.5-4.5"/>'
-    },
-    motorsport: {
-      he: 'ספורט מוטורי', en: 'Motorsport',
-      icon: '<path d="M6 21V4"/><path d="M6 4.5h12l-3 3.5 3 3.5H6"/>'
-    },
-    tennis: {
-      he: 'טניס', en: 'Tennis',
-      icon: '<circle cx="12" cy="12" r="9"/><path d="M6.5 4.8C9 8 9 16 6.5 19.2M17.5 4.8c-2.5 3.2-2.5 11.2 0 14.4"/>'
-    },
-    darts: {
-      he: 'דארטס', en: 'Darts',
-      icon: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3"/>'
-    },
-    // honest fallback for a sport code the registry doesn't know yet - never silently shown as football
-    unknown: {
-      he: 'ענף לא מסווג', en: 'Sport unspecified',
-      icon: '<circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/>'
-    }
-  };
-  // raw provider/competition sport code -> canonical registry id. A fixture/competition with no
-  // `sport` field at all is the original football-only data (no code was ever needed for it).
-  var SPORT_CATEGORY = { f1: 'motorsport' };
-  function sportIdOf(rawSport) {
-    if (!rawSport) return 'football';
-    var id = SPORT_CATEGORY[rawSport] || rawSport;
-    if (!SPORT_REGISTRY[id]) { if (window.console && console.warn) console.warn('[sport] unmapped sport code from data:', rawSport); return 'unknown'; }
-    return id;
+  /* ---------- static chrome ---------- */
+  function renderNav() {
+    var st = store.get(), n = st.trip.entries.length;
+    var nav = $('#mainNav');
+    if (!nav.firstChild) nav.innerHTML = U.navHtml(st.ui.tab, n);
+    $$('.tab', nav).forEach(function (b) { var on = b.getAttribute('data-tab') === st.ui.tab; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
+    var badge = $('[data-trip-count]', nav);
+    if (badge) { badge.textContent = n; badge.hidden = !n; badge.setAttribute('aria-label', tn('nav.tripCount', n)); }
   }
-  function categoryOf(c) { return sportIdOf(c.sport); }
-  function sportLabelHtml(rawSport) {
-    var s = SPORT_REGISTRY[sportIdOf(rawSport)];
-    return '<span class="sport-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + s.icon + '</svg>' + esc(s.he) + '</span>';
+  function renderFooter() {
+    var upd = DATA.generated ? new Date(DATA.generated).toLocaleString('he-IL', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    var stale = DATA.generated && (Date.now() - Date.parse(DATA.generated)) / 86400000 > 2;
+    $('#credits').innerHTML = t('footer.data') + '<div class="credits-row"><button type="button" class="linkbtn" id="legalBtn" aria-haspopup="dialog">' + esc(t('legal.link')) + '</button>' +
+      '<span class="version">' + (upd ? '<span' + (stale ? ' class="stale"' : '') + '>' + esc(t('footer.updated', { when: upd })) + '</span> · ' : '') + esc(t('footer.version', { v: BRAND.version })) + '</span></div>';
   }
-  // delegated on document since venue links render inside #list, #trip and map popups alike
-  document.addEventListener('click', function (e) {
-    var v = e.target.closest ? e.target.closest('a.venue-link') : null;
-    if (v) { track('venue_maps_click', { venue: v.textContent }); return; }
-    var fl = e.target.closest ? e.target.closest('.tools a.btn.primary') : null;
-    if (fl) { track('flight_link_click', {}); return; }
-    var hl = e.target.closest ? e.target.closest('.tools a.btn:not(.primary)') : null;
-    if (hl) { track('hotel_link_click', { city: hl.textContent.replace('חיפוש לינה: ', '') }); }
-  });
-  function pad(n) { return (n < 10 ? '0' : '') + n; }
-  function isoLocal(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
-  function parseDay(s) { var p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); }
-  function addDays(s, n) { var d = parseDay(s); d.setDate(d.getDate() + n); return isoLocal(d); }
-  function dayOf(f) { return f.dt.slice(0, 10); }
-  // non-football events (F1, tennis) span several days and have no kickoff time or two teams
-  function endDay(f) { return f.date_to || dayOf(f); }
-  function isEvent(f) { return !!f.sport && f.sport !== 'football'; }
-  function titleHe(f) { return isEvent(f) ? (f.title_he || f.title) : (f.home_he || f.home) + ' – ' + (f.away_he || f.away); }
-  // host-country flag for non-football events (saved locally in flags/; the code is validated
-  // before it is used in a path, so a malformed value in the data can't point anywhere else)
-  function flagHtml(f) {
-    return f.flag && /^[a-z]{2}(-[a-z]{3})?$/.test(f.flag)
-      ? '<img class="flag" src="flags/' + f.flag + '.svg" alt="" title="' + esc(HE_COUNTRY[f.country] || f.country || '') + '" loading="lazy">' : '';
-  }
-  function shortRange(f) {
-    var a = parseDay(dayOf(f)), b = parseDay(endDay(f));
-    var fa = a.getDate() + '/' + (a.getMonth() + 1), fb = b.getDate() + '/' + (b.getMonth() + 1);
-    return fa === fb ? fa : fa + '–' + fb;
-  }
-  // date ranges are digits + punctuation only, so force LTR or the RTL page flips "21/9–27/9" visually
-  function rangeHtml(f) { return f.day_no ? 'יום ' + f.day_no : '<bdi dir="ltr">' + esc(shortRange(f)) + '</bdi>'; }
-  // "פירוט" opens the day's session schedule - only rendered when we actually have one
-  function detailBtn(f) { return f.sessions && f.sessions.length ? ' <button type="button" class="detail-btn" data-detail="' + f.id + '">פירוט</button>' : ''; }
-  function tagHtml(f) {
-    return sportLabelHtml(f.sport) + '<span class="tag">' + (compLogoById[f.comp_id] ? '<img src="' + esc(compLogoById[f.comp_id]) + '" alt="" loading="lazy">' : '') + '<bdi dir="rtl">' + esc(f.comp_he || f.comp) + '</bdi></span>';
-  }
-  function kickHtml(f, withDate) {
-    var d0 = parseDay(dayOf(f));
-    var date = withDate ? '<span class="kdate"><bdi dir="ltr">' + esc(d0.getDate() + '/' + (d0.getMonth() + 1)) + '</bdi></span>' : '';
-    if (isEvent(f)) return '<div class="kick tbd">' + (f.day_no ? date + rangeHtml(f) : rangeHtml(f)) + '</div>';
-    return f.status === 'TBD' ? '<div class="kick tbd">' + date + 'שעה לא מאושרת</div>' : '<div class="kick">' + date + esc(f.dt.slice(11, 16)) + '</div>';
-  }
-  function titleHtml(f) {
-    if (isEvent(f)) return flagHtml(f) + '<bdi dir="rtl">' + esc(titleHe(f)) + '</bdi>';
-    var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
-    var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
-    return '<bdi dir="rtl">' + homeLogo + esc(f.home_he || f.home) + ' – ' + esc(f.away_he || f.away) + awayLogo + '</bdi>';
-  }
-  // one card used by the list, the map panel and plan proposals, so they can never drift apart.
-  // refCity: the point distance/"same city"/country-mismatch is measured from - omitted means the
-  // Discover base city (S.base), an explicit city object measures from that instead (e.g. the plan's
-  // own target city), and null suppresses the badge entirely (no single reference point, e.g. a
-  // whole-country plan).
-  function distBadge(ref, f) {
-    if (!hasPos(f)) return '';
-    var d = km(ref, f);
-    if (d < 3) return ' <span class="dist">באותה עיר</span>';
-    var countryNote = (ref.country && f.country && ref.country !== f.country) ? ' · ' + (HE_COUNTRY[f.country] || f.country) : '';
-    return ' <span class="dist">' + Math.round(d) + ' ק״מ' + countryNote + '</span>';
-  }
-  function cardHtml(f, withDate, refCity) {
-    var picked = S.trip.indexOf(f.id) !== -1;
-    var ref = refCity === undefined ? S.base : refCity;
-    var dist = ref ? distBadge(ref, f) : '';
-    return '<li class="match' + (picked ? ' picked' : '') + '">' + kickHtml(f, withDate) +
-      '<div class="teams">' + titleHtml(f) + '</div>' +
-      '<div class="meta">' + tagHtml(f) + placeHtml(f) + dist + detailBtn(f) + '</div>' +
-      '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
-  }
-  function weekday(s) { return parseDay(s).getDay(); }
-  function minutes(f) { return f.status === 'TBD' ? null : Number(f.dt.slice(11, 13)) * 60 + Number(f.dt.slice(14, 16)); }
-  function km(a, b) {
-    var R = 6371, rad = Math.PI / 180;
-    var dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
-    var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
-  }
-  function hasPos(f) { return f.lat != null && f.lng != null; }
-  function venueMapsUrl(f) {
-    if (!f.venue) return null;
-    if (f.venue_lat != null && f.venue_lng != null) return 'https://www.google.com/maps/search/?api=1&query=' + f.venue_lat + ',' + f.venue_lng;
-    if (f.city) return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(f.venue + ', ' + f.city);
-    return null;
-  }
-  function venueHtml(f) {
-    if (!f.venue) return '';
-    var url = venueMapsUrl(f);
-    return url ? '<a class="venue-link" target="_blank" rel="noopener" href="' + esc(url) + '"><bdi dir="rtl">' + esc(f.venue) + '</bdi></a>' : '<bdi dir="rtl">' + esc(f.venue) + '</bdi>';
-  }
-  function fmtLong(s) { return parseDay(s).toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' }); }
-  // where an event happens: city + stadium, saying so explicitly when we don't have the stadium (or
-  // even the city) yet - e.g. a multi-city tournament whose host venue isn't announced - instead of
-  // silently showing less than a card with full details would
-  function placeHtml(f) {
-    var city = f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : '';
-    if (f.venue) return (city ? city + ' · ' : '') + venueHtml(f);
-    return city ? city + ' · מיקום מדויק עדיין לא ידוע' : 'מיקום עדיין לא ידוע';
-  }
+  $('#skipLink').textContent = t('skip');
 
-  // ---------- custom combobox (styled dropdown, replaces native <datalist>) ----------
-  // items: [{label, sub, search, ...anything else onSelect needs}]
-  function combobox(input, menu, items, opts) {
-    var filtered = [], activeIdx = -1;
-    function highlight(text, q) {
-      var i = text.toLowerCase().indexOf(q.toLowerCase());
-      if (i === -1) return esc(text);
-      return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
-    }
-    function close() { menu.classList.remove('open'); menu.innerHTML = ''; activeIdx = -1; }
-    function updateActive() {
-      Array.prototype.forEach.call(menu.children, function (el, i) { el.classList.toggle('active', i === activeIdx); });
-      if (menu.children[activeIdx]) menu.children[activeIdx].scrollIntoView({ block: 'nearest' });
-    }
-    function render(list, q) {
-      filtered = list;
-      if (!list.length) { menu.innerHTML = '<div class="combo-empty">אין תוצאות</div>'; menu.classList.add('open'); return; }
-      menu.innerHTML = list.slice(0, 60).map(function (it, i) {
-        return '<div class="combo-opt" data-i="' + i + '"><bdi dir="rtl">' + highlight(it.label, q) + '</bdi>' + (it.sub ? '<small>' + esc(it.sub) + '</small>' : '') + '</div>';
-      }).join('');
-      menu.classList.add('open');
-      activeIdx = -1;
-    }
-    function choose(it) { input.value = it.label; close(); opts.onSelect(it); }
-    input.addEventListener('input', function () {
-      var q = input.value.trim();
-      if (!q) { close(); opts.onInput && opts.onInput(''); return; }
-      var ql = q.toLowerCase();
-      render(items.filter(function (it) { return it.search.indexOf(ql) !== -1; }), q);
-      opts.onInput && opts.onInput(q);
-    });
-    input.addEventListener('focus', function () { if (input.value.trim()) input.dispatchEvent(new Event('input')); });
-    input.addEventListener('keydown', function (e) {
-      if (!menu.classList.contains('open') || !filtered.length) return;
-      if (e.key === 'ArrowDown') { e.preventDefault(); activeIdx = Math.min(activeIdx + 1, filtered.length - 1); updateActive(); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = Math.max(activeIdx - 1, 0); updateActive(); }
-      else if (e.key === 'Enter') { if (activeIdx >= 0) { e.preventDefault(); choose(filtered[activeIdx]); } }
-      else if (e.key === 'Escape') { close(); }
-    });
-    menu.addEventListener('mousedown', function (e) {
-      var row = e.target.closest('.combo-opt');
-      if (!row) return;
-      e.preventDefault();
-      choose(filtered[Number(row.getAttribute('data-i'))]);
-    });
-    input.addEventListener('blur', function () { setTimeout(close, 150); });
-  }
-
-  // ---------- state ----------
-  var today = new Date();
-  var S = {
-    base: null, radius: 150,
-    from: isoLocal(today), to: addDays(isoLocal(today), 45),
-    days: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1},
-    comps: {},
-    trip: [], origin: 'Ben Gurion International Airport – Tel Aviv, ישראל (TLV)',
-    tab: 'discover',       // top-level destination: discover | plan | trip (trip is mobile-only as a
-                            // dedicated screen - on desktop the trip panel is always visible, see applyTab())
-    discoverMode: 'list'   // inside Discover: list | map
-  };
-  comps.forEach(function (c) { S.comps[c.id] = true; });
-  try {
-    var saved = JSON.parse(localStorage.getItem('tripIds_v1') || '[]');
-    S.trip = saved.filter(function (id) { return byId[id]; });
-  } catch (e) { /* no storage: fine */ }
-  function saveTrip() { try { localStorage.setItem('tripIds_v1', JSON.stringify(S.trip)); } catch (e) { } }
-
-  // returning visitors resume their base city/dates instead of seeing onboarding again (brief section 3)
-  function saveFilterCtx() { try { localStorage.setItem('filterCtx_v1', JSON.stringify({ base: S.base, from: S.from, to: S.to })); } catch (e) { } }
-  var restoredCtx = null;
-  try { restoredCtx = JSON.parse(localStorage.getItem('filterCtx_v1') || 'null'); } catch (e) { }
-  if (restoredCtx) {
-    if (restoredCtx.base && restoredCtx.base.lat != null) S.base = restoredCtx.base;
-    if (restoredCtx.from) S.from = restoredCtx.from;
-    if (restoredCtx.to) S.to = restoredCtx.to;
-  }
-
-  // ---------- cities for the base-city box ----------
-  function cityHe(f) { return f.city_he || f.city; }
-  var cityMap = {};
-  fixtures.forEach(function (f) {
-    if (f.city && hasPos(f)) {
-      var lblCountry = f.country === 'United Kingdom' ? 'England' : f.country; // so an event in London merges with football's London
-      var label = cityHe(f) + ' (' + (HE_COUNTRY[lblCountry] || lblCountry) + ')';
-      if (!cityMap[label]) cityMap[label] = { city: f.city, cityHe: cityHe(f), lat: f.lat, lng: f.lng, country: lblCountry };
-    }
-  });
-  var cityLabels = Object.keys(cityMap).sort();
-  var cityItems = cityLabels.map(function (l) { return { label: l, search: l.toLowerCase(), place: cityMap[l] }; });
-  function findBase(text) {
-    var t = text.trim();
-    if (!t) return null;
-    var exact = cityLabels.filter(function (l) { return l === t || cityMap[l].cityHe === t; });
-    if (exact.length) return cityMap[exact[0]];
-    var starts = cityLabels.filter(function (l) { return cityMap[l].cityHe.indexOf(t) === 0; });
-    return starts.length ? cityMap[starts[0]] : null;
-  }
-
-  // ---------- flight-origin autocomplete: real airports (OurAirports data, filtered to
-  // scheduled-service large/medium/small airports with an IATA code) ----------
-  var AIRPORTS = window.AIRPORTS_DATA || [];
-  var originMap = {};
-  AIRPORTS.forEach(function (a) { originMap[a.l] = a.c; });
-  var airportItems = AIRPORTS.map(function (a) { return { label: a.l, sub: a.grp ? '🌐' : a.c, search: a.s }; });
-  function resolveOrigin(text) {
-    var t = text.trim();
-    return originMap[t] || t;
-  }
-
-  // ---------- filter UI ----------
-  if (window.matchMedia && window.matchMedia('(max-width:760px)').matches) $('#compsBox').removeAttribute('open');
-  $('#from').value = S.from; $('#to').value = S.to;
-  if (S.base) { $('#base').value = S.base.cityHe; $('#baseHint').textContent = 'המרחק מחושב מהעיר ' + S.base.cityHe + '.'; }
-  $('#days').innerHTML = HE_DAYS.map(function (d, i) {
-    return '<label class="chip" title="יום ' + HE_DAYS_FULL[i] + '"><input type="checkbox" data-day="' + i + '" checked><span>' + d + '</span></label>';
-  }).join('');
-  var byCountry = {}, order = [];
-  comps.forEach(function (c) { if (!byCountry[c.country]) { byCountry[c.country] = []; order.push(c.country); } byCountry[c.country].push(c); });
-  function compRows(ct) {
-    return byCountry[ct].map(function (c) {
-      return '<label class="comp"><input type="checkbox" data-comp="' + c.id + '" checked>' + (c.logo ? '<img class="comp-logo" src="' + esc(c.logo) + '" alt="" loading="lazy">' : (c.emoji ? '<span class="comp-logo" aria-hidden="true">' + esc(c.emoji) + '</span>' : '')) + '<bdi dir="rtl">' + esc(c.label_he || c.label) + '</bdi></label>';
-    }).join('');
-  }
-  function groupHead(ct, cls) {
-    return '<div class="' + cls + '"><span>' + esc(HE_COUNTRY[ct] || ct) + '</span><button type="button" class="linkbtn" data-ctry="' + esc(ct) + '">הכל / כלום</button></div>';
-  }
-  // two levels: a category (sport family), then - where a category has several groups - its groups.
-  // Football's groups are countries; motorsport is the umbrella for F1 now and bikes/horses later.
-  // Labels/order come from the canonical SPORT_REGISTRY, not a second hardcoded list - adding a
-  // sport to the registry is enough for it to show up here too.
-  var CATEGORIES = Object.keys(SPORT_REGISTRY).filter(function (k) { return k !== 'unknown'; })
-    .map(function (k) { return { key: k, he: SPORT_REGISTRY[k].he }; });
-  comps.forEach(function (c) {
-    var k = categoryOf(c);
-    if (!CATEGORIES.some(function (x) { return x.key === k; })) CATEGORIES.push({ key: k, he: SPORT_REGISTRY[k].he });
-  });
-  $('#comps').innerHTML = CATEGORIES.map(function (cat) {
-    var groups = order.filter(function (ct) { return byCountry[ct].some(function (c) { return categoryOf(c) === cat.key; }); });
-    if (!groups.length) return '';
-    var body = groups.map(function (ct) {
-      var head = cat.key === 'football' || (groups.length > 1 && byCountry[ct].length > 1);
-      return (head ? groupHead(ct, 'ctry') : '') + compRows(ct);
-    }).join('');
-    return '<div class="sport-head"><button type="button" class="cat-toggle" data-toggle="' + esc(cat.key) + '" aria-expanded="true" aria-controls="sub-' + esc(cat.key) + '">' + esc(cat.he) + '</button><button type="button" class="linkbtn" data-sport="' + esc(cat.key) + '">הכל / כלום</button></div><div class="sub" id="sub-' + esc(cat.key) + '">' + body + '</div>';
-  }).join('');
-
-  function setBase(place, typedText) {
-    S.base = place;
-    $('#baseHint').textContent = !typedText.trim()
-      ? 'בלי עיר בסיס מוצגים אירועים מכל היעדים.'
-      : (place ? 'המרחק מחושב מהעיר ' + place.cityHe + '.' : 'העיר לא נמצאה ברשימה. בחר עיר מההצעות.');
-    saveFilterCtx();
-    update();
-  }
-  combobox($('#base'), $('#baseMenu'), cityItems, {
-    onSelect: function (it) { setBase(it.place, it.label); track('base_city_set', { city: it.place ? it.place.city : it.label }); },
-    // draft text vs. applied destination (R1): unresolved text while typing must not silently widen
-    // results to "worldwide" - only an explicit match or a fully cleared field change what's applied.
-    onInput: function (text) {
-      if (!text.trim()) { setBase(null, text); return; }
-      var match = findBase(text);
-      if (match) { setBase(match, text); return; }
-      // make the (correct, from R1) silent no-op explicit: the field looking "broken" while results
-      // keep showing the last applied city is exactly the disconnect that needed spelling out
-      $('#baseHint').textContent = 'העיר לא נמצאה ברשימה. בחר עיר מההצעות, או נקה את השדה כדי לראות את כל היעדים.' +
-        (S.base ? ' מוצגות עדיין התוצאות עבור ' + S.base.cityHe + ', עד לבחירת יעד תקין.' : '');
-    }
-  });
-  $('#radius').addEventListener('input', function (e) { S.radius = Number(e.target.value); $('#radiusOut').textContent = S.radius; update(); });
-  $('#radius').addEventListener('change', function (e) { track('radius_change', { radius_km: Number(e.target.value) }); });
-  $('#from').addEventListener('change', function (e) { S.from = e.target.value; saveFilterCtx(); update(); track('date_range_change', { field: 'from', value: S.from }); });
-  $('#to').addEventListener('change', function (e) { S.to = e.target.value; saveFilterCtx(); update(); track('date_range_change', { field: 'to', value: S.to }); });
-  $('#days').addEventListener('change', function (e) { var d = e.target.getAttribute('data-day'); if (d != null) { S.days[d] = e.target.checked ? 1 : 0; update(); } });
-  $('#comps').addEventListener('change', function (e) {
-    var id = e.target.getAttribute('data-comp');
-    if (id == null) return;
-    S.comps[id] = e.target.checked;
-    update();
-    var c = comps.filter(function (x) { return String(x.id) === id; })[0];
-    track('competition_toggle', { comp: c ? c.label : id, checked: e.target.checked });
-  });
-  $('#comps').addEventListener('click', function (e) {
-    var tg = e.target.closest ? e.target.closest('[data-toggle]') : null;
-    if (tg) {
-      var open = tg.getAttribute('aria-expanded') !== 'true';
-      tg.setAttribute('aria-expanded', String(open));
-      $('#sub-' + tg.getAttribute('data-toggle')).hidden = !open;
-      track('category_collapse_toggle', { category: tg.getAttribute('data-toggle'), expanded: open });
-      return;
-    }
-    var ct = e.target.getAttribute('data-ctry'), sp = e.target.getAttribute('data-sport');
-    if (!ct && !sp) return;
-    var list = sp ? comps.filter(function (c) { return categoryOf(c) === sp; }) : byCountry[ct];
-    if (sp) ct = sp;
-    var allOn = list.every(function (c) { return S.comps[c.id]; });
-    list.forEach(function (c) { S.comps[c.id] = !allOn; });
-    document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = !!S.comps[i.getAttribute('data-comp')]; });
-    update();
-    track('competition_country_toggle', { country: ct, checked: !allOn });
-  });
-  $('#allComps').addEventListener('click', function () {
-    var allOn = comps.every(function (c) { return S.comps[c.id]; });
-    comps.forEach(function (c) { S.comps[c.id] = !allOn; });
-    document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = !!S.comps[i.getAttribute('data-comp')]; });
-    update();
-    track('competition_all_toggle', { checked: !allOn });
+  /* ---------- history: Back closes the open dialog, or returns to the previous tab - and never exits mid-flow ---------- */
+  var suppressPop = false, poppedByHistory = false;
+  function pushHist(state) { try { history.pushState(state, '', location.pathname + location.search + (state.tab ? '#' + state.tab : '')); } catch (e) { } }
+  try { history.replaceState({ tab: store.get().ui.tab }, '', location.href); } catch (e) { }
+  window.addEventListener('popstate', function (e) {
+    if (suppressPop) { suppressPop = false; return; }
+    var open = $('dialog[open]');
+    if (open) { poppedByHistory = true; open.close(); return; }
+    var st = e.state;
+    if (st && st.tab && st.tab !== store.get().ui.tab) store.dispatch({ type: 'VIEW', tab: st.tab });
   });
 
-  // ---------- results ----------
-  function filtered() {
-    var hiddenNoPos = 0;
-    var out = fixtures.filter(function (f) {
-      var d = dayOf(f), e = endDay(f);
-      // a multi-day event counts if any of its days falls in the window and on a wanted weekday
-      if (S.from && e < S.from) return false;
-      if (S.to && d > S.to) return false;
-      var wanted = false;
-      for (var x = d; x <= e && !wanted; x = addDays(x, 1)) wanted = !!S.days[weekday(x)] && (!S.from || x >= S.from) && (!S.to || x <= S.to);
-      if (!wanted) return false;
-      if (!S.comps[f.comp_id]) return false;
-      if (S.base) {
-        if (!hasPos(f)) { hiddenNoPos++; return false; }
-        if (km(S.base, f) > S.radius) return false;
-      }
-      return true;
-    });
-    return { list: out, hiddenNoPos: hiddenNoPos };
+  /* ---------- dialogs ---------- */
+  function openDialog(dlg, opener) {
+    dlg.__opener = opener || document.activeElement;
+    dlg.showModal();
+    pushHist({ tab: store.get().ui.tab, dlg: dlg.id });
   }
-
-  // r: the already-filtered() result, when the caller (update()) has just computed one - avoids
-  // filtering the whole fixture list a second time in the same update cycle; falls back to
-  // computing it here when called on its own.
-  function renderResults(r) {
-    r = r || filtered();
-    var list = r.list, html = '', lastDay = '';
-    var days = {};
-    list.forEach(function (f) { days[dayOf(f)] = 1; });
-    var nDays = Object.keys(days).length;
-    $('#summary').innerHTML = list.length ? '<strong>' + list.length + '</strong> אירועים ב-<strong>' + nDays + '</strong> ימים' : '';
-    if (!list.length) {
-      $('#list').innerHTML = '<p class="empty">לא נמצאו אירועים. הגדל את הרדיוס, הרחב את טווח התאריכים או סמן עוד תחרויות.</p>';
-      return;
-    }
-    if (r.hiddenNoPos) html += '<p class="notice">' + r.hiddenNoPos + ' אירועים בלי מיקום מזוהה לא נכללים בסינון לפי מרחק.</p>';
-    var open = false;
-    list.forEach(function (f) {
-      var d = dayOf(f);
-      if (d !== lastDay) {
-        if (open) html += '</ul></section>';
-        html += '<section class="day"><h3>' + esc(fmtLong(d)) + '</h3><ul class="matches">';
-        open = true; lastDay = d;
-      }
-      html += cardHtml(f, false);
+  $$('dialog').forEach(function (dlg) {
+    dlg.addEventListener('close', function () {
+      var fromHistory = poppedByHistory; poppedByHistory = false;
+      if (!fromHistory && history.state && history.state.dlg === dlg.id) { suppressPop = true; try { history.back(); } catch (e) { suppressPop = false; } }
+      var op = dlg.__opener; dlg.__opener = null;
+      if (op && document.contains(op) && typeof op.focus === 'function') op.focus();
+      else if (op && op.getAttribute && op.getAttribute('data-ev')) { var again = $('[data-open="' + op.getAttribute('data-ev') + '"]'); if (again) again.focus(); }
     });
-    if (open) html += '</ul></section>';
-    $('#list').innerHTML = html;
-  }
-
-  $('#list').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('button.add') : null;
-    if (!b) return;
-    toggleTrip(Number(b.getAttribute('data-id')), 'list');
+    // a click on the backdrop (outside the dialog box) closes it
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
   });
 
-  // ---------- map view (Leaflet + OpenStreetMap tiles) ----------
-  // lastMapKey captures everything that changes which cities/markers should show (filters,
-  // base city, radius) but deliberately excludes S.trip - adding/removing a trip match must
-  // never move or rebuild the map, or the user loses their place after every click.
-  var mapState = { map: null, markers: null, circle: null, lastKey: null, sel: null, groups: {}, pins: {} };
-  function mapFilterKey() {
-    return JSON.stringify([S.base ? [S.base.lat, S.base.lng] : null, S.radius, S.from, S.to, S.days, S.comps]);
-  }
-  function initMap() {
-    if (mapState.map || typeof L === 'undefined') return;
-    mapState.map = L.map('map', { scrollWheelZoom: true }).setView([48, 12], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
-    }).addTo(mapState.map);
-    mapState.markers = L.layerGroup().addTo(mapState.map);
-  }
-  function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
-  // A pin's events are shown in a panel under the map (the same cards as the list) instead of a
-  // Leaflet popup - normal page flow, one typeface, no nested scrolling, and it survives re-renders.
-  function dayGroupsHtml(list) {
-    var html = '', last = '';
-    list.forEach(function (f) {
-      var d = dayOf(f);
-      if (d !== last) { if (last) html += '</ul></section>'; html += '<section class="day"><h3>' + esc(fmtLong(d)) + '</h3><ul class="matches">'; last = d; }
-      html += cardHtml(f, false);
-    });
-    return html + (last ? '</ul></section>' : '');
-  }
-  // allList: the already-filtered fixture list, when the caller (renderMap) has just computed one -
-  // avoids running filtered() a second time on every map render; falls back to computing it here
-  // when called on its own (selecting/closing a pin, outside a full renderMap pass).
-  function renderPanel(allList) {
-    var el = $('#mapPanel'), g = mapState.sel && mapState.groups[mapState.sel];
-    if (!g) { el.innerHTML = '<p class="panel-empty">לחצו על סיכה במפה כדי לראות את האירועים במקום ולהוסיף אותם לטיול.</p>'; return; }
-    var rows = g.list.slice().sort(function (a, b) { return a.dt < b.dt ? -1 : 1; });
-    var here = {}; rows.forEach(function (f) { here[f.id] = 1; });
-    // everything else inside the radius of the base city (the pin's city, set when the pin was clicked)
-    var rest = S.base ? (allList || filtered().list).filter(function (f) { return !here[f.id]; }) : [];
-    el.innerHTML = '<div class="panel-head"><div><h3><bdi dir="rtl">' + esc(g.venue || g.cityHe) + '</bdi></h3><p><bdi dir="rtl">' + (g.venue ? esc(g.cityHe) + ' · ' : '') + rows.length + ' אירועים כאן</bdi></p></div>' +
-      '<button type="button" class="panel-close" data-close aria-label="סגור">×</button></div><ul class="matches">' + rows.map(function (f) { return cardHtml(f, true); }).join('') + '</ul>' +
-      (rest.length ? '<h4 class="panel-sub">עוד ' + rest.length + ' אירועים בטווח ' + S.radius + ' ק״מ מ<bdi dir="rtl">' + esc(S.base.cityHe) + '</bdi></h4>' + dayGroupsHtml(rest.sort(function (a, b) { return a.dt < b.dt ? -1 : 1; })) : '');
-  }
-  function markSelected() {
-    Object.keys(mapState.pins).forEach(function (k) {
-      var el = mapState.pins[k].getElement(), pin = el && el.querySelector('.map-pin');
-      if (pin) pin.classList.toggle('sel', k === mapState.sel);
-    });
-  }
-  function selectPin(key) {
-    mapState.sel = key;
-    var g = mapState.groups[key];
-    var at = g && g.list.filter(hasPos)[0];
-    if (at) {
-      var place = { city: at.city, cityHe: cityHe(at), lat: at.lat, lng: at.lng };
-      if (!S.base || S.base.lat !== place.lat || S.base.lng !== place.lng) {
-        $('#base').value = place.cityHe;
-        setBase(place, place.cityHe);   // -> update() -> renderMap() re-fits the map to the radius circle
-        track('base_city_set', { city: place.city, source: 'map' });
-      }
-    }
-    renderPanel(); markSelected();
-    if (g) track('map_marker_click', { city: g.cityHe, venue: g.venue || '', match_count: g.list.length });
-    $('#mapPanel').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
-  }
-  $('#mapPanel').addEventListener('click', function (e) {
-    var t = e.target;
-    if (!t || !t.closest) return;
-    var add = t.closest('button.add');
-    if (add) { toggleTrip(Number(add.getAttribute('data-id')), 'map'); return; }
-    if (t.closest('[data-close]')) {
-      mapState.sel = null; renderPanel(); markSelected();
-      $('#map').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
-    }
-  });
-  // list: the already-filtered() fixtures, when the caller (update()) has just computed them -
-  // avoids a second full pass over the fixture list in the same update cycle.
-  function renderMap(list) {
-    if (!mapState.map) return;
-    var key = mapFilterKey();
-    var keyChanged = key !== mapState.lastKey;
-    mapState.lastKey = key;
-    mapState.markers.clearLayers();
-    mapState.pins = {}; mapState.groups = {};
-    if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
-    list = list || filtered().list;
-    var byCity = mapState.groups;
-    // pin by the exact stadium when we know it (so e.g. Real Madrid's Bernabéu and
-    // Atlético's Metropolitano get separate pins, not one shared city dot), falling back
-    // to the city-level position - and possibly a shared pin with other such fixtures -
-    // for a fixture whose stadium wasn't successfully geocoded
-    list.forEach(function (f) {
-      var precise = f.venue_lat != null && f.venue_lng != null;
-      var lat = precise ? f.venue_lat : f.lat, lng = precise ? f.venue_lng : f.lng;
-      if (lat == null || lng == null) return;
-      var k = lat + ',' + lng;
-      if (!byCity[k]) byCity[k] = { cityHe: cityHe(f), venue: precise ? f.venue : null, lat: lat, lng: lng, list: [] };
-      byCity[k].list.push(f);
-    });
-    var keys = Object.keys(byCity);
-    keys.forEach(function (k) {
-      var g = byCity[k];
-      var icon = L.divIcon({
-        className: '', html: '<div class="map-pin"><span>' + g.list.length + '</span></div>',
-        iconSize: [28, 28], iconAnchor: [14, 26]
-      });
-      mapState.pins[k] = L.marker([g.lat, g.lng], { icon: icon, title: g.venue || g.cityHe })
-        .on('click', function () { selectPin(k); })
-        .addTo(mapState.markers);
-    });
-    if (mapState.sel && !byCity[mapState.sel]) mapState.sel = null;
-    renderPanel(list); markSelected();
-    if (S.base) {
-      mapState.circle = L.circle([S.base.lat, S.base.lng], { radius: S.radius * 1000, color: '#2454E6', weight: 2, fillOpacity: .1 }).addTo(mapState.map);
-      if (keyChanged) mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
-    } else if (keys.length && keyChanged) {
-      mapState.map.fitBounds(keys.map(function (k) { return [byCity[k].lat, byCity[k].lng]; }), { padding: [30, 30], maxZoom: 6 });
-    }
-  }
-  // ---------- top-level navigation: Discover / Plan / My trip ----------
-  // "My trip" is a real dedicated screen only on mobile - on desktop the trip panel is a permanent
-  // sidebar (as it always was), so selecting it there just scrolls it into view instead of hiding
-  // Discover/Plan. This is the one place mobile and desktop genuinely diverge in what a tab means.
-  function isMobile() { return window.matchMedia('(max-width:760px)').matches; }
-  function setTabPressed(tab) {
-    document.querySelectorAll('[data-tab]').forEach(function (b) {
-      var on = b.getAttribute('data-tab') === tab;
-      if (b.hasAttribute('aria-selected')) b.setAttribute('aria-selected', String(on));
-    });
-  }
-  function applyTab() {
-    if (!$('#filterTrigger')) return;   // defensive: skip if the page is mid-navigation/teardown
-    var mobile = isMobile();
-    $('#results').style.display = S.tab === 'discover' ? '' : 'none';
-    $('#smartWrap').style.display = S.tab === 'plan' ? '' : 'none';
-    $('#trip').style.display = (mobile && S.tab !== 'trip') ? 'none' : '';
-    // the filter-sheet trigger lives outside #results (so it isn't hidden along with it) - only
-    // meaningful in Discover, and only exists at all on mobile (hidden by CSS above 760px)
-    $('#filterTrigger').style.display = S.tab === 'discover' ? '' : 'none';
-    if (S.tab !== 'discover') closeFilters();
-    app.classList.toggle('is-plan', S.tab === 'plan');
-    setTabPressed(S.tab);
-  }
-  function goTab(tab, source) {
-    if (tab === 'trip' && !isMobile()) {
-      $('#trip').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
-      return;
-    }
-    if (S.tab === tab) return;
-    S.tab = tab;
-    applyTab();   // also closes the filter sheet when leaving Discover
-    if (tab === 'plan') { initSmart(); renderSmartResult(); }
-    if (tab === 'discover' && S.discoverMode === 'map') { initMap(); requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); }); }
-    if (isMobile()) window.scrollTo({ top: 0, behavior: 'auto' });
-    track('tab_change', { tab: tab, source: source || 'unknown' });
-  }
-  document.querySelectorAll('#tabbar, #bottomNav').forEach(function (nav) {
-    nav.addEventListener('click', function (e) {
-      var b = e.target.closest ? e.target.closest('[data-tab]') : null;
-      if (b) goTab(b.getAttribute('data-tab'), nav.id);
-    });
-  });
-  $('.jump').addEventListener('click', function () { goTab('trip', 'header'); });
-  applyTab();
-  window.addEventListener('resize', debounce(applyTab, 150));
-
-  // ---------- Discover-internal: List / Map ----------
-  $('#discoverToggle').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('button.dtab') : null;
-    if (!b) return;
-    S.discoverMode = b.getAttribute('data-mode');
-    document.querySelectorAll('#discoverToggle .dtab').forEach(function (v) { v.setAttribute('aria-pressed', v === b ? 'true' : 'false'); });
-    $('#list').style.display = S.discoverMode === 'list' ? '' : 'none';
-    $('#mapWrap').style.display = S.discoverMode === 'map' ? '' : 'none';
-    if (S.discoverMode === 'map') {
-      initMap();
-      requestAnimationFrame(function () { mapState.map.invalidateSize(); renderMap(); });
-    }
-    track('view_toggle', { view: S.discoverMode });
-  });
-
-  // ---------- mobile filter sheet ----------
-  // Filters apply live (same as desktop) rather than through a separate draft copy - simpler and
-  // consistent with how every other control on the site already behaves. "Apply" is mainly a clear,
-  // reachable way to close the sheet and see the (already up to date) result count; "Reset" is the
-  // one true undo, back to the site's defaults.
-  function openFilters() {
-    $('#filters').classList.add('sheet-open'); $('#filtersBackdrop').hidden = false;
-    document.body.classList.add('sheet-locked');
-    $('#filters').querySelector('input,button,select,a').focus();
-  }
-  function closeFilters() {
-    $('#filters').classList.remove('sheet-open'); $('#filtersBackdrop').hidden = true;
-    document.body.classList.remove('sheet-locked');
-  }
-  $('#filterTrigger').addEventListener('click', function () { openFilters(); track('filters_sheet_open', {}); });
-  $('#filtersClose').addEventListener('click', closeFilters);
-  $('#filtersBackdrop').addEventListener('click', closeFilters);
-  $('#filtersApply').addEventListener('click', closeFilters);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('#filters').classList.contains('sheet-open')) closeFilters(); });
-  $('#filtersReset').addEventListener('click', function () {
-    $('#base').value = ''; setBase(null, '');
-    S.radius = 150; $('#radius').value = 150; $('#radiusOut').textContent = 150;
-    S.from = isoLocal(today); S.to = addDays(isoLocal(today), 45); $('#from').value = S.from; $('#to').value = S.to;
-    Object.keys(S.days).forEach(function (k) { S.days[k] = 1; });
-    document.querySelectorAll('#days input').forEach(function (i) { i.checked = true; });
-    comps.forEach(function (c) { S.comps[c.id] = true; });
-    document.querySelectorAll('#comps input[data-comp]').forEach(function (i) { i.checked = true; });
-    saveFilterCtx();
-    update();
-    track('filters_reset', {});
-  });
-
-  // ---------- trip ----------
-  function toggleTrip(id, source) {
-    var i = S.trip.indexOf(id);
-    var added = i === -1;
-    if (added) S.trip.push(id); else S.trip.splice(i, 1);
-    saveTrip(); update();
-    var f = byId[id];
-    if (f) { var p = fixtureTrackParams(f); p.source = source || 'unknown'; track(added ? 'add_to_trip' : 'remove_from_trip', p); }
-  }
-
-  function tripSorted() { return S.trip.map(function (id) { return byId[id]; }).sort(function (a, b) { return a.dt < b.dt ? -1 : 1; }); }
-
-  function hopInfo(prev, cur) {
-    var sameDay = dayOf(prev) === dayOf(cur);
-    var gap = Math.round((parseDay(dayOf(cur)) - parseDay(endDay(prev))) / 86400000);
-    var parts = [], cls = '';
-    if (isEvent(prev) || isEvent(cur)) {
-      // a multi-day event has no kickoff time to compare, so only day overlap can clash
-      if (gap < 0) { parts.push('חופף בתאריכים לאירוע הקודם'); cls = 'clash'; }
-      else if (gap === 0) parts.push('אותו יום');
-      else if (gap === 1) parts.push('למחרת');
-      else parts.push(gap + ' ימים אחר כך');
-    } else if (sameDay) {
-      var a = minutes(prev), b = minutes(cur);
-      if (a == null || b == null) { parts.push('אותו יום, שעה לא ידועה'); cls = 'clash'; }
-      else if (b - a < 180) { parts.push('חפיפה בין האירועים'); cls = 'clash'; }
-      else { parts.push('אותו יום'); }
-    } else if (gap === 1) parts.push('למחרת');
-    else parts.push(gap + ' ימים אחר כך');
-    return { text: parts.join(' · '), cls: cls };
-  }
-
-  function flightSearch(text) { return 'https://www.google.com/travel/flights?q=' + encodeURIComponent(text); }
-
-  function bookingLinks(list) {
-    var first = list[0], last = list[list.length - 1];
-    var d1 = dayOf(first), d2 = list.reduce(function (m, f) { return endDay(f) > m ? endDay(f) : m; }, endDay(last));
-    var origin = resolveOrigin(S.origin);
-    var flights;
-    if (first.city && last.city && first.city !== last.city) {
-      // different first/last match cities: one-way out + one-way back (multi-city), not a round trip
-      flights = [
-        { label: 'טיסת הלוך: ' + origin + ' ← ' + (first.city_he || first.city), url: flightSearch('Flights from ' + origin + ' to ' + first.city + ' on ' + d1) },
-        { label: 'טיסת חזור: ' + (last.city_he || last.city) + ' ← ' + origin, url: flightSearch('Flights from ' + last.city + ' to ' + origin + ' on ' + addDays(d2, 1)) }
-      ];
-    } else {
-      // return the day AFTER the last event (same as the multi-city case below and the hotel
-      // checkout math) - a same-day flight right after an evening event isn't realistic, and
-      // disagreeing with the hotel link on the trip's last night is the actual bug (R3)
-      flights = [
-        { label: 'חיפוש טיסות', url: flightSearch('Flights from ' + origin + ' to ' + (first.city || '') + ' on ' + d1 + ' through ' + addDays(d2, 1)) }
-      ];
-    }
-    var cities = [], seen = {};
-    list.forEach(function (f) {
-      if (!f.city) return;
-      if (!seen[f.city]) { seen[f.city] = { city: f.city, cityHe: f.city_he || f.city, a: dayOf(f), b: endDay(f), lat: f.venue_lat, lng: f.venue_lng }; cities.push(seen[f.city]); }
-      else { if (endDay(f) > seen[f.city].b) seen[f.city].b = endDay(f); if (seen[f.city].lat == null && f.venue_lat != null) { seen[f.city].lat = f.venue_lat; seen[f.city].lng = f.venue_lng; } }
-    });
-    // the return flight always covers the trip's true last day (d2), even for an event whose city
-    // is unknown (excluded from `cities` above) - if that leaves the last known hotel checking out
-    // before the flight home, stretch it to match, so the two links never disagree on when the
-    // trip actually ends
-    if (cities.length && cities[cities.length - 1].b < d2) cities[cities.length - 1].b = d2;
-    // when we know a stadium's exact spot, centre the hotel search there (< 3km) instead of
-    // just searching the city name - closer results for the actual match, not just downtown
-    var hotels = cities.map(function (c) {
-      var url = 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(c.city) + '&checkin=' + c.a + '&checkout=' + addDays(c.b, 1);
-      if (c.lat != null && c.lng != null) url += '&latitude=' + c.lat + '&longitude=' + c.lng + '&distance=3000';
-      return { city: c.cityHe, url: url };
-    });
-    return { flights: flights, hotels: hotels };
-  }
-
-  function tripText(list) {
-    return list.map(function (f) {
-      var when = isEvent(f) ? dayOf(f) + (endDay(f) !== dayOf(f) ? ' עד ' + endDay(f) : '') : dayOf(f) + ' ' + (f.status === 'TBD' ? '(שעה לא מאושרת)' : f.dt.slice(11, 16));
-      return when + '  ' + titleHe(f).replace(' – ', ' - ') + '  (' + (f.city_he || f.city || 'מיקום עדיין לא ידוע') + ', ' + (f.comp_he || f.comp) + ')';
-    }).join('\n');
-  }
-
-  function renderTrip() {
-    var list = tripSorted(), body = $('#tripBody');
-    document.querySelectorAll('.js-trip-count').forEach(function (el) { el.textContent = list.length; });
-    if (!list.length) {
-      body.innerHTML = '<p class="empty">עוד אין אירועים בטיול. לחץ על "הוסף לטיול" ליד אירוע, והוא יופיע כאן עם המרחקים בין האירועים.</p>';
-      return;
-    }
-    var html = '';
-    // inclusive calendar-day span from the first event's day to the last event's last day - e.g.
-    // three events on 9/10/11 October is a 3-day span, not 4 (a stray "+2" here used to overcount
-    // by a day; this number is also what bookingLinks() below books as hotel nights, so it must
-    // match: arrive the first event's day, leave the day after the last one = span nights).
-    var lastEnd = list.reduce(function (m, f) { return endDay(f) > m ? endDay(f) : m; }, endDay(list[list.length - 1]));
-    var span = Math.round((parseDay(lastEnd) - parseDay(dayOf(list[0]))) / 86400000) + 1;
-    html += '<p class="tripsum"><strong>' + list.length + '</strong> אירועים ב-<strong>' + span + '</strong> ימים</p>';
-    html += '<p class="tripnote remind">השעות המוצגות הן שעון מקומי באתר כל אירוע (לא שעון ישראל). מומלץ לוודא את זמני ותאריכי האירועים באתרים הרשמיים לפני רכישת טיסות ולינה - חלק מהשעות והתאריכים עדיין לא סופיים.</p>';
-    list.forEach(function (f, i) {
-      if (i > 0) { var h = hopInfo(list[i - 1], f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + '</div>'; }
-      var d = parseDay(dayOf(f));
-      var homeLogo = f.home_logo ? '<img class="crest" src="' + esc(f.home_logo) + '" alt="" loading="lazy">' : '';
-      var awayLogo = f.away_logo ? '<img class="crest" src="' + esc(f.away_logo) + '" alt="" loading="lazy">' : '';
-      var ev = isEvent(f), endD = parseDay(endDay(f));
-      html += '<div class="stub"><div class="date"><span class="num">' + d.getDate() + '</span><span class="mon">' + esc(d.toLocaleDateString('he-IL', { month: 'short' })) + '</span><span class="wd">' + (ev && endDay(f) !== dayOf(f) ? 'עד ' + endD.getDate() + '.' + (endD.getMonth() + 1) : HE_DAYS_FULL[d.getDay()]) + '</span></div>' +
-        '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
-        (ev ? '<div class="t">' + flagHtml(f) + '<bdi dir="rtl" class="tname">' + esc(titleHe(f)) + '</bdi></div>'
-            : '<div class="t">' + homeLogo + '<bdi dir="rtl" class="tname">' + esc(f.home_he || f.home) + '</bdi><span class="vs">–</span><bdi dir="rtl" class="tname">' + esc(f.away_he || f.away) + '</bdi>' + awayLogo + '</div>') +
-        '<div class="s">' + tagHtml(f) + (ev ? rangeHtml(f) : f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · ' + placeHtml(f) + detailBtn(f) + '</div></div></div>';
-    });
-    var links = bookingLinks(list);
-    html += '<div class="tools">' +
-      '<label class="field"><span>טיסה מ-</span><div class="combo-wrap"><input id="origin" type="text" autocomplete="off" value="' + esc(S.origin) + '"><div class="combo-menu" id="originMenu"></div></div></label>' +
-      links.flights.map(function (f) { return '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(f.url) + '"><bdi dir="rtl">' + esc(f.label) + '</bdi></a>'; }).join('') +
-      links.hotels.map(function (h) { return '<a class="btn" target="_blank" rel="noopener" href="' + esc(h.url) + '">חיפוש לינה: <bdi dir="rtl">' + esc(h.city) + '</bdi></a>'; }).join('') +
-      '<button type="button" class="btn" id="copyTrip">העתק את הטיול כטקסט</button>' +
-      '<button type="button" class="btn" id="clearTrip">נקה את הטיול</button>' +
-      '</div><p class="tripnote">קישורי הטיסה והלינה פותחים חיפוש כללי לפי התאריכים של האירועים (חיפוש הלינה ממוקד סביב האצטדיון עצמו כשהמיקום המדויק שלו ידוע, לא רק מרכז העיר). כשהעיר הראשונה והאחרונה בטיול שונות, מוצגות שתי טיסות חד-כיווניות (הלוך לעיר הראשונה, חזור מהעיר האחרונה) במקום טיסת הלוך-חזור רגילה - ותאריכי הטיסה כדאי להתאים ידנית.</p>';
-    body.innerHTML = html;
-    combobox($('#origin'), $('#originMenu'), airportItems, {
-      onSelect: function (it) { S.origin = it.label; renderTrip(); track('origin_airport_selected', { airport: it.label }); }
-    });
-    $('#origin').addEventListener('blur', function (e) {
-      var v = e.target.value.trim() || 'Ben Gurion International Airport – Tel Aviv, ישראל (TLV)';
-      if (v !== S.origin) { S.origin = v; renderTrip(); }
-    });
-  }
-
-  $('#tripBody').addEventListener('click', function (e) {
-    var t = e.target;
-    if (t.getAttribute('data-rm')) { toggleTrip(Number(t.getAttribute('data-rm')), 'trip_panel'); return; }
-    if (t.id === 'clearTrip') { track('clear_trip', { trip_size: S.trip.length }); S.trip = []; saveTrip(); update(); return; }
-    if (t.id === 'copyTrip') {
-      track('copy_trip', { trip_size: S.trip.length });
-      var txt = tripText(tripSorted());
-      var done = function () { t.textContent = 'הועתק ✓'; };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt); done(); });
-      else { fallbackCopy(txt); done(); }
-    }
-  });
-  function fallbackCopy(txt) {
-    var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); } catch (e) { }
-    document.body.removeChild(ta);
-  }
-  // small live counters on the mobile filter sheet trigger/apply button, so closing the sheet (or
-  // deciding not to open it) still tells you how many events your current filters match
-  function updateFilterBadge(n) {
-    var badge = $('#filterBadge'); badge.textContent = n; badge.hidden = false;
-    $('#filtersApplyCount').textContent = n;
-  }
-  function update() {
-    var r = filtered();   // computed once and reused below, instead of each render re-filtering
-    renderResults(r);
-    renderTrip();
-    if (S.tab === 'discover' && S.discoverMode === 'map') renderMap(r.list);
-    if (S.tab === 'plan') renderSmartResult();
-    updateFilterBadge(r.list.length);
-  }
-
-  // ---------- smart planner view (rules in planner.js; this is only the UI) ----------
-  var smart = { ready: false, result: null, sel: 0, params: null };
-  function destKey(f) { return f.country === 'United Kingdom' ? 'England' : f.country; }
-  function fmtRange(a, b) {
-    var x = parseDay(a), y = parseDay(b), o = { day: 'numeric', month: 'long' };
-    return x.toLocaleDateString('he-IL', o) + ' – ' + y.toLocaleDateString('he-IL', o);
-  }
-  // the "יעד" select's empty placeholder looks the same whether nothing is chosen or a CITY is
-  // active (city search doesn't use this dropdown at all) - makes an active city destination look
-  // like something's missing. Show it explicitly, and call the control "change destination" instead
-  // of "choose destination" while a destination is in fact already active.
-  function updateSmartDestUI() {
-    var active = !$('#smartCountry').value && smart.city;
-    $('#smartDestLabel').textContent = active ? 'שינוי יעד' : 'יעד';
-    $('#smartActiveDest').hidden = !active;
-    if (active) $('#smartActiveDest').textContent = 'יעד פעיל: ' + smart.city.cityHe;
-  }
-  function initSmart() {
-    if (smart.ready) return;
-    smart.ready = true;
-    var count = {}, cities = [], teams = {};
-    smart.footballLast = fixtures.reduce(function (m, f) { return !isEvent(f) && dayOf(f) > m ? dayOf(f) : m; }, '');
-    fixtures.forEach(function (f) { if (f.country && hasPos(f) && f.country !== 'Europe') count[destKey(f)] = (count[destKey(f)] || 0) + 1; });
-    // team names for the free-text "with an X match" preference (football only - the other sports
-    // are individual/national events, not club-team fixtures). A national team's fixtures use the
-    // country's own name ("England" vs. "France") - excluded here, since otherwise just naming a
-    // destination country (e.g. "5 days in England") would be mistaken for "with an England match".
-    fixtures.forEach(function (f) {
-      if (f.sport) return;
-      if (f.home_he && !teams[f.home] && !HE_COUNTRY[f.home]) teams[f.home] = f.home_he;
-      if (f.away_he && !teams[f.away] && !HE_COUNTRY[f.away]) teams[f.away] = f.away_he;
-    });
-    smart.teams = Object.keys(teams).map(function (en) { return { en: en, he: teams[en] }; });
-    smart.countries = Object.keys(count).map(function (k) { return { key: k, he: HE_COUNTRY[k] || k, n: count[k] }; })
-      .sort(function (a, b) { return a.he.localeCompare(b.he, 'he'); });
-    $('#smartCountry').innerHTML = '<option value="">בחרו יעד</option>' + smart.countries.map(function (c) { return '<option value="' + esc(c.key) + '">' + esc(c.he) + '</option>'; }).join('');
-    Object.keys(cityMap).forEach(function (l) { cities.push({ he: cityMap[l].cityHe, place: cityMap[l] }); });
-    smart.cities = cities;
-    // months from this month to the last month we have data for
-    var last = fixtures.reduce(function (m, f) { return endDay(f) > m ? endDay(f) : m; }, S.from);
-    var d = new Date(), opts = '';
-    d = new Date(d.getFullYear(), d.getMonth(), 1);
-    while (isoLocal(d).slice(0, 7) <= last.slice(0, 7)) {
-      opts += '<option value="' + isoLocal(d).slice(0, 7) + '">' + esc(d.toLocaleDateString('he-IL', { month: 'long', year: 'numeric' })) + '</option>';
+  /* ---------- destination/date form (first visit and in-place editing) ---------- */
+  var forms = {};   // prefix -> {selected}
+  function monthOptions() {
+    var out = [], d = new Date(); d = new Date(d.getFullYear(), d.getMonth(), 1);
+    for (var i = 0; i < 9; i++) {
+      out.push({ value: d.getFullYear() + '-' + M.pad(d.getMonth() + 1), label: M.HE_MONTHS[d.getMonth()] + ' ' + d.getFullYear() });
       d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
     }
-    $('#smartMonth').innerHTML = opts;
-    // reuse Discover's resolved destination/month as Plan's starting point (R4) - a city stays a
-    // city (never widened to its whole country), and this only runs once so it can't clobber a
-    // draft the visitor has already started typing into the plan form
-    if (S.base) {
-      smart.city = S.base;
-      var fromMonth = S.from.slice(0, 7);
-      if ($('#smartMonth').querySelector('option[value="' + fromMonth + '"]')) $('#smartMonth').value = fromMonth;
-      $('#smartUnderstood').textContent = 'יעד מ"חיפוש אירועים": ' + S.base.cityHe + ' (אפשר לשנות למטה, או להזין טקסט חדש).';
-    }
-    updateSmartDestUI();
-    $('#smartCountry').addEventListener('change', updateSmartDestUI);
-    $('#smartCats').innerHTML = CATEGORIES.map(function (c) {
-      return '<label class="chip"><input type="checkbox" data-cat="' + esc(c.key) + '" checked><span>' + esc(c.he) + '</span></label>';
-    }).join('');
-    $('#smartGo').addEventListener('click', function () { runSmart('form'); });
-    $('#smartText').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runSmartText(); } });
-    // typing in the free-text box + Enter, or leaving the box, fills the form from the text
-    $('#smartText').addEventListener('change', runSmartText);
-    $('#smartResult').addEventListener('click', function (e) {
-      var t = e.target;
-      if (!t || !t.closest) return;
-      var add = t.closest('button.add');
-      if (add) { toggleTrip(Number(add.getAttribute('data-id')), 'smart'); return; }
-      var alt = t.closest('[data-alt]');
-      if (alt) { smart.sel = Number(alt.getAttribute('data-alt')); renderSmartResult(); return; }
-      if (t.closest('#planAddAll')) {
-        var o = smart.result && smart.result.options[smart.sel], n = 0;
-        if (!o) return;
-        o.days.forEach(function (d) { if (d.id && S.trip.indexOf(d.id) === -1) { S.trip.push(d.id); n++; } });
-        saveTrip(); update();
-        track('smart_plan_add_all', { events: n });
+    return out;
+  }
+  function destItems(q) {
+    return M.suggestDestinations(dests, q, 8).map(function (d) { return { label: d.label, sub: d.kind === 'country' ? '' : '', value: d }; });
+  }
+  function setErr(id, msg) { var el = $('#' + id); if (!el) return; el.hidden = !msg; el.textContent = msg || ''; }
+  function destHintFor(d) {
+    return d.kind === 'country' ? t('form.destResolvedCountry', { name: d.countryHe }) : t('form.destResolvedCity', { name: d.labelHe, country: d.countryHe });
+  }
+  function bindContextForm(prefix, onSubmit) {
+    var form = $('#' + prefix + 'Form'), input = $('#' + prefix + 'Dest'); if (!form || !input) return;
+    var fs = forms[prefix] = { selected: null };
+    var curCtx = store.get().context;
+    if (curCtx.dest && input.value) { var m = M.matchDestination(dests, input.value); if (m.status === 'resolved') fs.selected = m.dest; }
+    function applyResolved(d) { fs.selected = d; setErr(prefix + 'DestErr', ''); input.removeAttribute('aria-invalid'); $('#' + prefix + 'DestHint').textContent = destHintFor(d); }
+    combo(input, {
+      items: destItems, emptyText: t('form.noResults'), announce: function (txt) { announce(txt); }, countWord: '',
+      onSelect: function (it) { applyResolved(it.value); },
+      onInput: function (text) {
+        if (fs.selected && fs.selected.label !== text) fs.selected = null;
+        setErr(prefix + 'DestErr', ''); input.removeAttribute('aria-invalid');
+        $('#' + prefix + 'DestHint').textContent = t('form.destHint');
       }
     });
+    $$('input[name="' + prefix + 'Mode"]', form).forEach(function (r) {
+      r.addEventListener('change', function () { var fx = this.value === 'fixed'; $('#' + prefix + 'Fixed').hidden = !fx; $('#' + prefix + 'Flex').hidden = fx; });
+    });
+    var rad = $('#' + prefix + 'Radius');
+    if (rad) rad.addEventListener('input', function () { $('#' + prefix + 'RadiusOut').textContent = t('form.radiusKm', { n: rad.value }); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var res = readContextForm(prefix); if (!res) return;
+      onSubmit(res);
+    });
+    var br = $('#' + prefix + 'Browse');
+    if (br) br.addEventListener('click', function () {
+      var dres = readDates(prefix); if (!dres.ok) { if (dres.msg) { setErr(prefix + 'DatesErr', dres.msg); } return; }
+      onSubmit({ dest: null, dates: dres.dates, browse: true, radiusKm: null });
+    });
+    var cn = $('#' + prefix + 'Cancel'); if (cn) cn.addEventListener('click', function () { $('#ctxDialog').close(); });
   }
-  function runSmartText() {
-    var text = $('#smartText').value.trim();
-    // clearing the free-text box must drop any preference it set (e.g. a team) - not leave it
-    // silently applied to whatever gets generated next from the form fields alone
-    if (!text) { smart.team = null; $('#smartUnderstood').textContent = ''; updateSmartDestUI(); return; }
-    var r = Planner.parse(text, { countries: smart.countries, cities: smart.cities, teams: smart.teams, today: new Date() });
-    var got = [], missing = [];
-    smart.team = r.team;
-    if (r.city) { got.push('יעד: ' + r.city.he); $('#smartCountry').value = ''; smart.city = r.city.place; }
-    else { smart.city = null; }
-    if (r.country && !r.city) { got.push('יעד: ' + (HE_COUNTRY[r.country] || r.country)); $('#smartCountry').value = r.country; }
-    if (!r.country && !r.city) missing.push('יעד');
-    if (r.month) {
-      var ym = r.year + '-' + ('0' + r.month).slice(-2);
-      if ($('#smartMonth').querySelector('option[value="' + ym + '"]')) { $('#smartMonth').value = ym; got.push('חודש: ' + new Date(r.year, r.month - 1, 1).toLocaleDateString('he-IL', { month: 'long' })); }
-      else missing.push('חודש (אין לנו נתונים ל-' + new Date(r.year, r.month - 1, 1).toLocaleDateString('he-IL', { month: 'long' }) + ')');
-    } else missing.push('חודש');
-    $('#smartPart').value = r.part;
-    var PART_LABEL = { start: 'תחילת החודש', mid: 'אמצע החודש', end: 'סוף החודש', 'start-mid': 'תחילת עד אמצע החודש', 'mid-end': 'אמצע עד סוף החודש' };
-    if (r.part !== 'all') got.push(PART_LABEL[r.part] || r.part);
-    if (r.weekend) { $('#smartDays').value = 'weekend'; got.push('סוף שבוע (שישי–ראשון)'); }
-    else if (r.days) {
-      // "weekend" isn't a plain day-count option, so it's excluded from the nearest-length match below
-      var opt = Array.prototype.slice.call($('#smartDays').options).map(function (o) { return Number(o.value); }).filter(function (n) { return !isNaN(n); });
-      var nearest = opt.reduce(function (a, b) { return Math.abs(b - r.days) < Math.abs(a - r.days) ? b : a; });
-      $('#smartDays').value = String(nearest); got.push('אורך: ' + nearest + ' ימים');
+  function readDates(prefix) {
+    var mode = ($('input[name="' + prefix + 'Mode"]:checked') || {}).value || 'fixed';
+    setErr(prefix + 'DatesErr', '');
+    if (mode === 'flexible') {
+      var ym = $('#' + prefix + 'Month').value, n = Number($('#' + prefix + 'Days').value) || 3;
+      var from = ym + '-01', to = M.monthEnd(ym);
+      if (to < today()) { setErr(prefix + 'DatesErr', t('form.datesPast')); return { ok: false }; }
+      if (from < today()) from = today();
+      return { ok: true, dates: { mode: 'flexible', from: from, to: to, days: n, weekdays: null } };
     }
-    if (r.team) got.push('כולל משחק של ' + r.team.he);
-    document.querySelectorAll('#smartCats input').forEach(function (i) { i.checked = !r.cats.length || r.cats.indexOf(i.getAttribute('data-cat')) !== -1; });
-    if (r.cats.length) got.push('ענפים: ' + r.cats.map(function (k) { return (CATEGORIES.filter(function (c) { return c.key === k; })[0] || { he: k }).he; }).join(', '));
-    $('#smartUnderstood').textContent = (got.length ? 'הבנתי - ' + got.join(' · ') + '. ' : '') + (missing.length ? 'חסר: ' + missing.join(', ') + ' - השלימו בשדות למטה.' : 'אפשר לתקן בשדות למטה.');
-    updateSmartDestUI();
-    if (!missing.length) runSmart('text');
+    var f = $('#' + prefix + 'From').value, to2 = $('#' + prefix + 'To').value;
+    if (!M.isISODate(f) || !M.isISODate(to2)) { setErr(prefix + 'DatesErr', t('form.datesMissing')); return { ok: false, msg: t('form.datesMissing') }; }
+    if (to2 < f) { setErr(prefix + 'DatesErr', t('form.datesOrder')); return { ok: false, msg: t('form.datesOrder') }; }
+    if (to2 < today()) { setErr(prefix + 'DatesErr', t('form.datesPast')); return { ok: false, msg: t('form.datesPast') }; }
+    return { ok: true, dates: { mode: 'fixed', from: f, to: to2 } };
   }
-  // competition prestige (real, structural fact from the data - which league/cup an event belongs
-  // to - not an invented "excitement" score) so the planner can prefer the more notable of two
-  // otherwise-similar same-day options. 0-3, higher = more prestigious. Unlisted competitions (lower
-  // domestic divisions, regular ATP/WTA/PDC tour stops) default to 0 - not a penalty, just no bonus.
-  var COMP_TIER = {
-    'Champions League': 3, 'Premier League': 3, 'La Liga': 3, 'Bundesliga': 3, 'Serie A': 3, 'Ligue 1': 3,
-    'ATP Finals': 3, 'WTA Finals': 3, 'Davis Cup Finals': 3, 'Next Gen ATP Finals': 3, 'PDC Majors': 3,
-    'Europa League': 2, 'Conference League': 2, 'Eredivisie': 2, 'Primeira Liga': 2, 'Championship': 2, 'UEFA Nations League': 2,
-    'FA Cup': 1, 'Copa del Rey': 1, 'DFB-Pokal': 1, 'Coupe de France': 1, 'Coppa Italia': 1, 'KNVB Beker': 1, 'Puchar Polski': 1, 'Taça de Portugal': 1,
-    'Segunda': 1, '2. Bundesliga': 1, 'Serie B': 1, 'Ligue 2': 1, 'Ekstraklasa': 1, 'League One': 1
-  };
-  function compTier(f) { return COMP_TIER[f.comp] || 0; }
-  // a short, honest title for a proposed option - derived from real computed facts about the chosen
-  // events (same city/country/competition, all-European club competitions, sport mix), never an
-  // invented "how exciting" judgment. Returns null when nothing distinctive stands out.
-  function planLabel(days) {
-    var evs = days.filter(function (d) { return d.id; }).map(function (d) { return byId[d.id]; });
-    if (evs.length < 2) return null;
-    var cities = {}, countries = {}, sports = {}, comps = {}, allEurope = true;
-    evs.forEach(function (f) {
-      if (f.city_he || f.city) cities[f.city_he || f.city] = 1;
-      if (f.country) countries[f.country] = 1;
-      sports[sportIdOf(f.sport)] = 1;
-      comps[f.comp_he || f.comp] = 1;
-      if (f.country !== 'Europe') allEurope = false;
-    });
-    var cityKeys = Object.keys(cities), countryKeys = Object.keys(countries), sportKeys = Object.keys(sports), compKeys = Object.keys(comps);
-    if (allEurope) return 'על טהרת אירופה' + (cityKeys.length === 1 ? ' ב' + cityKeys[0] : '');
-    if (compKeys.length === 1) return 'כולו ' + compKeys[0];
-    if (sportKeys.length > 1) return 'שילוב ענפים: ' + sportKeys.map(function (k) { return SPORT_REGISTRY[k].he; }).join(' ו');
-    if (cityKeys.length === 1) return 'הכול ב' + cityKeys[0];
-    if (countryKeys.length === 1) return 'סיור ב' + (HE_COUNTRY[countryKeys[0]] || countryKeys[0]);
-    return null;
+  function readContextForm(prefix) {
+    var input = $('#' + prefix + 'Dest'), text = input.value.trim(), fs = forms[prefix] || {}, dest = null;
+    if (!text) { failDest(prefix, t('form.destRequired')); return null; }
+    if (fs.selected && fs.selected.label === text) dest = fs.selected;
+    else {
+      var m = M.matchDestination(dests, text);
+      if (m.status === 'resolved') dest = m.dest;
+      else { failDest(prefix, m.status === 'ambiguous' ? t('form.destAmbiguous') : m.status === 'unresolved' ? t('form.destUnresolved') : t('form.destUnknown')); return null; }
+    }
+    var dres = readDates(prefix); if (!dres.ok) return null;
+    var rad = $('#' + prefix + 'Radius');
+    return { dest: dest, dates: dres.dates, browse: false, radiusKm: rad ? Number(rad.value) : null };
   }
-  // single part -> [firstDay, lastDay]; a hyphenated compound ("mid-end") spans from the first
-  // part's start to the second part's end - see the matching parse() fix in planner.js
-  function monthPartRange(part, lastD) {
-    var R = { start: [1, 10], mid: [11, 20], end: [21, lastD] };
-    var keys = part.split('-'), a = R[keys[0]] || [1, lastD], b = R[keys[keys.length - 1]] || a;
-    return [a[0], b[1]];
+  function failDest(prefix, msg) { var input = $('#' + prefix + 'Dest'); setErr(prefix + 'DestErr', msg); input.setAttribute('aria-invalid', 'true'); input.focus(); }
+  function destToState(d) {
+    if (!d) return null;
+    return d.kind === 'country' ? { kind: 'country', key: d.key, country: d.country, countryHe: d.countryHe }
+      : { kind: 'city', key: d.key, city: d.city || d.labelEn, cityHe: d.cityHe || d.labelHe, country: d.country, countryHe: d.countryHe, lat: d.lat, lng: d.lng };
   }
-  function runSmart(source) {
-    var country = $('#smartCountry').value, ym = $('#smartMonth').value, part = $('#smartPart').value;
-    var durationVal = $('#smartDays').value, weekend = durationVal === 'weekend';
-    var D = weekend ? 3 : Number(durationVal), startWeekday = weekend ? 5 : null;   // Friday=5
-    var maxHop = Number($('#smartHop').value);
-    var cats = Array.prototype.slice.call(document.querySelectorAll('#smartCats input:checked')).map(function (i) { return i.getAttribute('data-cat'); });
-    var city = country ? null : smart.city;
-    if (!country && !city) { smart.result = { error: 'בחרו יעד (מדינה) כדי שנוכל להציע מסלול.' }; renderSmartResult(); return; }
-    var y = Number(ym.slice(0, 4)), m = Number(ym.slice(5, 7)), lastD = new Date(y, m, 0).getDate();
-    var pr = monthPartRange(part, lastD);
-    var from = ym + '-' + ('0' + pr[0]).slice(-2), to = ym + '-' + ('0' + pr[1]).slice(-2);
-    if (from < S.from) from = S.from;                                   // never plan into the past
-    // a city search reuses the SAME base-city radius the visitor already set in Discover (S.radius)
-    // instead of a second, hidden distance - changing it there now actually changes plan candidates
-    var matched = fixtures.filter(function (f) {
-      if (!hasPos(f) || cats.indexOf(categoryOf(f)) === -1) return false;
-      return city ? km(city, f) <= S.radius : destKey(f) === country;
-    });
-    var items = matched.map(function (f) {
-      var mn = (isEvent(f) || f.status === 'TBD') ? null : minutes(f);
-      return { id: f.id, day: dayOf(f), kick: mn == null ? null : mn / 60,
-        lat: f.venue_lat != null ? f.venue_lat : f.lat, lng: f.venue_lng != null ? f.venue_lng : f.lng, tier: compTier(f) };
-    });
-    // a team mentioned by name is a strong preference, not a hard filter (section 7): we still
-    // propose the best trip even if that team has no match in range, and say so explicitly below
-    var preferIds = smart.team ? matched.filter(function (f) { return f.home === smart.team.en || f.away === smart.team.en; }).map(function (f) { return f.id; }) : [];
-    var res = Planner.plan({ from: from, to: to, days: D, maxHop: maxHop, startWeekday: startWeekday, preferIds: preferIds }, items);
-    smart.sel = 0;
-    if (res.options.length) {
-      smart.result = { options: res.options, D: D, maxHop: maxHop, weekend: weekend, considered: res.considered, team: smart.team, preferIds: preferIds };
+  function commitContext(res, source) {
+    var wasFirst = !store.get().meta.onboarded;
+    store.dispatch({ type: 'CONTEXT_COMMIT', dest: destToState(res.dest), dates: res.dates, browse: !!res.browse, radiusKm: res.radiusKm });
+    track('context_submit', { source: source, dest_kind: res.dest ? res.dest.kind : 'none', date_mode: res.dates.mode, first_visit: wasFirst });
+    retDismissed = true;
+    goTab(res.dates.mode === 'flexible' ? 'plan' : 'search');
+  }
+
+  /* ---------- onboarding ---------- */
+  function showOnboarding(prefill) {
+    var el = $('#onboarding'), st = store.get();
+    el.innerHTML = U.onboardingHtml(Object.assign({ mode: 'fixed', from: today(), to: M.addDays(today(), 2), months: monthOptions(), month: monthOptions()[0].value, days: 3, destText: '' }, prefill || {}));
+    el.hidden = false; $('#app').hidden = true; $('#mainNav').hidden = true; document.body.classList.add('onboarding-active');
+    bindContextForm('ob', function (res) { hideOnboarding(); showPanels(); renderPeek(); commitContext(res, 'onboarding'); $('#main').focus(); });
+    $('#obDest').focus();
+  }
+  function hideOnboarding() { $('#onboarding').hidden = true; $('#app').hidden = false; $('#mainNav').hidden = false; document.body.classList.remove('onboarding-active'); }
+
+  /* ---------- search ---------- */
+  var searchLimit = 60, lastListCount = 0, lastResult = null;
+  function renderSearchSkeletonOnce() { var v = $('#view-search'); if (!v.firstChild) v.innerHTML = U.searchSkeleton(); }
+  function retBannerInfo() {
+    if (retDismissed) return null;
+    var st = store.get();
+    if (!st.meta.onboarded) return null;
+    var n = st.trip.entries.length, past = st.context.dates && st.context.dates.to < today() ? M.fmtRange(st.context.dates.from, st.context.dates.to) : null;
+    if (!n && !past) return null;
+    return { tripCount: n, pastRange: past };
+  }
+  function renderSearch() {
+    renderSearchSkeletonOnce();
+    var st = store.get(), ctx = effectiveCtx(), ui = st.ui, picked = pickedMap();
+    var qBase = runQuery(ctx, null), res = ctx.sports ? runQuery(ctx, ctx.sports) : qBase;
+    lastResult = res;
+    $('#retBanner').innerHTML = U.retBannerHtml(retBannerInfo());
+    $('#ctxBar').innerHTML = U.ctxBarHtml({ dest: ctx.dest, dates: ctx.dates, radiusKm: ctx.radiusKm });
+    $('#sportChips').innerHTML = U.sportChipsHtml(M.countBySport(qBase.events), ctx.sports);
+    var nF = U.activeFilterCount(st.filters);
+    $('#filterBtnText').textContent = nF ? t('filter.buttonCount', { n: nF }) : t('filter.button');
+    $('#filterChips').innerHTML = U.filterChipsHtml(st.filters);
+    $('#dayBar').innerHTML = U.dayBarHtml(ctx.range.from, ctx.range.to, M.countByDay(res.events), ui.day);
+    $$('.viewsw .segbtn').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === ui.mode)); });
+    var list = ui.day === 'all' ? res.events : res.events.filter(function (e) { return e.date === ui.day; });
+    $('#summary').textContent = U.summaryText(list);
+    var notices = '';
+    if (qBase.noPos && ctx.dest && ctx.dest.kind === 'city') notices += '<p class="notice">' + esc(t('results.noPos', { n: qBase.noPos })) + '</p>';
+    if (cat.last && ctx.range.to > cat.last) notices += '<p class="notice">' + esc(t('results.coverage', { date: M.fmtDate(cat.last) })) + '</p>';
+    $('#notices').innerHTML = notices;
+    var listEl = $('#list');
+    if (!list.length) {
+      var canGrow = ctx.dest && ctx.dest.kind === 'city' ? Math.min(800, ctx.radiusKm * 2) : 0;
+      listEl.innerHTML = U.emptyHtml({ canExtend: ui.day === 'all' && ctx.dates.mode === 'fixed', growTo: canGrow > ctx.radiusKm ? canGrow : 0, sportsActive: !!ctx.sports, filtersActive: nF > 0, dayOnly: ui.day !== 'all' });
     } else {
-      smart.result = { error: 'לא מצאנו אירועים ביעד ובתקופה האלה. נסו חודש אחר, יעד אחר או יותר ענפים.' };
+      var days = M.groupResults(list), shown = [], count = 0, total = 0;
+      days.forEach(function (d) { total += d.items.length; });
+      for (var i = 0; i < days.length && count < searchLimit; i++) { shown.push(days[i]); count += days[i].items.length; }
+      lastListCount = count;
+      listEl.innerHTML = U.resultsHtml(shown, { picked: picked, cat: cat }) +
+        (count < total ? '<div class="more"><button type="button" class="btn" data-act="more">' + esc(tn('more.show', total - count)) + '</button></div>' : '');
     }
-    renderSmartResult();
-    track('smart_plan_run', { source: source, destination: country || (city && city.city) || '', month: ym, days: D, weekend: weekend, sports: cats.join(','),
-      team: smart.team ? smart.team.en : '', planned_days: res.options.length ? res.options[0].covered : 0 });
-  }
-  function renderSmartResult() {
-    var box = $('#smartResult'), r = smart.result;
-    if (!r) { box.innerHTML = ''; return; }
-    if (r.error) { box.innerHTML = '<p class="empty">' + esc(r.error) + '</p>'; return; }
-    var o = r.options[smart.sel] || r.options[0], html = '';
-    var label = planLabel(o.days);
-    html += '<div class="plan-head"><h3>' + (label ? 'המסלול המוצע: ' + esc(label) : 'המסלול המוצע') + (r.weekend ? ' (סוף שבוע: שישי–ראשון)' : '') + '</h3><p><bdi dir="rtl">' + esc(fmtRange(o.start, o.end)) + '</bdi> · אירוע ב-' + o.covered + ' מתוך ' + r.D + ' ימים' +
-      (o.covered > 1 ? (o.km < 3 ? ' · כולם באותה עיר' : ' · כ-' + o.km + ' ק״מ בין האירועים') : '') + '</p></div>';
-    if (r.team) {
-      var teamFound = o.days.some(function (d) { return r.preferIds.indexOf(d.id) !== -1; });
-      html += '<p class="notice">' + (teamFound ? '✓ כולל משחק של <bdi dir="rtl">' + esc(r.team.he) + '</bdi>.' : 'לא הצלחנו לשלב משחק של <bdi dir="rtl">' + esc(r.team.he) + '</bdi> במסלול הזה - ' + (r.preferIds.length ? 'יש לה משחק בטווח, אבל המרחק/התאריך לא הסתדרו עם שאר המסלול.' : 'אין לה משחק ידוע בטווח שביקשתם.')) + '</p>';
-    }
-    if (r.options.length > 1) {
-      html += '<div class="plan-alts">חלופות: ' + r.options.map(function (x, i) {
-        var xLabel = planLabel(x.days);
-        return '<button type="button" class="plan-alt" data-alt="' + i + '" aria-pressed="' + (i === smart.sel) + '"><bdi dir="rtl">' + esc(fmtRange(x.start, x.end)) + '</bdi> (' + x.covered + '/' + r.D + ')' + (xLabel ? ' · <bdi dir="rtl">' + esc(xLabel) + '</bdi>' : '') + '</button>';
-      }).join('') + '</div>';
-    }
-    if (o.end > smart.footballLast) html += '<p class="notice">נתוני משחקי הכדורגל שלנו מגיעים כרגע עד <bdi dir="rtl">' + esc(fmtLong(smart.footballLast)) + '</bdi> - אחרי התאריך הזה ייתכן שיש יותר אירועים ממה שמוצג (משחקים חדשים נוספים כל יום).</p>';
-    var prev = null;
-    o.days.forEach(function (d) {
-      var f = d.id ? byId[d.id] : null;
-      html += '<section class="day"><h3>' + esc(fmtLong(d.date)) + '</h3>';
-      if (f) {
-        if (prev) { var h = hopInfo(prev, f); html += '<div class="hop ' + h.cls + '">' + esc(h.text) + (hasPos(prev) && hasPos(f) ? ' · ' + (km(prev, f) < 3 ? 'אותה עיר' : Math.round(km(prev, f)) + ' ק״מ') : '') + '</div>'; }
-        html += '<ul class="matches">' + cardHtml(f, false, smart.city) + '</ul>'; prev = f;
-      } else {
-        // an empty day between two events far apart is a travel day (by road/rail), not a gap in the data
-        var idx = o.days.indexOf(d), nxt = null;
-        for (var q = idx + 1; q < o.days.length && !nxt; q++) if (o.days[q].id) nxt = byId[o.days[q].id];
-        var justAfter = idx > 0 && o.days[idx - 1].id;
-        if (prev && nxt && justAfter && hasPos(prev) && hasPos(nxt) && km(prev, nxt) > r.maxHop) {
-          html += '<p class="plan-travel">יום מעבר: מ<bdi dir="rtl">' + esc(cityHe(prev)) + '</bdi> ל<bdi dir="rtl">' + esc(cityHe(nxt)) + '</bdi> (כ-' + Math.round(km(prev, nxt)) + ' ק״מ)</p>';
-        } else html += '<p class="plan-empty">אין אירוע מתאים ביום הזה בטווח שביקשתם.</p>';
-      }
-      html += '</section>';
-    });
-    var allIn = o.days.every(function (d) { return !d.id || S.trip.indexOf(d.id) !== -1; });
-    html += '<div class="plan-actions"><button type="button" class="btn primary" id="planAddAll"' + (allIn ? ' disabled' : '') + '>' + (allIn ? 'המסלול נוסף לטיול ✓' : 'הוסף את כל המסלול לטיול') + '</button></div>' +
-      '<p class="tripnote">ההצעה מנסה לתת אירוע בכל יום, בלי נסיעות ארוכות בין ערב לבוקר, אבל לא תמיד אפשר. השעות הן שעון מקומי באתר כל אירוע (לא שעון ישראל), ועדיין עשויות להשתנות יחד עם התאריכים - מומלץ לוודא באתרים הרשמיים.</p>';
-    box.innerHTML = html;
+    announce(t('results.announce', { n: list.length }));
+    $('#list').hidden = ui.mode === 'map'; $('#mapWrap').hidden = ui.mode !== 'map';
+    if (ui.mode === 'map') renderMap(list);
   }
 
-  // ---------- session-details dialog ("פירוט") ----------
-  var detailDialog = $('#detailDialog');
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('button.detail-btn') : null;
-    if (!b) return;
-    var f = byId[Number(b.getAttribute('data-detail'))];
-    if (!f || !f.sessions) return;
-    $('#detailTitle').textContent = titleHe(f);
-    $('#detailSub').innerHTML = sportLabelHtml(f.sport) + ' · ' + esc(fmtLong(dayOf(f))) + (f.sessions_note ? ' · ' + esc(f.sessions_note) : '');
-    $('#detailRows').innerHTML = f.sessions.map(function (s) {
-      return '<div class="drow' + (s.main ? ' main' : '') + '"><span class="dser">' + esc(s.series) + '</span><span class="dname">' + esc(s.name) +
-        '</span><span class="dtime"><bdi dir="ltr">' + esc(s.start ? (s.end ? s.start + ' - ' + s.end : s.start) : '') + '</bdi></span></div>';
-    }).join('');
-    var official = /^https?:\/\//.test(f.web_url || '') ? ' <a href="' + esc(f.web_url) + '" target="_blank" rel="noopener">לאתר התחרות</a>' : '';
-    $('#detailOfficial').innerHTML = official;
-    detailDialog.showModal();
-    track('event_details_open', { sport: f.sport || '', title: f.title || '' });
+  /* ---------- map (Leaflet is loaded lazily; the list keeps working if it fails) ---------- */
+  var mapState = { map: null, layer: null, circle: null, groups: {}, pins: {}, loading: null, key: null };
+  var LEAFLET = { css: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css', cssSri: 'sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H',
+    js: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js', jsSri: 'sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH' };
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve();
+    if (mapState.loading) return mapState.loading;
+    mapState.loading = new Promise(function (resolve, reject) {
+      var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = LEAFLET.css; l.integrity = LEAFLET.cssSri; l.crossOrigin = 'anonymous'; document.head.appendChild(l);
+      var s = document.createElement('script'); s.src = LEAFLET.js; s.integrity = LEAFLET.jsSri; s.crossOrigin = 'anonymous';
+      s.onload = function () { resolve(); }; s.onerror = function () { mapState.loading = null; reject(new Error('leaflet')); };
+      document.head.appendChild(s);
+    });
+    return mapState.loading;
+  }
+  function renderMap(list) {
+    var panel = $('#mapPanel');
+    if (!mapState.map) {
+      panel.innerHTML = '<p class="panel-empty">' + esc(t('map.loading')) + '</p>';
+      loadLeaflet().then(function () {
+        if (!window.L) throw new Error('leaflet');
+        mapState.map = L.map('map', { scrollWheelZoom: true }).setView([48, 12], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(mapState.map);
+        mapState.layer = L.layerGroup().addTo(mapState.map);
+        drawPins(currentList());
+      }).catch(function () { panel.innerHTML = '<p class="panel-empty">' + esc(t('map.failed')) + '</p>'; });
+      return;
+    }
+    drawPins(list);
+  }
+  function currentList() {
+    var st = store.get(); if (!lastResult) return [];
+    return st.ui.day === 'all' ? lastResult.events : lastResult.events.filter(function (e) { return e.date === st.ui.day; });
+  }
+  function drawPins(list) {
+    if (!mapState.map) return;
+    var ctx = effectiveCtx();
+    var key = JSON.stringify([ctx.dest, ctx.range, ctx.radiusKm, ctx.sports, ctx.excludedComps, ctx.excludedWeekdays, store.get().ui.day]);
+    var changed = key !== mapState.key; mapState.key = key;
+    mapState.layer.clearLayers(); if (mapState.circle) { mapState.map.removeLayer(mapState.circle); mapState.circle = null; }
+    mapState.groups = {}; mapState.pins = {};
+    list.forEach(function (f) {
+      var precise = f.venueLat != null && f.venueLng != null, lat = precise ? f.venueLat : f.lat, lng = precise ? f.venueLng : f.lng;
+      if (lat == null || lng == null) return;
+      var k = lat + ',' + lng + (precise ? '' : '~');
+      var g = mapState.groups[k] || (mapState.groups[k] = { cityHe: f.cityHe, city: f.city, venue: precise ? f.venue : null, lat: lat, lng: lng, approx: !precise, list: [], cityLat: f.lat, cityLng: f.lng, country: f.destKey });
+      g.list.push(f);
+    });
+    var keys = Object.keys(mapState.groups);
+    keys.forEach(function (k) {
+      var g = mapState.groups[k];
+      var icon = L.divIcon({ className: '', html: '<div class="map-pin' + (g.approx ? ' approx' : '') + '"><span>' + g.list.length + '</span></div>', iconSize: [30, 30], iconAnchor: [15, 28] });
+      mapState.pins[k] = L.marker([g.lat, g.lng], { icon: icon, title: (g.venue || g.cityHe) + (g.approx ? ' - ' + t('map.pinApprox') : ''), keyboard: true }).on('click', function () { selectPin(k); }).addTo(mapState.layer);
+    });
+    if (ctx.dest && ctx.dest.kind === 'city') {
+      mapState.circle = L.circle([ctx.dest.lat, ctx.dest.lng], { radius: ctx.radiusKm * 1000, color: '#2454E6', weight: 2, fillOpacity: .08, interactive: false }).addTo(mapState.map);
+      if (changed) mapState.map.fitBounds(mapState.circle.getBounds(), { padding: [20, 20] });
+    } else if (keys.length && changed) mapState.map.fitBounds(keys.map(function (k) { return [mapState.groups[k].lat, mapState.groups[k].lng]; }), { padding: [30, 30], maxZoom: 6 });
+    var sel = store.get().ui.pin;
+    if (sel && !mapState.groups[sel]) store.dispatch({ type: 'VIEW', pin: null });
+    renderMapPanel();
+    setTimeout(function () { if (mapState.map) mapState.map.invalidateSize(); }, 50);
+  }
+  function renderMapPanel() {
+    var sel = store.get().ui.pin, g = sel && mapState.groups[sel];
+    $('#mapPanel').innerHTML = U.mapPanelHtml(g || null, { picked: pickedMap(), cat: cat });
+    $$('.map-pin', $('#map')).forEach(function (p) { p.classList.remove('sel'); });
+    if (sel && mapState.pins[sel]) { var el = mapState.pins[sel].getElement(); var pin = el && el.querySelector('.map-pin'); if (pin) pin.classList.add('sel'); }
+  }
+  function selectPin(k) {
+    store.dispatch({ type: 'VIEW', pin: k });          // inspect only: it does NOT change the destination, dates or radius
+    renderMapPanel();
+    var g = mapState.groups[k];
+    if (g) track('map_marker_click', { city: g.cityHe, match_count: g.list.length, precise: !g.approx });
+    var pn = $('#mapPanel'); if (pn && pn.scrollIntoView) pn.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
+  }
+  function searchHere() {
+    var sel = store.get().ui.pin, g = sel && mapState.groups[sel]; if (!g) return;
+    var f = g.list[0], ctx = effectiveCtx();
+    var dest = { kind: 'city', key: f.city + '|' + f.destKey, city: f.city, cityHe: f.cityHe, country: f.destKey, countryHe: M.countryHe(f.destKey), lat: f.lat, lng: f.lng };
+    store.dispatch({ type: 'CONTEXT_COMMIT', dest: dest, dates: ctx.dates, browse: false, radiusKm: ctx.radiusKm });
+    track('search_here', { source: 'map' });
+  }
+
+  /* ---------- event details ---------- */
+  function ticketsHtmlFor(ev) { return TS.tickets && TS.tickets.detailHtml ? TS.tickets.detailHtml(ev) : null; }
+  function openEvent(id, opener) {
+    var ev = cat.byId[id]; if (!ev) return;
+    var dlg = $('#evDialog');
+    dlg.innerHTML = U.eventDialogHtml(ev, { picked: !!pickedMap()[id], ticketsHtml: ticketsHtmlFor(ev) });
+    dlg.setAttribute('data-ev', id);
+    openDialog(dlg, opener);
+    track('event_details_open', { sport: ev.sportId, title: ev.title, comp: ev.comp, source: 'list' });
+  }
+
+  /* ---------- advanced filters (a genuine draft) ---------- */
+  function openFilters(opener) {
+    store.dispatch({ type: 'DRAFT_OPEN' });
+    var dlg = $('#fdDialog'); renderFilterDialog();
+    openDialog(dlg, opener); track('filters_sheet_open', {});
+  }
+  function draftPreviewCount() {
+    var st = store.get(), d = st.ui.draft, ctx = effectiveCtx();
+    if (!d) return 0;
+    return M.query(cat, { dest: ctx.dest, dates: ctx.range, radiusKm: d.radiusKm, sports: ctx.sports, excludedComps: d.excludedComps, excludedWeekdays: d.excludedWeekdays }).events.length;
+  }
+  function renderFilterDialog() { var d = store.get().ui.draft; if (!d) return; $('#fdDialog').innerHTML = U.filterDialogHtml(d, cat, draftPreviewCount()); }
+  function refreshDraftUI() {
+    var d = store.get().ui.draft; if (!d) return;
+    var n = draftPreviewCount(); var b = $('#fdApply'); if (b) b.textContent = t('fd.apply', { n: n });
+    $('#fdRadiusOut').textContent = t('form.radiusKm', { n: d.radiusKm });
+    $$('.fd-sport').forEach(function (det) {
+      var boxes = $$('input[data-comp]', det), on = boxes.filter(function (x) { return x.checked; }).length, n2 = det.querySelector('summary .n'); if (n2) n2.textContent = '(' + on + '/' + boxes.length + ')';
+    });
+  }
+  function readDraftFromDom() {
+    var ec = {}, ew = {};
+    $$('#fdDialog input[data-comp]').forEach(function (i) { if (!i.checked) ec[i.getAttribute('data-comp')] = true; });
+    $$('#fdDialog input[data-wd]').forEach(function (i) { if (!i.checked) ew[i.getAttribute('data-wd')] = true; });
+    store.dispatch({ type: 'DRAFT_SET', excludedComps: ec, excludedWeekdays: ew, radiusKm: Number($('#fdRadius').value) });
+    refreshDraftUI();
+  }
+  $('#fdDialog').addEventListener('input', function (e) { if (e.target.matches('input[data-comp],input[data-wd],#fdRadius')) readDraftFromDom(); });
+  $('#fdDialog').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-close') || b.getAttribute('data-fd') === 'cancel') { $('#fdDialog').close(); return; }
+    var sp = b.getAttribute('data-fd-sport');
+    if (sp) { var on = b.getAttribute('data-on') === '1'; var det = b.closest('.fd-sport'); $$('input[data-comp]', det).forEach(function (i) { i.checked = on; }); readDraftFromDom(); return; }
+    if (b.getAttribute('data-fd') === 'reset') {
+      $$('#fdDialog input[data-comp],#fdDialog input[data-wd]').forEach(function (i) { i.checked = true; }); readDraftFromDom(); return;
+    }
+    if (b.getAttribute('data-fd') === 'apply') { store.dispatch({ type: 'DRAFT_APPLY' }); track('filters_apply', {}); $('#fdDialog').close(); }
   });
-  $('#detailClose').addEventListener('click', function () { detailDialog.close(); });
-  detailDialog.addEventListener('click', function (e) { if (e.target === detailDialog) detailDialog.close(); });
+  $('#fdDialog').addEventListener('close', function () { if (store.get().ui.draft) store.dispatch({ type: 'DRAFT_CANCEL' }); });
 
-  // ---------- legal dialog + version ----------
-  $('#appVersion').textContent = APP_VERSION;
-  var legalDialog = $('#legalDialog');
-  $('#legalBtn').addEventListener('click', function () { legalDialog.showModal(); track('legal_dialog_open', {}); });
-  $('#legalClose').addEventListener('click', function () { legalDialog.close(); });
-  legalDialog.addEventListener('click', function (e) { if (e.target === legalDialog) legalDialog.close(); });
+  /* ---------- context editing ---------- */
+  function openContextDialog(opener, fresh) {
+    var st = store.get(), c = st.context, dlg = $('#ctxDialog');
+    var d = c.dates, mo = monthOptions();
+    var values = fresh ? { mode: 'fixed', from: today(), to: M.addDays(today(), 2), destText: '' }
+      : { mode: d && d.mode === 'flexible' ? 'flexible' : 'fixed', from: d ? d.from : today(), to: d ? d.to : M.addDays(today(), 2), days: d && d.days || 3, month: d && d.mode === 'flexible' ? d.from.slice(0, 7) : mo[0].value,
+          destText: c.dest ? (c.dest.kind === 'country' ? c.dest.countryHe + ' - כל המדינה' : (c.dest.cityHe + ' (' + c.dest.countryHe + ')')) : '' };
+    dlg.innerHTML = '<div class="dlg-head"><h2 id="ctxTitle">' + esc(fresh ? t('form.newSearch') : t('form.editTitle')) + '</h2><button type="button" class="dialog-close" data-close aria-label="' + esc(t('dialog.close')) + '">' + U.icon('x') + '</button></div>' +
+      U.contextFormHtml('cx', Object.assign({ months: mo, month: mo[0].value, days: 3, radius: true, radiusKm: c.radiusKm, submitLabel: t('form.save'), showCancel: true, showBrowse: false }, values));
+    openDialog(dlg, opener);
+    bindContextForm('cx', function (res) { dlg.close(); commitContext(res, fresh ? 'new-search' : 'edit'); });
+  }
+  $('#ctxDialog').addEventListener('click', function (e) { if (e.target.closest('[data-close]')) $('#ctxDialog').close(); });
+  $('#evDialog').addEventListener('click', function (e) { if (e.target.closest('[data-close]')) $('#evDialog').close(); });
 
-  // ---------- freshness (shown in the footer next to the version) ----------
-  (function () {
-    var el = $('#fresh');
-    if (!DATA.generated) return;
-    var ageDays = (Date.now() - Date.parse(DATA.generated)) / 86400000;
-    el.textContent = 'הנתונים עודכנו ב-' + new Date(DATA.generated).toLocaleString('he-IL', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    if (ageDays > 2) el.classList.add('stale');
-  })();
-
-  // ---------- back to top ----------
-  (function () {
-    var btn = $('#toTop'), shown = false;
-    function onScroll() {
-      var want = window.scrollY > 700;
-      if (want !== shown) { shown = want; btn.hidden = !want; }
+  /* ---------- trip ---------- */
+  function sourceOf(el) {
+    if (el.closest('#mapPanel')) return 'map'; if (el.closest('#view-trip')) return 'trip'; if (el.closest('#view-plan')) return 'plan'; if (el.closest('#evDialog')) return 'detail'; return 'list';
+  }
+  function toggleTrip(id, source) {
+    var ev = cat.byId[id]; var st = store.get(), has = st.trip.entries.some(function (e) { return e.id === id; });
+    var title = ev ? ev.title : String(id);
+    if (has) {
+      store.dispatch({ type: 'TRIP_REMOVE', id: id }); announce(t('live.removed', { title: title }));
+      if (ev) track('remove_from_trip', { sport: ev.sportId, comp: ev.comp, country: ev.country, city: ev.city, source: source });
+    } else {
+      var first = !st.trip.entries.length;
+      store.dispatch({ type: 'TRIP_ADD', id: id, snap: ev ? M.snapshotOf(ev) : null, at: new Date().toISOString() }); announce(t('live.added', { title: title }));
+      if (ev) track('add_to_trip', { sport: ev.sportId, comp: ev.comp, country: ev.country, city: ev.city, source: source });
+      if (first) track('first_event_added', { source: source });
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    btn.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: reducedMotion() ? 'auto' : 'smooth' });
-      track('back_to_top_click', {});
+  }
+  function patchPicked(ids) {
+    var picked = pickedMap();
+    ids.forEach(function (id) {
+      $$('[data-add="' + id + '"]').forEach(function (b) {
+        var on = !!picked[id], title = b.getAttribute('data-title') || '';
+        b.setAttribute('aria-pressed', String(on)); b.textContent = on ? t('ev.added') : t('ev.add'); b.setAttribute('aria-label', (on ? t('ev.added') : t('ev.add')) + ': ' + title);
+      });
+      $$('.ev[data-ev="' + id + '"]').forEach(function (li) { li.classList.toggle('picked', !!picked[id]); });
     });
-    onScroll();
-  })();
-
-  // ---------- first-visit onboarding (destination-first, brief section 3) ----------
-  // Shown only when nobody has ever completed/skipped it and there is no saved context (no base
-  // city, no trip) to resume - a returning visitor goes straight into Discover as before.
-  (function () {
-    var obPlace = null;
-    function obHint(place, typedText) {
-      $('#obBaseHint').textContent = !typedText.trim()
-        ? 'אפשר גם בלי יעד - יוצגו אירועים מכל העולם.'
-        : (place ? 'היעד: ' + place.cityHe + '.' : 'היעד לא נמצא - בחרו אחת מההצעות מהרשימה.');
+  }
+  function tripDerived() {
+    var st = store.get(), tes = M.tripEvents(st.trip, cat);
+    var ctxDates = st.context.dates && st.context.dates.mode === 'fixed' ? st.context.dates : null;
+    var dates = M.tripDates(st.trip, tes, ctxDates), stays = M.tripStays(tes, dates);
+    var links = M.travelLinks(stays, dates, resolveOrigin(st.trip.origin));
+    var dated = tes.filter(function (te) { return M.entryDate(te); });
+    var days = [], eventDays = {};
+    dated.forEach(function (te) { eventDays[M.entryDate(te)] = 1; });
+    if (dated.length) {
+      var firstEntry = M.entryDate(dated[0]), lastEntry = M.entryDate(dated[dated.length - 1]);
+      var from = dates.arrival && dates.arrival < firstEntry ? dates.arrival : firstEntry;
+      var to = dates.source === 'derived' ? lastEntry : (dates.departure && dates.departure > lastEntry ? dates.departure : lastEntry);
+      var prevEv = null;
+      M.eachDay(from, to).forEach(function (d) {
+        var es = dated.filter(function (te) { return M.entryDate(te) === d; });
+        var day = { date: d, entries: es, noteBefore: null };
+        if (es.length && prevEv && es[0].ev) day.noteBefore = M.pairNote(prevEv, es[0].ev);
+        days.push(day);
+        var withEv = es.filter(function (te) { return te.ev; }); if (withEv.length) prevEv = withEv[withEv.length - 1].ev;
+      });
     }
-    combobox($('#obBase'), $('#obBaseMenu'), cityItems, {
-      onSelect: function (it) { obPlace = it.place; obHint(it.place, it.label); },
-      onInput: function (text) { obPlace = findBase(text); obHint(obPlace, text); }
+    var cities = []; stays.forEach(function (s) { if (cities.indexOf(s.cityHe || s.city) === -1) cities.push(s.cityHe || s.city); });
+    return { tes: tes, dates: dates, stays: stays, links: links, days: days, eventDays: Object.keys(eventDays).length, destText: cities.slice(0, 3).join(' · ') + (cities.length > 3 ? '…' : '') };
+  }
+  function renderTripView() {
+    var v = $('#view-trip'), st = store.get(), d = tripDerived();
+    var focusSel = null, ae = document.activeElement;
+    if (ae && v.contains(ae)) { ['data-lock', 'data-open', 'data-ack'].forEach(function (a) { if (ae.hasAttribute(a)) focusSel = '[' + a + '="' + ae.getAttribute(a) + '"]'; }); if (ae.id) focusSel = '#' + ae.id; }
+    v.innerHTML = U.tripHtml(d, { origin: st.trip.origin, cat: cat });
+    var o = $('#origin');
+    if (o) combo(o, {
+      items: function (q) { var ql = q.toLowerCase(); return airportItems.filter(function (a) { return a.search.indexOf(ql) !== -1 || a.label.toLowerCase().indexOf(ql) !== -1; }).slice(0, 40); }, emptyText: t('form.noResults'),
+      onSelect: function (it) { store.dispatch({ type: 'TRIP_ORIGIN', origin: it.label }); track('origin_airport_selected', { airport: it.label }); }
     });
-    document.querySelectorAll('input[name="obDateMode"]').forEach(function (r) {
-      r.addEventListener('change', function () { $('#obDates').style.display = (this.value === 'exact') ? '' : 'none'; });
-    });
-    function finishOnboarding() {
-      try { localStorage.setItem('onboarded_v1', '1'); } catch (e) { }
-      document.body.classList.remove('onboarding-active');
-      $('#onboarding').hidden = true;
-    }
-    function showOnboarding() {
-      document.body.classList.add('onboarding-active');
-      $('#onboarding').hidden = false;
-      $('#obFrom').value = S.from; $('#obTo').value = S.to;
-      obHint(null, '');
-      $('#obBase').focus();
-    }
-    $('#onboarding').addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { finishOnboarding(); track('onboarding_skip', {}); }
-      // Enter submits like the button does, from any field (date inputs, or the destination box
-      // once its own suggestion list is closed) - except the button itself, which already gets a
-      // native Enter-triggered click and would otherwise fire twice
-      else if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') { e.preventDefault(); $('#obGo').click(); }
-    });
-    $('#obGo').addEventListener('click', function () {
-      var text = $('#obBase').value;
-      if (text.trim() && !obPlace) { obHint(null, text); $('#obBase').focus(); return; }
-      var mode = document.querySelector('input[name="obDateMode"]:checked').value;
-      if (obPlace) { $('#base').value = obPlace.cityHe; setBase(obPlace, obPlace.cityHe); }
-      if (mode === 'exact') {
-        var f = $('#obFrom').value, t = $('#obTo').value;
-        if (f) S.from = f;
-        if (t) S.to = (f && t < f) ? f : t;
-        $('#from').value = S.from; $('#to').value = S.to;
-        saveFilterCtx();
-      }
-      finishOnboarding();
-      update();
-      track('onboarding_complete', { destination: !!obPlace, date_mode: mode });
-    });
-    $('#obSkip').addEventListener('click', function () { finishOnboarding(); track('onboarding_skip', {}); });
+    if (o) o.addEventListener('change', function () { var val = o.value.trim() || S.DEFAULT_ORIGIN; if (val !== store.get().trip.origin) store.dispatch({ type: 'TRIP_ORIGIN', origin: val }); });
+    if (focusSel) { var f = $(focusSel, v); if (f) f.focus(); }
+  }
+  function renderPeek() {
+    var st = store.get(), peek = $('#tripPeek'), tes = M.tripEvents(st.trip, cat);
+    peek.innerHTML = U.peekHtml(tes, {}); peek.setAttribute('aria-label', t('peek.title'));
+    peek.hidden = !tes.length;
+    updatePeekLayout();
+  }
+  // the side summary only exists while searching and only once something is chosen - no empty sidebar
+  function updatePeekLayout() { $('#app').classList.toggle('has-peek', !$('#tripPeek').hidden && store.get().ui.tab === 'search'); }
+  function exportTrip() {
+    var doc = S.exportDoc(store.get(), BRAND.version), blob = new Blob([JSON.stringify(doc, null, 1)], { type: 'application/json' });
+    var a = document.createElement('a'), d = new Date();
+    a.href = URL.createObjectURL(blob); a.download = 'tosport-trip-' + M.isoOf(d).replace(/-/g, '') + '.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    track('export_trip', { trip_size: doc.trip.entries.length }); showToast(t('import.exported'));
+  }
+  var pendingImport = null;
+  function handleImportFile(file) {
+    if (!file) return;
+    if (file.size > S.LIMITS.maxImportBytes) { showToast(t('import.error.too-large')); return; }
+    file.text().then(function (text) {
+      var res = S.parseImport(text);
+      if (!res.ok) { showToast(t('import.error.' + res.error) || t('import.error.not-json')); return; }
+      pendingImport = res.doc;
+      if (!store.get().trip.entries.length) { applyImport('replace'); return; }
+      var dlg = $('#impDialog'), n = res.doc.trip.entries.length;
+      dlg.innerHTML = '<div class="dlg-head"><h2 id="impTitle">' + esc(t('import.title')) + '</h2><button type="button" class="dialog-close" data-close aria-label="' + esc(t('dialog.close')) + '">' + U.icon('x') + '</button></div>' +
+        '<p>' + esc(tn('import.summary', n)) + '</p><div class="dlg-actions"><button type="button" class="btn primary" data-imp="merge">' + esc(t('import.merge')) + '</button><button type="button" class="btn" data-imp="replace">' + esc(t('import.replace')) + '</button><button type="button" class="btn" data-imp="cancel">' + esc(t('import.cancel')) + '</button></div>';
+      openDialog(dlg);
+    }, function () { showToast(t('import.error.not-text')); });
+  }
+  function applyImport(mode) {
+    if (!pendingImport) return;
+    store.dispatch({ type: 'IMPORT_APPLY', doc: pendingImport, mode: mode }); track('import_trip', { mode: mode, trip_size: pendingImport.trip.entries.length });
+    pendingImport = null; showToast(t('import.done')); $('#importFile').value = '';
+  }
+  $('#impDialog').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-close') || b.getAttribute('data-imp') === 'cancel') { pendingImport = null; $('#impDialog').close(); return; }
+    var m = b.getAttribute('data-imp'); if (m) { applyImport(m); $('#impDialog').close(); }
+  });
+  $('#importFile').addEventListener('change', function (e) { handleImportFile(e.target.files && e.target.files[0]); });
 
-    var onboarded = false;
-    try { onboarded = !!localStorage.getItem('onboarded_v1'); } catch (e) { }
-    var hasSavedContext = !!S.base || S.trip.length > 0;
-    if (!onboarded && !hasSavedContext) showOnboarding();
-    else if (!onboarded) { try { localStorage.setItem('onboarded_v1', '1'); } catch (e) { } }
-  })();
+  /* ---------- tabs ---------- */
+  function showPanels() {
+    var tab = store.get().ui.tab;
+    ['search', 'plan', 'trip'].forEach(function (k) { $('#view-' + k).hidden = k !== tab; });
+    renderNav();
+    $('#tripPeek').classList.toggle('on-search', tab === 'search');
+    updatePeekLayout();
+  }
+  function goTab(tab) {
+    if (store.get().ui.tab === tab) return;
+    store.dispatch({ type: 'VIEW', tab: tab });
+    pushHist({ tab: tab });
+    if (isMobile()) window.scrollTo({ top: 0, behavior: 'auto' });
+    track('tab_change', { tab: tab });
+  }
+  $('#mainNav').addEventListener('click', function (e) { var b = e.target.closest('[data-tab]'); if (b) goTab(b.getAttribute('data-tab')); });
+  $('#mainNav').addEventListener('keydown', function (e) {
+    var tabs = $$('.tab', $('#mainNav')), i = tabs.indexOf(document.activeElement); if (i < 0) return;
+    var rtl = document.documentElement.dir === 'rtl', next = null;
+    if (e.key === 'ArrowLeft') next = rtl ? i + 1 : i - 1; else if (e.key === 'ArrowRight') next = rtl ? i - 1 : i + 1; else if (e.key === 'Home') next = 0; else if (e.key === 'End') next = tabs.length - 1;
+    if (next == null) return;
+    e.preventDefault(); next = (next + tabs.length) % tabs.length; tabs[next].focus(); goTab(tabs[next].getAttribute('data-tab'));
+  });
 
-  update();
+  /* ---------- plan (placeholder until the planner slice) ---------- */
+  function renderPlan() { var v = $('#view-plan'); if (!v.firstChild) v.innerHTML = '<h2>' + esc(t('plan.title')) + '</h2><p class="hint">' + esc(t('plan.soon')) + '</p>'; if (TS.planView && TS.planView.render) TS.planView.render(v, api); }
+
+  /* ---------- delegated actions ---------- */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target : null; if (!el) return;
+    var b;
+    if ((b = el.closest('[data-add]'))) { toggleTrip(Number(b.getAttribute('data-add')), sourceOf(b)); return; }
+    if ((b = el.closest('[data-open]'))) { openEvent(Number(b.getAttribute('data-open')), b); return; }
+    if ((b = el.closest('[data-remove]'))) { var id = Number(b.getAttribute('data-remove')); var ev = cat.byId[id]; store.dispatch({ type: 'TRIP_REMOVE', id: id }); announce(t('live.removed', { title: ev ? ev.title : '' })); return; }
+    if ((b = el.closest('[data-lock]'))) { var lid = Number(b.getAttribute('data-lock')); var cur = store.get().trip.entries.filter(function (x) { return x.id === lid; })[0]; store.dispatch({ type: 'TRIP_LOCK', id: lid, locked: !(cur && cur.locked) }); track('lock_event', { locked: !(cur && cur.locked) }); return; }
+    if ((b = el.closest('[data-ack]'))) { var aid = Number(b.getAttribute('data-ack')); var aev = cat.byId[aid]; if (aev) store.dispatch({ type: 'TRIP_ACK', id: aid, snap: M.snapshotOf(aev) }); return; }
+    if ((b = el.closest('[data-day]'))) { store.dispatch({ type: 'VIEW', day: b.getAttribute('data-day') }); return; }
+    if ((b = el.closest('[data-sport]'))) { toggleSport(b.getAttribute('data-sport')); return; }
+    if ((b = el.closest('[data-unfilter]'))) { var k = b.getAttribute('data-unfilter'), f = store.get().filters; store.dispatch({ type: 'FILTERS_SET', filters: { sports: f.sports, excludedComps: k === 'comps' ? {} : f.excludedComps, excludedWeekdays: k === 'days' ? {} : f.excludedWeekdays } }); return; }
+    if ((b = el.closest('[data-mode]'))) { store.dispatch({ type: 'VIEW', mode: b.getAttribute('data-mode') }); track('view_toggle', { view: b.getAttribute('data-mode') }); return; }
+    if ((b = el.closest('[data-searchday]'))) { var day = b.getAttribute('data-searchday'); store.dispatch({ type: 'VIEW', tab: 'search', day: day }); pushHist({ tab: 'search' }); return; }
+    if ((b = el.closest('[data-link]'))) { track(b.getAttribute('data-link') === 'flight' ? 'flight_link_click' : 'hotel_link_click', {}); return; }
+    if ((b = el.closest('[data-act]'))) { handleAct(b.getAttribute('data-act'), b); return; }
+    if (el.closest('#filterBtn')) { openFilters(el.closest('#filterBtn')); return; }
+    if (el.closest('#ctxEdit')) { openContextDialog(el.closest('#ctxEdit'), false); return; }
+    if (el.closest('#legalBtn')) { var ld = $('#legalDialog'); ld.innerHTML = '<div class="dlg-head"><h2 id="legalTitle">' + esc(t('legal.title')) + '</h2><button type="button" class="dialog-close" data-close aria-label="' + esc(t('dialog.close')) + '">' + U.icon('x') + '</button></div>' + ['p1', 'p2', 'p3', 'p4', 'p5'].map(function (p) { return '<p>' + esc(t('legal.' + p)) + '</p>'; }).join(''); openDialog(ld, el.closest('#legalBtn')); return; }
+    if (el.closest('#legalDialog [data-close]')) { $('#legalDialog').close(); return; }
+    if (el.closest('#copyTrip')) { copyTrip(el.closest('#copyTrip')); return; }
+    if (el.closest('#exportTrip')) { exportTrip(); return; }
+    if (el.closest('#clearTrip')) { if (window.confirm(t('actions.clearConfirm'))) { track('clear_trip', { trip_size: store.get().trip.entries.length }); store.dispatch({ type: 'TRIP_CLEAR' }); } return; }
+  });
+  document.addEventListener('change', function (e) {
+    var el = e.target;
+    if (el.id === 'daySelect') { store.dispatch({ type: 'VIEW', day: el.value }); return; }
+    if (el.id === 'tArr' || el.id === 'tDep') {
+      var arr = $('#tArr').value || null, dep = $('#tDep').value || null; var d = tripDerived().dates;
+      store.dispatch({ type: 'TRIP_DATES', arrival: arr || d.arrival, departure: dep || d.departure }); return;
+    }
+  });
+  function toggleSport(id) {
+    var f = store.get().filters, cur = f.sports ? f.sports.slice() : [];
+    if (id === 'all') { store.dispatch({ type: 'SPORTS_SET', sports: null }); track('sports_filter', { sports: 'all' }); return; }
+    var i = cur.indexOf(id); if (i === -1) cur.push(id); else cur.splice(i, 1);
+    store.dispatch({ type: 'SPORTS_SET', sports: cur.length ? cur : null }); track('sports_filter', { sports: cur.join(',') });
+  }
+  function copyTrip(btn) {
+    var txt = M.tripText(M.tripEvents(store.get().trip, cat)); track('copy_trip', { trip_size: store.get().trip.entries.length });
+    var done = function () { btn.textContent = t('actions.copied'); setTimeout(function () { btn.textContent = t('actions.copy'); }, 2500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt); done(); }); else { fallbackCopy(txt); done(); }
+  }
+  function fallbackCopy(txt) { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) { } document.body.removeChild(ta); }
+  function handleAct(act, el) {
+    var ctx = effectiveCtx();
+    switch (act) {
+      case 'more': { var before = $$('#list .title-btn, #list .group-days summary').length; searchLimit += 60; renderSearch(); var after = $$('#list .title-btn, #list .group-days summary'); if (after[before]) after[before].focus(); break; }
+      case 'extend-dates': { var d = ctx.dates; store.dispatch({ type: 'CONTEXT_COMMIT', dest: store.get().context.dest, dates: { mode: 'fixed', from: d.from, to: M.addDays(d.to, 7) }, browse: store.get().context.browse, radiusKm: ctx.radiusKm }); break; }
+      case 'grow-radius': store.dispatch({ type: 'CONTEXT_RADIUS', km: Number(el.getAttribute('data-km')) }); break;
+      case 'all-sports': store.dispatch({ type: 'SPORTS_SET', sports: null }); break;
+      case 'reset-filters': store.dispatch({ type: 'FILTERS_RESET' }); track('filters_reset', {}); break;
+      case 'map-close': store.dispatch({ type: 'VIEW', pin: null }); renderMapPanel(); break;
+      case 'search-here': searchHere(); break;
+      case 'go-search': goTab('search'); break;
+      case 'go-plan': goTab('plan'); break;
+      case 'import-trip': $('#importFile').click(); break;
+      case 'dates-auto': store.dispatch({ type: 'TRIP_DATES', arrival: null, departure: null }); break;
+      case 'continue-trip': retDismissed = true; goTab('trip'); renderSearch(); break;
+      case 'new-search': retDismissed = true; openContextDialog(el, true); break;
+      case 'pick-dates': retDismissed = true; openContextDialog(el, false); break;
+      case 'dismiss-banner': retDismissed = true; renderSearch(); break;
+      default: break;
+    }
+  }
+  /* ---------- state -> view ---------- */
+  var sig = {};
+  function sigOf(st) {
+    return { ctx: JSON.stringify([st.context, st.filters]), view: JSON.stringify([st.ui.tab, st.ui.mode, st.ui.day]), pin: String(st.ui.pin), trip: JSON.stringify(st.trip), prefs: JSON.stringify(st.prefs), meta: JSON.stringify(st.meta), undo: st.ui.undo ? st.ui.undo.kind + ':' + (st.ui.undo.entry ? st.ui.undo.entry.id : '') : '' };
+  }
+  function persist(st) { if (!S.save(storage, st) && store.get().ui.storageOk !== false) { /* storage became unavailable mid-session */ } }
+  var undoClose = null, undoSeq = 0;
+  function onState(st) {
+    var s = sigOf(st), prev = sig; sig = s;
+    var tabChanged = !!prev.view && JSON.parse(s.view)[0] !== JSON.parse(prev.view)[0];
+    if (s.ctx !== prev.ctx || s.view !== prev.view) { if (!$('#app').hidden) { searchLimit = 60; renderSearch(); } }
+    if (s.pin !== prev.pin && st.ui.mode === 'map') renderMapPanel();
+    if (s.trip !== prev.trip) {
+      var oldIds = {}, newIds = {}; try { JSON.parse(prev.trip || '{"entries":[]}').entries.forEach(function (e) { oldIds[e.id] = 1; }); } catch (e) { }
+      st.trip.entries.forEach(function (e) { newIds[e.id] = 1; });
+      var changedIds = Object.keys(oldIds).concat(Object.keys(newIds)).filter(function (k) { return !!oldIds[k] !== !!newIds[k]; }).map(Number);
+      patchPicked(changedIds); renderNav(); renderPeek();
+      if (st.ui.tab === 'trip' || $('#view-trip').firstChild) renderTripView();
+      if (mapState.map) renderMapPanel();
+      var dlg = $('#evDialog'); if (dlg.open) { var id = Number(dlg.getAttribute('data-ev')); if (id) patchPicked([id]); }
+    }
+    if (s.view !== prev.view) {
+      showPanels();
+      if (st.ui.tab === 'trip') renderTripView();
+      if (st.ui.tab === 'plan') renderPlan();
+      if (tabChanged && st.ui.tab === 'search' && st.ui.mode === 'map' && mapState.map) setTimeout(function () { mapState.map.invalidateSize(); }, 50);
+    }
+    if (s.undo !== prev.undo && st.ui.undo) {
+      if (undoClose) undoClose(true);
+      var u = st.ui.undo, my = ++undoSeq;
+      undoClose = showToast(u.kind === 'clear' ? t('trip.cleared') : t('trip.removed'), { actionLabel: t('trip.undo'), timeout: 9000,
+        onAction: function () { store.dispatch({ type: 'TRIP_UNDO' }); },
+        onClose: function (byAction) { if (!byAction && my === undoSeq && store.get().ui.undo) store.dispatch({ type: 'UNDO_DISMISS' }); } });
+    }
+    if (s.ctx !== prev.ctx || s.trip !== prev.trip || s.prefs !== prev.prefs || s.meta !== prev.meta) persist(st);
+  }
+  store.subscribe(onState);
+
+  /* ---------- boot ---------- */
+  function boot() {
+    renderFooter();
+    var st = store.get();
+    sig = sigOf(st);
+    var hash = (location.hash || '').replace('#', '');
+    if (['search', 'plan', 'trip'].indexOf(hash) !== -1 && st.meta.onboarded) store.dispatch({ type: 'VIEW', tab: hash });
+    st = store.get();
+    renderNav();
+    var needOnboarding = !st.context.dest && !st.context.browse && !st.meta.onboarded;
+    if (!st.ui.storageOk) showToast(t('storage.off'), { timeout: 12000 });
+    if (bootReport.migrated) showToast(t('storage.migrated'), { timeout: 12000 });
+    else if (bootReport.issues && bootReport.issues.some(function (x) { return /malformed|bad-id|not-array/.test(x); })) showToast(t('storage.issues'), { timeout: 12000 });
+    if (needOnboarding) { showOnboarding(); }
+    else {
+      hideOnboarding(); showPanels(); renderSearch(); renderPeek();
+      if (st.ui.tab === 'trip') renderTripView();
+      if (st.ui.tab === 'plan') renderPlan();
+    }
+    S.save(storage, store.get());
+    store.dispatch({ type: 'META', lastVisit: today() });
+  }
+  var api = { store: store, cat: cat, model: M, ui: U, announce: announce, showToast: showToast, track: track, goTab: goTab, effectiveCtx: effectiveCtx, runQuery: runQuery, today: today, openEvent: openEvent, toggleTrip: toggleTrip, tripDerived: tripDerived, dests: dests, resolveOrigin: resolveOrigin };
+  window.ToSport.app = api;
+  boot();
 })();

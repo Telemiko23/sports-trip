@@ -1720,7 +1720,22 @@
    "lng": 151.2083,
    "venue_lat": null,
    "venue_lng": null,
-   "web_url": "https://www.unitedcup.com"
+   "web_url": "https://www.unitedcup.com",
+   "locs": [
+    {
+     "city": "Sydney",
+     "country": "Australia",
+     "cc": "au",
+     "src": "AllSportDB"
+    },
+    {
+     "city": "Perth",
+     "country": "Australia",
+     "cc": "au",
+     "src": "AllSportDB"
+    }
+   ],
+   "loc_provisional": true
   }
  ],
  "competitions": [
