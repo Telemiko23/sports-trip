@@ -1,0 +1,44 @@
+name: Update ticket offers (manual until activated)
+
+# MANUAL ONLY. Do not add a schedule until the activation checklist in TICKETS.md has passed with an authorized live sample.
+# Secrets (SE365_USER / SE365_PASSWORD / SE365_API_KEY) are repository secrets used only by this trusted job; this workflow never runs
+# for pull requests and never prints them. The non-secret provider configuration is the repository VARIABLE TICKETS_CONFIG (JSON,
+# same shape as tickets/config.example.json). A provider failure fails the job and leaves the previous tickets/offers.json untouched.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+# never overlap with the fixtures/events updates (all push to main)
+concurrency:
+  group: data-update
+  cancel-in-progress: false
+
+jobs:
+  offers:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests (matching, adapter, snapshot allowlist)
+        run: python -m unittest discover -s tests/py
+      - name: Build offers
+        env:
+          SE365_USER: ${{ secrets.SE365_USER }}
+          SE365_PASSWORD: ${{ secrets.SE365_PASSWORD }}
+          SE365_API_KEY: ${{ secrets.SE365_API_KEY }}
+          TICKETS_CONFIG: ${{ vars.TICKETS_CONFIG }}
+        run: |
+          if [ -z "$TICKETS_CONFIG" ]; then echo "TICKETS_CONFIG variable not set - live pricing stays OFF"; exit 0; fi
+          printf '%s' "$TICKETS_CONFIG" > tickets/config.json
+          python tickets/build_offers.py
+      - name: Commit the validated snapshot if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tickets/offers.json || true
+          git diff --cached --quiet || (git commit -m "Update ticket offers snapshot" && git push)

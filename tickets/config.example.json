@@ -1,0 +1,23 @@
+{
+  "_comment": "Copy to tickets/config.json (gitignored) and fill from ONE real authorized provider response. NO secret values here: credentials_env holds only the NAMES of environment variables / CI secrets.",
+  "provider": "sportsevents365",
+  "base_url": "https://REPLACE-WITH-THE-API-BASE-FROM-YOUR-ACCOUNT-MANAGER",
+  "events_path": "REPLACE-WITH-THE-DOCUMENTED-EVENTS-PATH",
+  "credentials_env": { "user": "SE365_USER", "password": "SE365_PASSWORD", "api_key": "SE365_API_KEY" },
+  "field_map": {
+    "_comment": "UNVERIFIED guesses based on the public documentation's field names (eventUrl, minTicketPrice, availableCategoriesQuantity). Correct each path from a real response.",
+    "items": "events", "id": "id", "name": "name", "start": "date", "home": "homeTeam", "away": "awayTeam", "competition": "tournament",
+    "city": "city", "venue": "venue", "sport": "sport", "url": "eventUrl",
+    "min_price": "minTicketPrice.price", "currency": "minTicketPrice.currency", "available_categories": "availableCategoriesQuantity"
+  },
+  "price_basis": { "_comment": "Fill ONLY from provider documentation/contract. null = unknown = no numeric price.", "quantity_basis": null, "fees_included": null, "scope": null },
+  "allowed_hosts": ["sportsevents365.com"],
+  "page_size": 50,
+  "max_pages": 40,
+  "ttl_minutes": 60,
+  "activation": {
+    "price_display_verified": false,
+    "attribution_verified": false,
+    "notes": "Set price_display_verified=true ONLY after the activation checklist in TICKETS.md passes with an authorized live sample."
+  }
+}

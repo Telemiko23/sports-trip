@@ -14,3 +14,8 @@ allsportdb_probe.json
 node_modules/
 test-results/
 playwright-report/
+
+# ticket enrichment: internal review output and the local (possibly account-specific) config stay out of the public repository
+tickets/_review/
+tickets/config.json
+__pycache__/
