@@ -9,3 +9,8 @@ __pycache__/
 
 # raw output of allsportdb_probe.py - exploration only, may be large
 allsportdb_probe.json
+
+# development/test tooling (the deployed site has no dependencies)
+node_modules/
+test-results/
+playwright-report/

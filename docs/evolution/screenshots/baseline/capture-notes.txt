@@ -1,0 +1,10 @@
+[desktop] results after onboarding: 16 אירועים ב-3 ימים
+[desktop] trip count after 3 adds: 3
+[desktop] plan understood: הבנתי - יעד: לונדון · חודש: אוקטובר · סוף שבוע (שישי–ראשון) · כולל משחק של ארסנל. אפשר לתקן בשדות למטה.
+[desktop] storage keys written: tripIds_v1, filterCtx_v1, onboarded_v1
+[desktop] page errors: none
+[mobile] results after onboarding: 16 אירועים ב-3 ימים
+[mobile] trip count after 3 adds: 3
+[mobile] plan understood: הבנתי - יעד: לונדון · חודש: אוקטובר · סוף שבוע (שישי–ראשון) · כולל משחק של ארסנל. אפשר לתקן בשדות למטה.
+[mobile] storage keys written: tripIds_v1, filterCtx_v1, onboarded_v1
+[mobile] page errors: none
