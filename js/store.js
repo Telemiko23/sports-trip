@@ -142,11 +142,22 @@
       case 'TRIP_UNDO': {
         var u = ui.undo; ui.undo = null;
         if (!u) return s;
+        if (u.kind === 'swap') { t.entries.forEach(function (e, k) { if (e.id === u.newId) t.entries[k] = u.entry; }); return s; }
         if (u.kind === 'remove' && !t.entries.some(function (e) { return e.id === u.entry.id; })) t.entries.splice(Math.min(u.index, t.entries.length), 0, u.entry);
         if (u.kind === 'clear' || u.kind === 'replace') { t.entries = cleanEntries(u.entries); t.excluded = cleanIdList(u.excluded); if (u.kind === 'replace') { t.arrival = iso(u.arrival); t.departure = iso(u.departure); } }
         return s;
       }
       case 'UNDO_DISMISS': ui.undo = null; return s;
+      case 'TRIP_SWAP': {                       // replace one entry by another event in place (keeps its position and lock); undoable
+        if (!isId(a.to) || t.entries.some(function (e) { return e.id === a.to; })) return s;
+        var si = -1; t.entries.forEach(function (e, k) { if (e.id === a.id) si = k; });
+        if (si === -1) return s;
+        var old = t.entries[si];
+        t.entries[si] = { id: a.to, locked: !!old.locked, addedAt: a.at || null, snap: cleanSnap(a.snap, a.to) };
+        t.excluded = t.excluded.filter(function (x) { return x !== a.to; });
+        ui.undo = { kind: 'swap', entry: old, newId: a.to, index: si };
+        return s;
+      }
       case 'TRIP_LOCK': t.entries.forEach(function (e) { if (e.id === a.id) e.locked = !!a.locked; }); return s;
       case 'TRIP_EXCLUDE':
         if (isId(a.id) && t.excluded.indexOf(a.id) === -1 && t.excluded.length < LIMITS.maxExcluded) t.excluded.push(a.id);

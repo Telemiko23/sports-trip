@@ -196,3 +196,26 @@ test.describe('P11 honest conflicts and uncertainty', () => {
     await expect(page.locator('.tnote').first()).toBeVisible();
   });
 });
+
+test.describe('P10b replace inside My trip', () => {
+  test('alternatives are previewed with consequences; swapping keeps position, is undoable; a locked entry cannot be replaced', async ({ page }) => {
+    await toPlan(page);
+    await page.check('input[name="plPace"][value="single"]');
+    await page.waitForSelector('.plan-card');
+    await page.locator('.plan-card').first().locator('[data-pl="add"]').click();
+    await page.click('#tab-trip');
+    const before = (await tripIds(page))[0];
+    await page.locator('[data-replace]').first().click();
+    await expect(page.locator('#repDialog')).toBeVisible();
+    await expect(page.locator('#repDialog')).toContainText(/בלי התנגשות|לא מומלץ|יעבור/);
+    await page.locator('#repDialog [data-swap-to]').first().click();
+    await expect(page.locator('.toast', { hasText: 'האירוע הוחלף' })).toBeVisible();
+    const after = (await tripIds(page));
+    expect(after.length).toBe(1); expect(after[0]).not.toBe(before);
+    await page.locator('.toast', { hasText: 'האירוע הוחלף' }).locator('.toast-act').click();
+    expect(await tripIds(page)).toEqual([before]);
+    await page.locator('[data-lock]').first().click();
+    await expect(page.locator('[data-replace]')).toHaveCount(0);                              // a locked entry is not offered for replacement
+    expect(page.errors).toEqual([]);
+  });
+});

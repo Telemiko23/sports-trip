@@ -215,7 +215,13 @@
     return li;
   }
   function altHtml(pr, ev) {
-    var alts = P.alternatives(ps.params, api.cat, pr, ev.id), slot = ev;
+    var alts = P.alternatives(ps.params, api.cat, pr, ev.id);
+    return '<li class="plan-alts-wrap"><div role="group" aria-label="' + esc(t('plan.alt.title', { title: ev.title })) + '"><h5>' + esc(t('plan.alt.title', { title: ev.title })) + '</h5>' +
+      altListHtml(alts, ev, function (e) { return 'data-pl="swap" data-pk="' + esc(pr.key) + '" data-id="' + ev.id + '" data-to="' + e.id + '"'; }) +
+      '<button type="button" class="btn small" data-pl="replace-close">' + esc(t('plan.alt.close')) + '</button></div></li>';
+  }
+  // the alternatives list shared by the Plan preview and My trip: what changes and what would conflict, BEFORE anything is replaced
+  function altListHtml(alts, slot, btnAttrs) {
     var body = !alts.length ? '<p class="hint">' + esc(t('plan.alt.none')) + '</p>' : '<ul class="plan-alts">' + alts.map(function (a) {
       var e = a.ev, parts = [];
       if (a.sameDate) parts.push(t('plan.alt.sameDate')); else if (a.dateChanged) parts.push(t('plan.alt.dateChange', { from: M.fmtDate(slot.date), to: M.fmtDate(e.date) }));
@@ -223,10 +229,9 @@
       var status = !a.compatible ? '<p class="tstatus warn">' + esc(t('plan.alt.incompatible')) + '</p>' : (notes ? '' : '<p class="hint">' + esc(t('plan.alt.noConflict')) + '</p>');
       return '<li class="plan-alt"><div class="plan-alt-main"><strong>' + U.titleHtml(e) + '</strong><div class="ev-meta">' + M.sportLabelHtml(e.sportId) + '<span class="ev-place">' + U.placeHtml(e) + '</span></div>' +
         '<p class="hint">' + esc(M.fmtDateLong(e.date) + ' · ' + itemTime(e)) + (parts.length ? ' · ' + esc(parts.join(' · ')) : '') + '</p>' + status + (notes ? '<ul class="tnotes">' + notes + '</ul>' : '') + '</div>' +
-        '<button type="button" class="btn small" data-pl="swap" data-pk="' + esc(pr.key) + '" data-id="' + ev.id + '" data-to="' + e.id + '" aria-label="' + esc(t('plan.alt.useNamed', { title: e.title })) + '">' + esc(t('plan.alt.use')) + '</button></li>';
+        '<button type="button" class="btn small" ' + btnAttrs(e) + ' aria-label="' + esc(t('plan.alt.useNamed', { title: e.title })) + '">' + esc(t('plan.alt.use')) + '</button></li>';
     }).join('') + '</ul>';
-    return '<li class="plan-alts-wrap" role="group" aria-label="' + esc(t('plan.alt.title', { title: ev.title })) + '"><h5>' + esc(t('plan.alt.title', { title: ev.title })) + '</h5>' + body +
-      '<button type="button" class="btn small" data-pl="replace-close">' + esc(t('plan.alt.close')) + '</button></li>';
+    return body;
   }
   function dayRows(pr) {
     var win = pr.window, by = {}, rows = '';
@@ -437,5 +442,5 @@
     run(false);
   }
 
-  TS.planView = { render: render };
+  TS.planView = { render: render, altListHtml: altListHtml };
 })();

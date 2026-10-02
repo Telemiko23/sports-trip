@@ -382,6 +382,32 @@
     track('event_details_open', { sport: ev.sportId, title: ev.title, comp: ev.comp, source: 'list' });
   }
 
+  /* ---------- replace one trip entry: alternatives with their consequences, shown before anything changes ---------- */
+  function openReplace(id, opener) {
+    var st = store.get(), d = tripDerived(), ev = cat.byId[id]; if (!ev) return;
+    var evs = d.tes.filter(function (te) { return te.ev; }).map(function (te) { return te.ev; });
+    var first = evs[0].date, last = evs[evs.length - 1].date, dt = d.dates;
+    var from = dt.arrival && dt.arrival < first ? dt.arrival : first, to = dt.departure && dt.departure > last ? dt.departure : last;
+    var dest = st.context.dest || (M.hasPos(ev) ? { kind: 'city', key: ev.city, city: ev.city, cityHe: ev.cityHe, country: ev.country, countryHe: M.countryHe(ev.country), lat: ev.lat, lng: ev.lng } : null);
+    var locked = st.trip.entries.filter(function (e) { return e.locked; }).map(function (e) { return e.id; });
+    var p = { dest: dest, radiusKm: st.context.radiusKm, mode: 'fixed', from: from, to: to, pace: st.prefs.pace, lodging: st.prefs.lodging, sports: st.filters.sports,
+      excludedComps: st.filters.excludedComps, excludedWeekdays: st.filters.excludedWeekdays, excluded: st.trip.excluded.slice(), locked: locked, fixed: st.trip.entries.map(function (e) { return e.id; }) };
+    var alts = TS.planner.alternatives(p, cat, { window: { from: from, to: to }, events: evs }, id);
+    var dlg = $('#repDialog');
+    dlg.innerHTML = '<div class="dlg-head"><h2 id="repTitle">' + esc(t('plan.alt.title', { title: ev.title })) + '</h2><button type="button" class="dialog-close" data-close aria-label="' + esc(t('dialog.close')) + '">' + U.icon('x') + '</button></div>' +
+      '<div class="dlg-body">' + TS.planView.altListHtml(alts, ev, function (e) { return 'data-swap-to="' + e.id + '" data-swap-from="' + id + '"'; }) + '</div>';
+    openDialog(dlg, opener);
+  }
+  $('#repDialog').addEventListener('click', function (e) {
+    if (e.target.closest('[data-close]')) { $('#repDialog').close(); return; }
+    var b = e.target.closest('[data-swap-to]'); if (!b) return;
+    var from = Number(b.getAttribute('data-swap-from')), to = Number(b.getAttribute('data-swap-to')), nev = cat.byId[to]; if (!nev) return;
+    store.dispatch({ type: 'TRIP_SWAP', id: from, to: to, snap: M.snapshotOf(nev), at: new Date().toISOString() });
+    track('trip_replace', { sport: nev.sportId });
+    announce(t('trip.swapped') + ': ' + nev.title);
+    $('#repDialog').close();
+  });
+
   /* ---------- advanced filters (a genuine draft) ---------- */
   function openFilters(opener) {
     store.dispatch({ type: 'DRAFT_OPEN' });
@@ -577,6 +603,7 @@
     var b;
     if ((b = el.closest('[data-add]'))) { toggleTrip(Number(b.getAttribute('data-add')), sourceOf(b)); return; }
     if ((b = el.closest('[data-open]'))) { openEvent(Number(b.getAttribute('data-open')), b); return; }
+    if ((b = el.closest('[data-replace]'))) { openReplace(Number(b.getAttribute('data-replace')), b); return; }
     if ((b = el.closest('[data-remove]'))) { var id = Number(b.getAttribute('data-remove')); var ev = cat.byId[id]; store.dispatch({ type: 'TRIP_REMOVE', id: id }); announce(t('live.removed', { title: ev ? ev.title : '' })); return; }
     if ((b = el.closest('[data-lock]'))) { var lid = Number(b.getAttribute('data-lock')); var cur = store.get().trip.entries.filter(function (x) { return x.id === lid; })[0]; store.dispatch({ type: 'TRIP_LOCK', id: lid, locked: !(cur && cur.locked) }); track('lock_event', { locked: !(cur && cur.locked) }); return; }
     if ((b = el.closest('[data-ack]'))) { var aid = Number(b.getAttribute('data-ack')); var aev = cat.byId[aid]; if (aev) store.dispatch({ type: 'TRIP_ACK', id: aid, snap: M.snapshotOf(aev) }); return; }
@@ -666,7 +693,7 @@
     if (s.undo !== prev.undo && st.ui.undo) {
       if (undoClose) undoClose(true);
       var u = st.ui.undo, my = ++undoSeq;
-      undoClose = showToast(u.kind === 'clear' ? t('trip.cleared') : u.kind === 'replace' ? t('trip.replaced') : t('trip.removed'), { actionLabel: t('trip.undo'), timeout: 9000,
+      undoClose = showToast(u.kind === 'clear' ? t('trip.cleared') : u.kind === 'replace' ? t('trip.replaced') : u.kind === 'swap' ? t('trip.swapped') : t('trip.removed'), { actionLabel: t('trip.undo'), timeout: 9000,
         onAction: function () { store.dispatch({ type: 'TRIP_UNDO' }); },
         onClose: function (byAction) { if (!byAction && my === undoSeq && store.get().ui.undo) store.dispatch({ type: 'UNDO_DISMISS' }); } });
     }

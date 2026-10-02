@@ -303,7 +303,7 @@
     else if (n.kind === 'same-day-transfer') txt = t('note.sameDayTransfer');
     else if (n.kind === 'transfer-unverified') txt = t('note.transferUnverified', { from: n.from, to: n.to }) + ' <a href="' + esc(M.directionsUrl(n.fromCity || n.from, n.toCity || n.to)) + '" target="_blank" rel="noopener noreferrer">' + esc(t('note.directions')) + '</a>';
     else return '';
-    return '<li class="tnote" role="note">' + (n.kind === 'transfer-unverified' ? txt : esc(txt)) + '</li>';
+    return '<li class="tnote">' + (n.kind === 'transfer-unverified' ? txt : esc(txt)) + '</li>';
   }
   function tripEntryHtml(te, o) {
     var ev = te.ev, e = te.entry, s = te.snap, id = e.id;
@@ -320,7 +320,7 @@
     return '<li class="tentry' + (e.locked ? ' locked' : '') + '" data-ev="' + id + '"><div class="tentry-time">' + esc(time) + '</div><div class="tentry-main">' +
       '<button type="button" class="title-btn" data-open="' + id + '" aria-haspopup="dialog">' + titleHtml(ev) + '</button>' +
       '<div class="ev-meta">' + M.sportLabelHtml(ev.sportId) + compTagHtml(ev, o.cat) + '<span class="ev-place">' + placeHtml(ev) + '</span></div>' + changed + '</div>' +
-      '<div class="tentry-actions"><button type="button" class="btn small" data-lock="' + id + '" aria-pressed="' + !!e.locked + '">' + icon('lock') + esc(e.locked ? t('trip.unlock') : t('trip.lock')) + '</button>' +
+      '<div class="tentry-actions">' + (e.locked ? '' : '<button type="button" class="btn small" data-replace="' + id + '" aria-haspopup="dialog" aria-label="' + esc(t('trip.replaceNamed', { title: ev.title })) + '">' + esc(t('trip.replace')) + '</button>') + '<button type="button" class="btn small" data-lock="' + id + '" aria-pressed="' + !!e.locked + '">' + icon('lock') + esc(e.locked ? t('trip.unlock') : t('trip.lock')) + '</button>' +
       '<button type="button" class="btn small danger" data-remove="' + id + '" aria-label="' + esc(t('trip.removeNamed', { title: ev.title })) + '">' + esc(t('trip.remove')) + '</button></div></li>';
   }
   function snapText(s) { return s ? [s.date, s.dt && s.dt.slice(11, 16) !== '00:00' ? s.dt.slice(11, 16) : '', s.venue || '', s.cityHe || s.city || ''].filter(Boolean).join(' · ') : ''; }
