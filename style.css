@@ -186,6 +186,8 @@ input[type=range]{width:100%;accent-color:var(--brand-primary);min-height:32px}
 .ev-time--text{font-weight:500;font-size:12px;color:var(--text-muted)}
 .ev-date{display:block;font-size:12px;font-weight:400;color:var(--text-muted)}
 .ev-main{min-width:0}
+.ev-group{display:block}
+.ev-group .ev-main{max-width:none}
 .ev-title{margin:0;font:700 17px/1.35 var(--sans)}
 .title-btn{background:none;border:0;padding:4px 0;margin:0;text-align:start;font:inherit;color:inherit;cursor:pointer;display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;max-width:100%;min-height:32px}
 .title-btn:hover bdi,.title-btn:hover{text-decoration:underline;text-decoration-color:var(--text-muted);text-underline-offset:3px}
@@ -383,7 +385,7 @@ dialog p{margin:0 0 8px}
 }
 
 /* ---------- tickets ---------- */
-.tix-chip{display:inline-block;font-size:13px;color:var(--text-muted);border:1px solid var(--border-subtle);border-radius:999px;padding:1px 10px}
+.tix-chip{display:inline-block;max-width:100%;font-size:13px;line-height:1.5;color:var(--text-muted);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:2px 10px}
 .tix-chip--price{color:var(--text);border-color:var(--link);font-weight:600}
 .tix-price{margin:0 0 6px;font-size:17px}
 .tix-basis{margin:0 0 8px;padding-inline-start:18px;color:var(--text-muted);font-size:13px}

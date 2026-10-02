@@ -241,3 +241,32 @@ test.describe('P21b hostile provider data in the Plan and ticket surfaces', () =
     expect(page.errors).toEqual([]);
   });
 });
+
+test.describe('P13 flight and hotel searches agree with the trip dates', () => {
+  test('same-city trip: one return flight and one stay for the exact fixed dates; two cities: one-ways and two stays; fixed dates are never extended', async ({ page }) => {
+    await open(page, { feed: PLAN_FEED });
+    await firstSearch(page, { dest: 'לונדון', from: '2026-10-09', to: '2026-10-11' });
+    await page.locator('#list .ev', { hasText: 'ווסט האם' }).locator('.add').click();
+    await page.click('#tab-trip');
+    const hotels = page.locator('a[data-link="hotel"]');
+    await expect(hotels).toHaveCount(1);
+    const href = await hotels.first().getAttribute('href');
+    expect(href).toContain('checkin=2026-10-09'); expect(href).toContain('checkout=2026-10-11');          // the fixed range is the stay: no extra night
+    const flights = page.locator('a[data-link="flight"]');
+    await expect(flights).toHaveCount(1);
+    const fh = decodeURIComponent(await flights.first().getAttribute('href'));
+    expect(fh).toContain('2026-10-09'); expect(fh).toContain('2026-10-11');
+    await expect(page.locator('.tsummary')).toContainText('2 לילות');
+    // add a Manchester match on the 10th: two cities -> one-way flights and two stays, dates unchanged
+    await page.click('#tab-search');
+    await page.click('#ctxEdit');
+    await page.fill('#cxDest', 'אנגליה'); await page.keyboard.press('ArrowDown'); await page.keyboard.press('Enter');
+    await page.click('#cxGo');
+    await page.locator('#list .ev', { hasText: "מנצ'סטר" }).locator('.add').click();
+    await page.click('#tab-trip');
+    await expect(page.locator('a[data-link="hotel"]')).toHaveCount(2);
+    await expect(page.locator('a[data-link="flight"]')).toHaveCount(2);
+    await expect(page.locator('#tArr')).toHaveValue('2026-10-09');
+    await expect(page.locator('#tDep')).toHaveValue('2026-10-11');
+  });
+});
