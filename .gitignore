@@ -19,3 +19,6 @@ playwright-report/
 tickets/_review/
 tickets/config.json
 __pycache__/
+
+# Playwright Firefox/WebKit binaries for cross-engine runs (kept inside the project folder, never committed)
+.browsers/

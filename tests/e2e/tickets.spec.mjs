@@ -22,7 +22,7 @@ async function open(page, doc) {
   await page.route('**/tickets/offers.json', (r) => (doc === 404 ? r.fulfill({ status: 404, body: 'no' }) : doc === 'bad' ? r.fulfill({ contentType: 'application/json', body: '{not json' }) : r.fulfill({ contentType: 'application/json', body: JSON.stringify(doc) })));
   await page.route('https://www.sportsevents365.com/**', (r) => r.fulfill({ contentType: 'text/html', body: '<title>provider</title>' }));
   const errors = []; page.on('pageerror', (e) => errors.push(e.message)); page.errors = errors;
-  page.events = []; page.on('console', (m) => { if (m.type() === 'debug' && m.text().includes('[analytics]')) page.events.push(m.text()); });
+  page.events = []; page.on('console', (m) => { if (m.text().includes('[analytics]')) page.events.push(m.text()); });
   await page.goto('/index.html');
 }
 const card = (page, name) => page.locator('#list .ev', { hasText: name }).first();

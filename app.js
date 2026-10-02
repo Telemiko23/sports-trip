@@ -42,7 +42,7 @@
     try {
       var p = params || {}; p.ui_version = UI_VERSION;
       if (typeof gtag === 'function' && !window.TOSPORT_ANALYTICS_OFF) gtag('event', name, p);
-      if (window.console && console.debug) console.debug('[analytics]', name, p);
+      if (window.console && console.debug) console.debug('[analytics] ' + name + ' ' + JSON.stringify(p));
     } catch (e) { }
   }
 

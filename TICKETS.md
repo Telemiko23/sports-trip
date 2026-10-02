@@ -1,5 +1,8 @@
 # TICKETS — Sports Events 365 enrichment
 
+> **PAUSED (2026-10-03):** no further ticket work until the owner has met the affiliate manager and decided whether this integration is relevant at all. Nothing here is wired to production data; the layer is inert without `tickets/offers.json`.
+> What the affiliate panel showed (owner screenshots): the programme runs on **Post Affiliate Pro** (campaigns, banners/links with target URLs on **sportsevents365.fr** as well as `.com`, ad channels, SubId tracking, a Deeplink generator, commission 8% / 7% per sale). It showed **no API, feed or price data**. If work resumes: add every real landing domain to `ALLOWED_HOSTS` (`js/tickets.js`) and `allowed_hosts` (config), take a link from the Deeplink generator to confirm the format, verify attribution in Reports → Raw Clicks, and only link to URLs that exist in the panel (no invented slugs).
+
 **Status (2026-10-02): the product shell, adapter, matching, review report, state contract, expiry and tests are built and
 verified with synthetic data. Live numeric pricing is OFF and has NOT been verified against the provider.** Nothing in this
 repository claims this account has API access. No credential value belongs in this file or anywhere in the repository.

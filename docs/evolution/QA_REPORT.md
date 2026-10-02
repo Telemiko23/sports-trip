@@ -1,6 +1,6 @@
 # QA report — ToSport v2 (branch `evolution/v2-20261002`)
 
-Run on 2026-10-02/03 on Windows 11, Node 24, Python 3.14, Playwright 1.63 (Chromium). Nothing was pushed or deployed.
+Run on 2026-10-02/03 on Windows 11, Node 24, Python 3.14, Playwright 1.63 (Chromium, Firefox, WebKit). Nothing was pushed or deployed.
 This is engineering verification with deterministic synthetic feeds and a fixed clock (2026-10-02 10:00 Jerusalem) — not a
 user study, not a real-device test, and **not evidence of a live ticket-provider integration**.
 
@@ -13,7 +13,7 @@ user study, not a real-device test, and **not evidence of a live ticket-provider
 | End-to-end — 52 scenarios × 2 projects (desktop Chrome 1280×800, **Pixel 7 emulation** 390×844) | `npx playwright test` | **104 / 104 pass** |
 | Rollback proof — baseline → v2 → baseline on one browser profile/origin | `node tests/capture/rollback-proof.mjs` | **8 / 8 checks pass** |
 | Performance sanity (4× CPU + ~Fast 4G, real feed) | `node tests/capture/perf.mjs` | see §4 |
-| Cross-engine (Firefox, WebKit) | `PW_ENGINES=all npx playwright test` | **not run** — projects are configured, the browser binaries are not installed on this machine (a download that was not authorized in this session) |
+| Cross-engine — the same 52 scenarios on **Firefox**, **WebKit desktop** and **WebKit mobile (iPhone 14 emulation)** | `npm run test:engines` | **156 / 156 pass** (52 × 3). Binaries are kept in `./.browsers` (gitignored, ~516 MB, installed with the owner's approval). One Firefox-only failure was a test-harness difference (console argument serialisation), fixed by logging analytics as one JSON string — no product defect |
 
 ## 2. Scenario coverage (brief IDs)
 
@@ -83,7 +83,7 @@ single/sport paces returned one proposal only (alternatives without each lead ev
 | --- | --- |
 | Live ticket prices | **Blocked externally** (entitlement, price basis, caching terms, deep link) — `TICKETS.md` §5 has the one-list of inputs |
 | Firefox / WebKit runs | Configured, **not run** (binaries not installed; download not authorized here) |
-| Real devices, screen readers | Handoff |
+| Real devices, screen readers | Handoff. Firefox/WebKit *engines* were run on Windows; that is **not** an iPhone/Safari device test (notably Safari's storage eviction after ~7 days without a visit is not emulated) |
 | Map marker clustering | Deferred; the list is the accessible alternative |
 | English / Arabic UI | Strings extracted + direction support; no selector until a locale is genuinely translated |
 | Share URL / `.ics` | Next (no fake timed events for unknown times); JSON backup/copy shipped |

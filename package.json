@@ -5,6 +5,7 @@
   "scripts": {
     "test": "playwright test",
     "test:unit": "node --test tests/unit/*.test.js",
+    "test:engines": "node tests/run-engines.mjs",
     "test:py": "py -m unittest discover -s tests/py"
   },
   "devDependencies": {

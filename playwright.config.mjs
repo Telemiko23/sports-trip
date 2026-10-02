@@ -1,4 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'node:path';
+
+// Cross-engine runs use the Firefox/WebKit binaries kept INSIDE the project (.browsers/, gitignored):
+//   PW_ENGINES=all npx playwright test --project=firefox --project=webkit --project=webkit-mobile
+if (process.env.PW_ENGINES === 'all' && !process.env.PLAYWRIGHT_BROWSERS_PATH) process.env.PLAYWRIGHT_BROWSERS_PATH = path.resolve(import.meta.dirname, '.browsers');
 
 // Development/test tooling only. Tests serve the sample feed from tests/fixtures (never production data) and a controllable clock.
 export default defineConfig({
