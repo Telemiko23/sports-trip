@@ -188,7 +188,7 @@
     var dist = ref ? distBadge(ref, f) : '';
     return '<li class="match' + (picked ? ' picked' : '') + '">' + kickHtml(f, withDate) +
       '<div class="teams">' + titleHtml(f) + '</div>' +
-      '<div class="meta">' + tagHtml(f) + (f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : 'עיר לא ידועה') + (f.venue ? ' · ' + venueHtml(f) : '') + dist + detailBtn(f) + '</div>' +
+      '<div class="meta">' + tagHtml(f) + placeHtml(f) + dist + detailBtn(f) + '</div>' +
       '<button type="button" class="add" data-id="' + f.id + '" aria-pressed="' + picked + '">' + (picked ? 'בטיול ✓' : 'הוסף לטיול') + '</button></li>';
   }
   function weekday(s) { return parseDay(s).getDay(); }
@@ -212,6 +212,14 @@
     return url ? '<a class="venue-link" target="_blank" rel="noopener" href="' + esc(url) + '"><bdi dir="rtl">' + esc(f.venue) + '</bdi></a>' : '<bdi dir="rtl">' + esc(f.venue) + '</bdi>';
   }
   function fmtLong(s) { return parseDay(s).toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' }); }
+  // where an event happens: city + stadium, saying so explicitly when we don't have the stadium (or
+  // even the city) yet - e.g. a multi-city tournament whose host venue isn't announced - instead of
+  // silently showing less than a card with full details would
+  function placeHtml(f) {
+    var city = f.city ? '<bdi dir="rtl">' + esc(f.city_he || f.city) + '</bdi>' : '';
+    if (f.venue) return (city ? city + ' · ' : '') + venueHtml(f);
+    return city ? city + ' · מיקום מדויק עדיין לא ידוע' : 'מיקום עדיין לא ידוע';
+  }
 
   // ---------- custom combobox (styled dropdown, replaces native <datalist>) ----------
   // items: [{label, sub, search, ...anything else onSelect needs}]
@@ -767,7 +775,7 @@
   function tripText(list) {
     return list.map(function (f) {
       var when = isEvent(f) ? dayOf(f) + (endDay(f) !== dayOf(f) ? ' עד ' + endDay(f) : '') : dayOf(f) + ' ' + (f.status === 'TBD' ? '(שעה לא מאושרת)' : f.dt.slice(11, 16));
-      return when + '  ' + titleHe(f).replace(' – ', ' - ') + '  (' + (f.city_he || f.city || '?') + ', ' + (f.comp_he || f.comp) + ')';
+      return when + '  ' + titleHe(f).replace(' – ', ' - ') + '  (' + (f.city_he || f.city || 'מיקום עדיין לא ידוע') + ', ' + (f.comp_he || f.comp) + ')';
     }).join('\n');
   }
 
@@ -797,7 +805,7 @@
         '<div class="body"><button type="button" class="rm" data-rm="' + f.id + '" aria-label="הסר מהטיול">×</button>' +
         (ev ? '<div class="t">' + flagHtml(f) + '<bdi dir="rtl" class="tname">' + esc(titleHe(f)) + '</bdi></div>'
             : '<div class="t">' + homeLogo + '<bdi dir="rtl" class="tname">' + esc(f.home_he || f.home) + '</bdi><span class="vs">–</span><bdi dir="rtl" class="tname">' + esc(f.away_he || f.away) + '</bdi>' + awayLogo + '</div>') +
-        '<div class="s">' + tagHtml(f) + (ev ? rangeHtml(f) : f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · <bdi dir="rtl">' + esc(f.city_he || f.city || 'עיר לא ידועה') + '</bdi>' + (f.venue ? ' · ' + venueHtml(f) : '') + detailBtn(f) + '</div></div></div>';
+        '<div class="s">' + tagHtml(f) + (ev ? rangeHtml(f) : f.status === 'TBD' ? 'שעה לא מאושרת' : esc(f.dt.slice(11, 16))) + ' · ' + placeHtml(f) + detailBtn(f) + '</div></div></div>';
     });
     var links = bookingLinks(list);
     html += '<div class="tools">' +

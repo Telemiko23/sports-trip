@@ -221,9 +221,17 @@
   42.3546,
   -7.8533
  ],
+ "Campo Padre José Tavares|Castro Daire": [
+  40.91715,
+  -7.93911
+ ],
  "Campo de Futbol de Vallecas|Madrid": [
   40.3918,
   -3.6587
+ ],
+ "Campo de Fútbol Municipal San Juan|Soria": [
+  41.81781,
+  -2.4491
  ],
  "Campo de Oreyana|Ribadesella": [
   43.4581,
@@ -282,9 +290,17 @@
   38.89798,
   -9.034479
  ],
+ "Complexo Desportivo Prof. José Sousa Gomes|Fazendas de Almeirim": [
+  39.17886,
+  -8.57769
+ ],
  "Complexo Desportivo da Camacha|Camacha (Ilha da Madeira)": [
   32.672564,
   -16.852534
+ ],
+ "Complexo Desportivo de Campanhã|Porto": [
+  41.15906,
+  -8.57206
  ],
  "County Ground|Swindon": [
   51.5645,
@@ -318,6 +334,10 @@
   52.2604,
   6.1727
  ],
+ "De Boekhorst|Noordwijkerhout": [
+  52.26822,
+  4.49745
+ ],
  "De Ebbenhorst|Nijkerk": [
   52.2237,
   5.499
@@ -330,9 +350,17 @@
   52.2364,
   6.8378
  ],
+ "De Koerbelt|Rijssen": [
+  52.2953,
+  6.51873
+ ],
  "De Kuip|Rotterdam": [
   51.8939,
   4.5232
+ ],
+ "De Wetering|Genemuiden": [
+  52.61683,
+  6.03839
  ],
  "De Zwaaier|Werkendam": [
   51.8087,
@@ -540,6 +568,14 @@
   41.1618,
   -8.5837
  ],
+ "Estádio Algarve|Almancil": [
+  37.08847,
+  -7.97513
+ ],
+ "Estádio António Almeida Correia|Alcochete": [
+  38.75443,
+  -8.95478
+ ],
  "Estádio Cidade de Barcelos|Barcelos": [
   41.551259,
   -8.622519
@@ -548,18 +584,42 @@
   41.378253,
   -8.354011
  ],
+ "Estádio Conde Dias Garcia|São João da Madeira": [
+  40.90177,
+  -8.4971
+ ],
  "Estádio D. Afonso Henriques|Guimarães": [
   41.445937,
   -8.300318
  ],
  "Estádio Dr. José Sousa Gomes|Fazendas de Almeirim": null,
+ "Estádio Dr. José de Matos|Viana do Castelo": [
+  41.69707,
+  -8.83866
+ ],
+ "Estádio Dr. Machado de Matos|Felgueiras": [
+  41.3561,
+  -8.19004
+ ],
+ "Estádio Dr. Magalhães Pessoa|Leiria": [
+  39.74893,
+  -8.81231
+ ],
  "Estádio José Alvalade|Lisbon": [
   38.76133,
   -9.160621
  ],
+ "Estádio José Arcanjo|Olhão": [
+  37.02932,
+  -7.84857
+ ],
  "Estádio José Gomes|Amadora": [
   38.752166,
   -9.227457
+ ],
+ "Estádio João Cardoso|Tondela": [
+  40.51219,
+  -8.08202
  ],
  "Estádio Manuel Marques|Torres Vedras": [
   39.0948,
@@ -568,6 +628,18 @@
  "Estádio Municipal Arouca|Arouca": [
   40.933014,
   -8.249605
+ ],
+ "Estádio Municipal Cidade de Coimbra|Coimbra": [
+  40.20346,
+  -8.40745
+ ],
+ "Estádio Municipal das Laranjeiras|Paredes": [
+  41.2027,
+  -8.33223
+ ],
+ "Estádio Municipal de Alpendorada|Alpendorada": [
+  41.08846,
+  -8.25115
  ],
  "Estádio Municipal de Braga|Braga": [
   41.561957,
@@ -581,6 +653,10 @@
   40.659728,
   -7.900192
  ],
+ "Estádio Papa Francisco|Fátima": [
+  39.60362,
+  -8.66273
+ ],
  "Estádio da Luz|Lisbon": [
   38.7527,
   -9.1847
@@ -589,17 +665,41 @@
   32.670733,
   -16.883111
  ],
+ "Estádio da Tapadinha|Lisbon": [
+  38.70982,
+  -9.18102
+ ],
+ "Estádio de São Luís|Faro": [
+  37.023,
+  -7.92806
+ ],
  "Estádio de São Miguel|Ponta Delgada": [
   37.763899,
   -25.623026
+ ],
+ "Estádio do Bonfim|Setúbal": [
+  38.53291,
+  -8.88813
+ ],
+ "Estádio do CD Aves|Vila das Aves": [
+  41.36703,
+  -8.41146
  ],
  "Estádio do Dragão|Porto": [
   41.1618,
   -8.5837
  ],
+ "Estádio do Lusitânia de Lourosa FC|Lourosa": [
+  40.988,
+  -8.54322
+ ],
  "Estádio do Marítimo|Funchal": [
   32.645726,
   -16.928041
+ ],
+ "Estádio do Restelo|Lisbon": [
+  38.70263,
+  -9.2075
  ],
  "Estádio do Rio Ave FC|Vila do Conde": [
   41.362818,
@@ -952,6 +1052,10 @@
   49.9839,
   8.2232
  ],
+ "Middelmors|Rijnsburg": [
+  52.20055,
+  4.44181
+ ],
  "Miejski Stadion Pilkarski Rakow|Częstochowa": [
   50.7768,
   19.1593
@@ -1108,6 +1212,10 @@
   50.857,
   6.0058
  ],
+ "Parque Desportivo do Buçaquinho|Cortegaça": [
+  40.94341,
+  -8.63845
+ ],
  "Parque Joaquim de Almeida Freitas|Moreira de Conegos": null,
  "Parque de Jogos do Brito SC|Brito": [
   41.4507,
@@ -1165,6 +1273,10 @@
   53.2541,
   -1.4274
  ],
+ "Purmersteijn Sports Park|Purmerend": [
+  52.51429,
+  4.97269
+ ],
  "Qi Zhong Tennis Center|Shanghai": [
   31.039947,
   121.359165
@@ -1172,6 +1284,10 @@
  "RCDE Stadium|Cornella de Llobregat": [
   41.3479,
   2.0765
+ ],
+ "RKAV Volendam complex|Volendam": [
+  52.49352,
+  5.06327
  ],
  "Racecourse Ground|Wrexham": [
   53.0518,
@@ -1287,6 +1403,10 @@
   8.517152
  ],
  "Seacon - De Koel|Venlo": null,
+ "Seacon Stadion - De Koel|Venlo": [
+  51.35207,
+  6.18003
+ ],
  "Select Car Leasing Stadium|Reading": [
   51.4223,
   -0.9831
@@ -1339,7 +1459,10 @@
   52.2579,
   5.3779
  ],
- "Sportpark Denoek|Hoek": null,
+ "Sportpark Denoek|Hoek": [
+  51.31471,
+  3.78855
+ ],
  "Sportpark Dijkpolder|Maassluis": [
   51.9269,
   4.2594
@@ -1353,8 +1476,15 @@
   4.4737
  ],
  "Sportpark ICT Specialist|Assen": null,
+ "Sportpark Koninklijke HFC Novi8 water|Haarlem": [
+  52.36385,
+  4.6231
+ ],
  "Sportpark Middelmors|Rijnsburg": null,
- "Sportpark Nieuw Zuid|Katwijk": null,
+ "Sportpark Nieuw Zuid|Katwijk": [
+  52.195,
+  4.39646
+ ],
  "Sportpark Noord|Groesbeek": [
   51.7913,
   5.9112
@@ -1563,6 +1693,10 @@
  "Stadio Ciro Vigorito|Benevento": [
   41.1166,
   14.7811
+ ],
+ "Stadio Città di Arezzo|Arezzo": [
+  43.45115,
+  11.89436
  ],
  "Stadio Comunale|Chiavari": [
   44.3154,
@@ -1811,6 +1945,10 @@
   48.1615,
   17.1322
  ],
+ "The ASM Stadium|Thame, Oxfordshire": [
+  51.754804,
+  -0.974148
+ ],
  "The Brewery Field|Spennymoor, County Durham": [
   54.704345,
   -1.597965
@@ -1927,6 +2065,10 @@
   39.1992,
   9.1374
  ],
+ "Univé Sportpark|Assen": [
+  52.98599,
+  6.54353
+ ],
  "Vale Park|Stoke on Trent": [
   53.05,
   -2.1927
@@ -2015,6 +2157,10 @@
   53.0664,
   8.8377
  ],
+ "Wesselopark|Kloetinge": [
+  51.50115,
+  3.91961
+ ],
  "Westfalenhalle|Dortmund": [
   51.4965,
   7.4569
@@ -2064,9 +2210,5 @@
  "Łęczna Stadium|Leczna": [
   51.301705,
   22.875548
- ],
- "The ASM Stadium|Thame, Oxfordshire": [
-  51.754804,
-  -0.974148
  ]
 }

@@ -10,6 +10,7 @@ To fix a specific name: add/edit an entry here (HE_TEAMS keyed by the exact Engl
 team name as it appears in fixtures.js, HE_CITIES keyed by "City|Country"), then re-run
 backfill_hebrew.py (no API calls, instant) or build_fixtures.py.
 """
+import unicodedata
 
 HE_COMPETITIONS = {
     "Premier League": "הפרמייר ליג",
@@ -309,8 +310,8 @@ HE_TEAMS = {
     "Juventus": "יובנטוס",
     "Kairat Almaty": "קאיראט אלמטי",
     "Karlsruher SC": "קרלסרוהה",
-    "Kloetinge": "קלוטינחה",
-    "Koninklijke HFC": "קוניקלייקה HFC",
+    "Kloetinge": "קלוטינייה",
+    "Koninklijke HFC": "HFC קונינקלייקה",
     "Korona Kielce": "קורונה קיילצה",
     "Kozakken Boys": "קוזקן בויז",
     "Las Palmas": "לאס פלמאס",
@@ -409,7 +410,7 @@ HE_TEAMS = {
     "Plzen": "פילזן",
     "Preston": "פרסטון",
     "PSV Eindhoven": "PSV איינדהובן",
-    "Purmersteijn": "פורמרסטיין",
+    "Purmersteijn": "פורמרשטיין",
     "Puszcza Niepołomice": "פושצ'ה ניפולומיצה",
     "QPR": "קווינס פארק ריינג'רס",
     "Racing Santander": "רסינג סנטנדר",
@@ -443,7 +444,7 @@ HE_TEAMS = {
     "San Rafael": "סנט ראפל",
     "Sassuolo": "סאסואולו",
     "SC Freiburg": "פרייבורג",
-    "SC Genemuiden": "SC חנמוידן",
+    "SC Genemuiden": "SC חנמיידן",
     "SC Paderborn 07": "פדרבורן 07",
     "Sevilla": "סביליה",
     "SG Sonnenhof Grossaspach": "זונהוף גרוסאשפאך",
@@ -644,6 +645,27 @@ HE_TEAMS = {
     "FC Midtjylland": "מיטיולן",
     "Benfica": "בנפיקה ליסבון",
     "Trabzonspor": "טרבזונספור",
+    # from the user's filled-in missing_info.csv (2026-10-02)
+    "Rijnsburgse Boys": "ריינסבוחסה בויס",
+    "Alpendorada": "אלפנדורדה",
+    "Academica": "אקדמיקה דה קוימברה",
+    "Fazendense": "פאזנדנסה",
+    "Felgueiras 1932": "פלגיירס 1932",
+    "CF Os Belenenses": "אוס בלננסס",
+    "Atlético CP": "אתלטיקו קלוב דה פורטוגל",
+    "Alcochetense": "אלקושטנסה",
+    "Vianense": "ויאננסה",
+    "Vitoria Setubal": "ויטוריה דה סטובל",
+    "Olhanense": "אולננסה",
+    "Tondela": "טונדלה",
+    "União de Leiria": "אוניאו דשפורטיבה דה לייריה",
+    "Louletano": "לולטאנו",
+    "Lusitânia Lourosa": "לוסיטנייה",
+    "Salgueiros": "סלגיירוס",
+    "Sanjoanense": "סנג'ואננסה",
+    "Fátima": "פאצ'ימה",
+    "Farense": "פארנסה",
+    "Recreativa de Lamelas": "לאמלאס",
 }
 
 # keyed by "City|Country" (matches the API's country label, e.g. "England")
@@ -796,7 +818,7 @@ HE_CITIES = {
     "Kiel|Germany": "קיל",
     "Kielce|Poland": "קיילצה",
     "Kleczew|Poland": "קלצ'ב",
-    "Kloetinge|Netherlands": "קלוטינחה",
+    "Kloetinge|Netherlands": "קלוטינייה",
     "Kraków|Poland": "קרקוב",
     "Palma|Spain": "פלמה דה מיורקה",
     "La Coruña|Spain": "לה קורוניה",
@@ -1073,6 +1095,34 @@ HE_CITIES = {
     "Ponta Delgada|Portugal": "פונטה דלגדה", "Rio Maior|Portugal": "ריו מאיור",
     "Thame, Oxfordshire|England": "תיים, אוקספורדשייר", "Vila Nova de Famalicao|Portugal": "וילה נובה דה פמליקאו",
     "Vila do Conde|Portugal": "וילה דו קונדה", "Viseu|Portugal": "ויזאו",
+    # from the user's filled-in missing_info.csv (2026-10-02)
+    "Rijnsburg|Netherlands": "ריינסבורח",
+    "Alpendorada|Portugal": "אלפנדורדה",
+    "Felgueiras|Portugal": "פלגיירס",
+    "Genemuiden|Netherlands": "חנמיידן",
+    "Noordwijkerhout|Netherlands": "נורדווייקרהאוט",
+    "Purmerend|Netherlands": "פורמרנד",
+    "Vila das Aves|Portugal": "וילה דס אווס",
+    "Alcochete|Portugal": "אלקושצ'ה",
+    "Viana do Castelo|Portugal": "ויאנה דו קאסטלו",
+    "Setúbal|Portugal": "סטובל",
+    "Olhão|Portugal": "אולייהו",
+    "Tondela|Portugal": "טונדלה",
+    "Leiria|Portugal": "לייריה",
+    "Almancil|Portugal": "לולה",
+    "Lourosa|Portugal": "לאורוסה",
+    "São João da Madeira|Portugal": "סאו ז'ואאו דה מדיירה",
+    "Fátima|Portugal": "פאצ'ימה",
+    "Cortegaça|Portugal": "קורטגאסה",
+    "Castro Daire|Portugal": "קסטרו דיירה",
+    "Coimbra|Portugal": "קוימברה",  # derived: matches the spelling in the user-corrected team name "אקדמיקה דה קוימברה",
+    # well-known cities with a standard Hebrew name (added 2026-10-02 - the automatic transliteration was visibly wrong)
+    "Seville|Spain": "סביליה",
+    "Cardiff|Wales": "קרדיף",
+    "Bordeaux|France": "בורדו",
+    "Bucharest|Romania": "בוקרשט",
+    "Belgrade|Serbia": "בלגרד",
+    "Thessaloniki|Greece": "סלוניקי",
 }
 
 _CONS = {
@@ -1092,9 +1142,26 @@ _VOWELS = [
 ]
 
 
+_FOLD_SPECIAL = {"ç": "s", "ß": "ss", "ł": "l", "đ": "d", "ñ": "n"}
+
+
+def _fold_accents(s):
+    """Drop diacritics the tables below don't know (ã, é, ó, ç...) so they can't leak into the Hebrew
+    text as stray Latin letters. ø/å/æ have their own entries in _VOWELS, so they are kept as-is."""
+    out = []
+    for ch in s:
+        if ch in "øåæ":
+            out.append(ch)
+        elif ch in _FOLD_SPECIAL:
+            out.append(_FOLD_SPECIAL[ch])
+        else:
+            out.append("".join(c for c in unicodedata.normalize("NFD", ch) if not unicodedata.combining(c)))
+    return "".join(out)
+
+
 def transliterate(name):
     """Best-effort phonetic Hebrew transliteration for a name not in the dictionaries above."""
-    out, i, s = [], 0, name.lower()
+    out, i, s = [], 0, _fold_accents(name.lower())
     while i < len(s):
         ch = s[i]
         if not ch.isalpha():

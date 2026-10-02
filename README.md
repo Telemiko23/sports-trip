@@ -96,6 +96,7 @@ Spanish clubs the API didn't have a crest for).
 | `brand.js` | The product's public name (ToSport), descriptor and version - read by `app.js` for the page title, logo text and footer. |
 | `brand/` | The vector logos (`tosport-logo-blue-white.svg` in the header, `tosport-logo-ink-blue.svg` for a future light theme), `favicon.svg` and PNG fallbacks (`favicon.png`, `apple-touch-icon.png`). See BRANDING.md. |
 | `missing_info_report.py` | Regenerates `missing_info.csv` (venues/pins/cities to fill in, keeps my earlier suggestions) and `missing_translations.csv` (names with no reviewed Hebrew). If the CSV is open in Excel it writes `*_UPDATED.csv` instead. | Whenever you want a fresh to-fill list. |
+| `check_coordinates.py` | Read-only sanity check (no network): lists stadium pins that sit far from their city's own point - usually a wrong city point (a geocoder returned a province centroid), or a typo in a hand-entered pin. Fix a city point in `cities_manual.json`, then run `backfill_hebrew.py`. | After editing venues/cities, or when a city's distances look off. |
 | `.github/workflows/` | `update-fixtures.yml` (daily, football) and `update-events.yml` (weekly + manual, F1/tennis; opens a GitHub issue when the AllSportDB key has expired). They share a concurrency group so they never push at the same time. | - |
 | `allsportdb_probe.py` | Read-only exploration of the AllSportDB API (needs `ALLSPORTDB_KEY` env var) - writes a git-ignored dump, doesn't touch `fixtures.js`. |
 | `README.md` | This file. |

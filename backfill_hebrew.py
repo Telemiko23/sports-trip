@@ -96,6 +96,7 @@ def main():
         # to geocode_any() (e.g. Scotland vs England) gets picked up on old data as well
         needs_resolve = r.get("city") and (
             nl_override or overridden or is_uefa or r.get("lat") is None or r.get("lng") is None
+            or (cc and f"{r['city']}|{cc}" in manual)   # a hand-entered point in cities_manual.json always wins
         )
         if needs_resolve:
             coords = None
