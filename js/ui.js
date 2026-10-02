@@ -63,11 +63,11 @@
       '<div class="row2" id="' + p + 'Flex"' + (fixed ? ' hidden' : '') + '>' +
       '<label>' + esc(t('form.month')) + '<select id="' + p + 'Month">' + months + '</select></label>' +
       '<label>' + esc(t('form.duration')) + '<select id="' + p + 'Days">' + durations + '</select></label>' +
-      '<p class="hint span-all">' + esc(t('form.flexNote')) + '</p></div>' +
+      (o.flexExtra || '') + '<p class="hint span-all">' + esc(t('form.flexNote')) + '</p></div>' +
       '<p class="field-error" id="' + p + 'DatesErr" role="alert" hidden></p></fieldset>' +
       (o.radius ? '<div class="field"><label for="' + p + 'Radius">' + esc(t('form.radius')) + ': <output id="' + p + 'RadiusOut">' + esc(t('form.radiusKm', { n: o.radiusKm || 150 })) + '</output></label>' +
         '<input id="' + p + 'Radius" type="range" min="10" max="800" step="10" value="' + (o.radiusKm || 150) + '"></div>' : '') +
-      '<div class="form-actions"><button type="submit" class="btn primary" id="' + p + 'Go">' + esc(o.submitLabel || t('form.go')) + '</button>' +
+      (o.extra || '') + '<div class="form-actions"><button type="submit" class="btn primary" id="' + p + 'Go">' + esc(o.submitLabel || t('form.go')) + '</button>' +
       (o.showBrowse ? '<button type="button" class="linkbtn" id="' + p + 'Browse">' + esc(t('ob.browse')) + '</button>' : '') +
       (o.showCancel ? '<button type="button" class="btn" id="' + p + 'Cancel">' + esc(t('form.cancel')) + '</button>' : '') + '</div></form>';
   }

@@ -51,5 +51,14 @@ export async function firstSearch(page, { dest = 'לונדון', from = '2026-10
   await page.waitForSelector('#list .ev, #list .empty');
 }
 
+// the planner feed: three London weekends (Oct 9-11, Nov 20-22), Manchester (Dec), Brighton, and a French club across the Channel
+export const PLAN_FEED = fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'plan-data.js'), 'utf8');
+export async function toPlan(page, opts = {}) {
+  await open(page, { feed: PLAN_FEED });
+  await firstSearch(page, opts);
+  await page.click('#tab-plan');
+  await page.waitForSelector('#plResults .plan-card, #plResults .empty-note');
+}
+
 export function titles(page) { return page.locator('#list .ev .title-btn, #list .ev-group .title-text').allInnerTexts(); }
 export async function tripIds(page) { return page.evaluate(() => JSON.parse(localStorage.getItem('tosport_v2_trip') || '{"trip":{"entries":[]}}').trip.entries.map((e) => e.id)); }

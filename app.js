@@ -130,6 +130,16 @@
     }
     return out;
   }
+  function planMonthOptions() {
+    var out = [], d = new Date(); d = new Date(d.getFullYear(), d.getMonth(), 1);
+    for (var i = 0; i < 12; i++) { out.push({ value: d.getFullYear() + '-' + M.pad(d.getMonth() + 1), label: M.HE_MONTHS[d.getMonth()] + ' ' + d.getFullYear() }); d = new Date(d.getFullYear(), d.getMonth() + 1, 1); }
+    return out;
+  }
+  function selectDest(prefix, d) {
+    var input = $('#' + prefix + 'Dest'), fs = forms[prefix]; if (!input || !fs) return;
+    fs.selected = d; input.value = d.label; setErr(prefix + 'DestErr', ''); input.removeAttribute('aria-invalid');
+    var hint = $('#' + prefix + 'DestHint'); if (hint) hint.textContent = destHintFor(d);
+  }
   function destItems(q) {
     return M.suggestDestinations(dests, q, 8).map(function (d) { return { label: d.label, sub: d.kind === 'country' ? '' : '', value: d }; });
   }
@@ -175,9 +185,14 @@
     if (mode === 'flexible') {
       var ym = $('#' + prefix + 'Month').value, n = Number($('#' + prefix + 'Days').value) || 3;
       var from = ym + '-01', to = M.monthEnd(ym);
+      var partEl = $('#' + prefix + 'Part'), sdEl = $('#' + prefix + 'StartDay');
+      if (partEl && partEl.value && partEl.value !== 'all') {
+        var w = TS.planner.monthWindow({ month: Number(ym.slice(5, 7)), year: Number(ym.slice(0, 4)), part: partEl.value }, null);
+        if (w) { from = w.from; to = w.to; }
+      }
       if (to < today()) { setErr(prefix + 'DatesErr', t('form.datesPast')); return { ok: false }; }
       if (from < today()) from = today();
-      return { ok: true, dates: { mode: 'flexible', from: from, to: to, days: n, weekdays: null } };
+      return { ok: true, dates: { mode: 'flexible', from: from, to: to, days: n, weekdays: sdEl && sdEl.value !== '' ? [Number(sdEl.value)] : null } };
     }
     var f = $('#' + prefix + 'From').value, to2 = $('#' + prefix + 'To').value;
     if (!M.isISODate(f) || !M.isISODate(to2)) { setErr(prefix + 'DatesErr', t('form.datesMissing')); return { ok: false, msg: t('form.datesMissing') }; }
@@ -554,7 +569,7 @@
   });
 
   /* ---------- plan (placeholder until the planner slice) ---------- */
-  function renderPlan() { var v = $('#view-plan'); if (!v.firstChild) v.innerHTML = '<h2>' + esc(t('plan.title')) + '</h2><p class="hint">' + esc(t('plan.soon')) + '</p>'; if (TS.planView && TS.planView.render) TS.planView.render(v, api); }
+  function renderPlan() { var v = $('#view-plan'); if (TS.planView && TS.planView.render) TS.planView.render(v, api); }
 
   /* ---------- delegated actions ---------- */
   document.addEventListener('click', function (e) {
@@ -651,7 +666,7 @@
     if (s.undo !== prev.undo && st.ui.undo) {
       if (undoClose) undoClose(true);
       var u = st.ui.undo, my = ++undoSeq;
-      undoClose = showToast(u.kind === 'clear' ? t('trip.cleared') : t('trip.removed'), { actionLabel: t('trip.undo'), timeout: 9000,
+      undoClose = showToast(u.kind === 'clear' ? t('trip.cleared') : u.kind === 'replace' ? t('trip.replaced') : t('trip.removed'), { actionLabel: t('trip.undo'), timeout: 9000,
         onAction: function () { store.dispatch({ type: 'TRIP_UNDO' }); },
         onClose: function (byAction) { if (!byAction && my === undoSeq && store.get().ui.undo) store.dispatch({ type: 'UNDO_DISMISS' }); } });
     }
@@ -682,7 +697,7 @@
     S.save(storage, store.get());
     store.dispatch({ type: 'META', lastVisit: today() });
   }
-  var api = { store: store, cat: cat, model: M, ui: U, announce: announce, showToast: showToast, track: track, goTab: goTab, effectiveCtx: effectiveCtx, runQuery: runQuery, today: today, openEvent: openEvent, toggleTrip: toggleTrip, tripDerived: tripDerived, dests: dests, resolveOrigin: resolveOrigin };
+  var api = { bindContextForm: bindContextForm, readContextForm: readContextForm, selectDest: selectDest, monthOptions: planMonthOptions, setErr: setErr, openDialog: openDialog, store: store, cat: cat, model: M, ui: U, announce: announce, showToast: showToast, track: track, goTab: goTab, effectiveCtx: effectiveCtx, runQuery: runQuery, today: today, openEvent: openEvent, toggleTrip: toggleTrip, tripDerived: tripDerived, dests: dests, resolveOrigin: resolveOrigin };
   window.ToSport.app = api;
   boot();
 })();

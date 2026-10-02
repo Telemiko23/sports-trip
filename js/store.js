@@ -143,7 +143,7 @@
         var u = ui.undo; ui.undo = null;
         if (!u) return s;
         if (u.kind === 'remove' && !t.entries.some(function (e) { return e.id === u.entry.id; })) t.entries.splice(Math.min(u.index, t.entries.length), 0, u.entry);
-        if (u.kind === 'clear') { t.entries = cleanEntries(u.entries); t.excluded = cleanIdList(u.excluded); }
+        if (u.kind === 'clear' || u.kind === 'replace') { t.entries = cleanEntries(u.entries); t.excluded = cleanIdList(u.excluded); if (u.kind === 'replace') { t.arrival = iso(u.arrival); t.departure = iso(u.departure); } }
         return s;
       }
       case 'UNDO_DISMISS': ui.undo = null; return s;
@@ -160,7 +160,7 @@
         return s;
       }
       case 'TRIP_REPLACE': {                    // explicit and recoverable: the previous trip becomes the undo snapshot
-        ui.undo = { kind: 'clear', entries: t.entries, excluded: t.excluded };
+        ui.undo = { kind: 'replace', entries: t.entries, excluded: t.excluded, arrival: t.arrival, departure: t.departure };
         var nt = cleanTrip(a.trip); t.entries = nt.entries; t.excluded = nt.excluded; t.arrival = nt.arrival; t.departure = nt.departure;
         return s;
       }
