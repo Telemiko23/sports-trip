@@ -12,6 +12,12 @@ export default defineConfig({
   webServer: { command: 'py -m http.server 8750', url: 'http://localhost:8750/index.html', reuseExistingServer: true, timeout: 20000, stdout: 'ignore', stderr: 'ignore' },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
-    { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } } }
+    { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } } },
+    // cross-engine runs are opt-in:  PW_ENGINES=all npx playwright test   (needs the Playwright firefox/webkit browsers installed)
+    ...(process.env.PW_ENGINES === 'all' ? [
+      { name: 'firefox', use: { ...devices['Desktop Firefox'], viewport: { width: 1280, height: 800 } } },
+      { name: 'webkit', use: { ...devices['Desktop Safari'], viewport: { width: 1280, height: 800 } } },
+      { name: 'webkit-mobile', use: { ...devices['iPhone 14'] } }
+    ] : [])
   ]
 });

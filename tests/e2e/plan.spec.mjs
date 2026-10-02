@@ -219,3 +219,25 @@ test.describe('P10b replace inside My trip', () => {
     expect(page.errors).toEqual([]);
   });
 });
+
+test.describe('P21b hostile provider data in the Plan and ticket surfaces', () => {
+  test('markup in names/competitions/venues never becomes elements or script in proposals, alternatives, excluded list or ticket dialog', async ({ page }) => {
+    const evil = '<img src=x onerror="window.__pwned=1"><b id=injected>x</b>';
+    const feed = PLAN_FEED.replace(/"home_he": "ארסנל"/g, '"home_he": ' + JSON.stringify(evil)).replace(/"venue": "London Ground"/g, '"venue": ' + JSON.stringify(evil)).replace(/"comp_he": "Premier League"/g, '"comp_he": ' + JSON.stringify(evil));
+    await open(page, { feed });
+    await firstSearch(page);
+    await page.click('#tab-plan');
+    await page.waitForSelector('.plan-card');
+    await page.check('input[name="plPace"][value="sport"]');
+    await page.waitForSelector('.plan-card');
+    const row = page.locator('.plan-ev').first();
+    await row.locator('[data-pl="replace"]').click().catch(() => {});
+    await page.locator('.plan-ev [data-pl="exclude"]').first().click().catch(() => {});
+    await page.locator('.plan-excluded summary').click().catch(() => {});
+    expect(await page.locator('#view-plan').innerText()).toContain('onerror');                 // the hostile text really reached the page, as inert text
+    expect(await page.locator('#injected').count()).toBe(0);
+    expect(await page.evaluate(() => window.__pwned)).toBeUndefined();
+    expect(await page.locator('#view-plan img[src="x"]').count()).toBe(0);
+    expect(page.errors).toEqual([]);
+  });
+});

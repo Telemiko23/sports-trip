@@ -14,9 +14,24 @@
   document.title = BRAND.name;
 
   var cat = M.buildCatalog(DATA), dests = M.buildDestinations(cat);
-  var AIRPORTS = window.AIRPORTS_DATA || [];
-  var originCity = {}; AIRPORTS.forEach(function (a) { originCity[a.l] = a.c; });
-  var airportItems = AIRPORTS.map(function (a) { return { label: a.l, sub: a.grp ? '🌐' : a.c, search: String(a.s || '').toLowerCase() }; });
+  // airports.js (~600 KB) is only needed for the departure-airport field in My trip: loaded on first use, never blocking first paint
+  var originCity = {}, airportItems = [], airportsState = 0, airportWaiters = [];
+  function loadAirports(done) {
+    if (airportsState === 2) { if (done) done(); return; }
+    if (done) airportWaiters.push(done);
+    if (airportsState === 1) return;
+    airportsState = 1;
+    var finish = function (list) {
+      (list || []).forEach(function (a) { originCity[a.l] = a.c; });
+      airportItems = (list || []).map(function (a) { return { label: a.l, sub: a.grp ? '🌐' : a.c, search: String(a.s || '').toLowerCase() }; });
+      airportsState = 2; var w = airportWaiters; airportWaiters = []; w.forEach(function (f) { try { f(); } catch (e) { } });
+    };
+    if (window.AIRPORTS_DATA) { finish(window.AIRPORTS_DATA); return; }
+    var s = document.createElement('script'); s.src = 'airports.js';
+    s.onload = function () { finish(window.AIRPORTS_DATA); };
+    s.onerror = function () { finish([]); };                         // the field still accepts free text
+    document.head.appendChild(s);
+  }
   function resolveOrigin(text) { var x = String(text || '').trim(); return originCity[x] || x; }
   function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
   function isMobile() { return !!(window.matchMedia && window.matchMedia('(max-width:760px)').matches); }
@@ -517,6 +532,7 @@
     return { tes: tes, undated: undated, dates: dates, stays: stays, links: links, days: days, eventDays: Object.keys(eventDays).length, destText: cities.slice(0, 3).join(' · ') + (cities.length > 3 ? '…' : '') };
   }
   function renderTripView() {
+    if (airportsState === 0) loadAirports(function () { if (store.get().ui.tab === 'trip') renderTripView(); });
     var v = $('#view-trip'), st = store.get(), d = tripDerived();
     var focusSel = null, ae = document.activeElement;
     if (ae && v.contains(ae)) { ['data-lock', 'data-open', 'data-ack', 'data-replace'].forEach(function (a) { if (ae.hasAttribute(a)) focusSel = '[' + a + '="' + ae.getAttribute(a) + '"]'; }); if (ae.id) focusSel = '#' + ae.id; }
