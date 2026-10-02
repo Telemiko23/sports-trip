@@ -338,7 +338,9 @@
       '<p class="hint">' + esc(t(srcKey)) + (dt.source === 'explicit' ? ' <button type="button" class="linkbtn" data-act="dates-auto">' + esc(t('trip.datesAuto')) + '</button>' : '') + '</p>' +
       (dt.outside && dt.outside.length ? '<p class="tstatus warn">' + esc(t('trip.outside', { n: dt.outside.length })) + '</p>' : '') + '</div>';
     var decisions = d.tes.filter(function (te) { return !te.ev || te.changed; });
-    if (decisions.length) html += '<section class="tdecisions" aria-labelledby="tDec"><h3 id="tDec">' + esc(t('trip.decisions')) + ' (' + decisions.length + ')</h3><p class="hint">' + esc(t('trip.missingNote')) + '</p></section>';
+    var undated = d.undated || [];
+    if (decisions.length) html += '<section class="tdecisions" aria-labelledby="tDec"><h3 id="tDec">' + esc(t('trip.decisions')) + ' (' + decisions.length + ')</h3><p class="hint">' + esc(t('trip.missingNote')) + '</p>' +
+      (undated.length ? '<ul class="tlist">' + undated.map(function (te) { return tripEntryHtml(te, o); }).join('') + '</ul>' : '') + '</section>';
     html += '<ol class="tdays">' + d.days.map(function (day, i) {
       var body = day.entries.length ? '<ul class="tlist">' + day.entries.map(function (te, k) { return (k > 0 ? noteHtml(M.pairNote(day.entries[k - 1].ev, te.ev)) : '') + tripEntryHtml(te, o); }).join('') + '</ul>'
         : '<div class="tfree"><strong>' + esc(t('trip.free')) + '</strong><p class="hint">' + esc(t('trip.freeNote')) + '</p><button type="button" class="linkbtn" data-searchday="' + day.date + '">' + esc(t('trip.searchDay')) + '</button></div>';

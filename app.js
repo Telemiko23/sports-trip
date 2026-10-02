@@ -322,6 +322,9 @@
       var g = mapState.groups[k];
       var icon = L.divIcon({ className: '', html: '<div class="map-pin' + (g.approx ? ' approx' : '') + '"><span>' + g.list.length + '</span></div>', iconSize: [30, 30], iconAnchor: [15, 28] });
       mapState.pins[k] = L.marker([g.lat, g.lng], { icon: icon, title: (g.venue || g.cityHe) + (g.approx ? ' - ' + t('map.pinApprox') : ''), keyboard: true }).on('click', function () { selectPin(k); }).addTo(mapState.layer);
+      // pins are real keyboard targets: Enter/Space opens the same panel as a click (does not rely on Leaflet's key handling)
+      var pinEl = mapState.pins[k].getElement();
+      if (pinEl) pinEl.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); ev.stopPropagation(); selectPin(k); } });
     });
     if (ctx.dest && ctx.dest.kind === 'city') {
       mapState.circle = L.circle([ctx.dest.lat, ctx.dest.lng], { radius: ctx.radiusKm * 1000, color: '#2454E6', weight: 2, fillOpacity: .08, interactive: false }).addTo(mapState.map);
@@ -468,7 +471,8 @@
       });
     }
     var cities = []; stays.forEach(function (s) { if (cities.indexOf(s.cityHe || s.city) === -1) cities.push(s.cityHe || s.city); });
-    return { tes: tes, dates: dates, stays: stays, links: links, days: days, eventDays: Object.keys(eventDays).length, destText: cities.slice(0, 3).join(' · ') + (cities.length > 3 ? '…' : '') };
+    var undated = tes.filter(function (te) { return !M.entryDate(te); });
+    return { tes: tes, undated: undated, dates: dates, stays: stays, links: links, days: days, eventDays: Object.keys(eventDays).length, destText: cities.slice(0, 3).join(' · ') + (cities.length > 3 ? '…' : '') };
   }
   function renderTripView() {
     var v = $('#view-trip'), st = store.get(), d = tripDerived();
@@ -666,8 +670,9 @@
     renderNav();
     var needOnboarding = !st.context.dest && !st.context.browse && !st.meta.onboarded;
     if (!st.ui.storageOk) showToast(t('storage.off'), { timeout: 12000 });
-    if (bootReport.migrated) showToast(t('storage.migrated'), { timeout: 12000 });
-    else if (bootReport.issues && bootReport.issues.some(function (x) { return /malformed|bad-id|not-array/.test(x); })) showToast(t('storage.issues'), { timeout: 12000 });
+    var storageIssues = bootReport.issues && bootReport.issues.some(function (x) { return /malformed|bad-id|not-array/.test(x); });
+    if (storageIssues) showToast(t('storage.issues'), { timeout: 12000 });
+    else if (bootReport.migrated) showToast(t('storage.migrated'), { timeout: 12000 });
     if (needOnboarding) { showOnboarding(); }
     else {
       hideOnboarding(); showPanels(); renderSearch(); renderPeek();
