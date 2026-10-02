@@ -276,7 +276,7 @@
       days.forEach(function (d) { total += d.items.length; });
       for (var i = 0; i < days.length && count < searchLimit; i++) { shown.push(days[i]); count += days[i].items.length; }
       lastListCount = count;
-      listEl.innerHTML = U.resultsHtml(shown, { picked: picked, cat: cat }) +
+      listEl.innerHTML = U.resultsHtml(shown, { picked: picked, cat: cat, ticketChip: ticketChip }) +
         (count < total ? '<div class="more"><button type="button" class="btn" data-act="more">' + esc(tn('more.show', total - count)) + '</button></div>' : '');
     }
     announce(t('results.announce', { n: list.length }));
@@ -352,7 +352,7 @@
   }
   function renderMapPanel() {
     var sel = store.get().ui.pin, g = sel && mapState.groups[sel];
-    $('#mapPanel').innerHTML = U.mapPanelHtml(g || null, { picked: pickedMap(), cat: cat });
+    $('#mapPanel').innerHTML = U.mapPanelHtml(g || null, { picked: pickedMap(), cat: cat, ticketChip: ticketChip });
     $$('.map-pin', $('#map')).forEach(function (p) { p.classList.remove('sel'); });
     if (sel && mapState.pins[sel]) { var el = mapState.pins[sel].getElement(); var pin = el && el.querySelector('.map-pin'); if (pin) pin.classList.add('sel'); }
   }
@@ -372,7 +372,8 @@
   }
 
   /* ---------- event details ---------- */
-  function ticketsHtmlFor(ev) { return TS.tickets && TS.tickets.detailHtml ? TS.tickets.detailHtml(ev) : null; }
+  function ticketsHtmlFor(ev) { try { return TS.tickets && TS.tickets.detailHtml ? TS.tickets.detailHtml(ev) : null; } catch (e) { return null; } }
+  function ticketChip(ev) { try { return TS.tickets && TS.tickets.chipHtml ? TS.tickets.chipHtml(ev) : ''; } catch (e) { return ''; } }
   function openEvent(id, opener) {
     var ev = cat.byId[id]; if (!ev) return;
     var dlg = $('#evDialog');
@@ -518,8 +519,8 @@
   function renderTripView() {
     var v = $('#view-trip'), st = store.get(), d = tripDerived();
     var focusSel = null, ae = document.activeElement;
-    if (ae && v.contains(ae)) { ['data-lock', 'data-open', 'data-ack'].forEach(function (a) { if (ae.hasAttribute(a)) focusSel = '[' + a + '="' + ae.getAttribute(a) + '"]'; }); if (ae.id) focusSel = '#' + ae.id; }
-    v.innerHTML = U.tripHtml(d, { origin: st.trip.origin, cat: cat });
+    if (ae && v.contains(ae)) { ['data-lock', 'data-open', 'data-ack', 'data-replace'].forEach(function (a) { if (ae.hasAttribute(a)) focusSel = '[' + a + '="' + ae.getAttribute(a) + '"]'; }); if (ae.id) focusSel = '#' + ae.id; }
+    v.innerHTML = U.tripHtml(d, { origin: st.trip.origin, cat: cat, ticketChip: ticketChip });
     var o = $('#origin');
     if (o) combo(o, {
       items: function (q) { var ql = q.toLowerCase(); return airportItems.filter(function (a) { return a.search.indexOf(ql) !== -1 || a.label.toLowerCase().indexOf(ql) !== -1; }).slice(0, 40); }, emptyText: t('form.noResults'),
@@ -612,7 +613,12 @@
     if ((b = el.closest('[data-unfilter]'))) { var k = b.getAttribute('data-unfilter'), f = store.get().filters; store.dispatch({ type: 'FILTERS_SET', filters: { sports: f.sports, excludedComps: k === 'comps' ? {} : f.excludedComps, excludedWeekdays: k === 'days' ? {} : f.excludedWeekdays } }); return; }
     if ((b = el.closest('[data-mode]'))) { store.dispatch({ type: 'VIEW', mode: b.getAttribute('data-mode') }); track('view_toggle', { view: b.getAttribute('data-mode') }); return; }
     if ((b = el.closest('[data-searchday]'))) { var day = b.getAttribute('data-searchday'); store.dispatch({ type: 'VIEW', tab: 'search', day: day }); pushHist({ tab: 'search' }); return; }
-    if ((b = el.closest('[data-link]'))) { track(b.getAttribute('data-link') === 'flight' ? 'flight_link_click' : 'hotel_link_click', {}); return; }
+    if ((b = el.closest('[data-link]'))) {
+      var lk = b.getAttribute('data-link');
+      if (lk === 'ticket' || lk === 'official-tickets') { var tev = cat.byId[Number($('#evDialog').getAttribute('data-ev'))]; track('ticket_link_click', { kind: lk, provider: b.getAttribute('data-tix-provider') || 'official', ticket_state: b.getAttribute('data-tix-state') || 'official', scope: b.getAttribute('data-tix-scope') || '', sport: tev ? tev.sportId : '' }); }
+      else track(lk === 'flight' ? 'flight_link_click' : 'hotel_link_click', {});
+      return;
+    }
     if ((b = el.closest('[data-act]'))) { handleAct(b.getAttribute('data-act'), b); return; }
     if (el.closest('#filterBtn')) { openFilters(el.closest('#filterBtn')); return; }
     if (el.closest('#ctxEdit')) { openContextDialog(el.closest('#ctxEdit'), false); return; }
@@ -724,7 +730,30 @@
     S.save(storage, store.get());
     store.dispatch({ type: 'META', lastVisit: today() });
   }
+  /* ---------- ticket enrichment: lazy, optional, can never break the rest ---------- */
+  var tixTimer = null;
+  function rerenderTickets() {
+    if (!$('#app').hidden) renderSearch();
+    if (store.get().ui.tab === 'trip') renderTripView();
+    var dlg = $('#evDialog'); if (dlg.open) { var id = Number(dlg.getAttribute('data-ev')); var ev = cat.byId[id]; if (ev) { var sec = $('#evTixBody', dlg); if (sec) sec.innerHTML = ticketsHtmlFor(ev) || '<p class="hint">' + esc(t('ev.ticketsNone')) + '</p>'; } }
+    scheduleTixTick();
+  }
+  function scheduleTixTick() {
+    clearTimeout(tixTimer);
+    if (!TS.tickets) return;
+    var next = TS.tickets.nextExpiry(Date.now());
+    if (next != null) tixTimer = setTimeout(rerenderTickets, Math.min(Math.max(next - Date.now() + 1000, 1000), 2147000000));
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && TS.tickets && TS.tickets.status().hasData) rerenderTickets(); });
+  function loadTickets() {
+    if (!TS.tickets || window.TOSPORT_TICKETS_OFF) return;
+    TS.tickets.load('tickets/offers.json').then(function (doc) {
+      if (doc) { track('ticket_data_state', { state: 'loaded', priced: !!doc.priceDisplay }); rerenderTickets(); }
+      else track('ticket_data_state', { state: TS.tickets.status().failed ? 'unavailable' : 'none' });
+    });
+  }
   var api = { bindContextForm: bindContextForm, readContextForm: readContextForm, selectDest: selectDest, monthOptions: planMonthOptions, setErr: setErr, openDialog: openDialog, store: store, cat: cat, model: M, ui: U, announce: announce, showToast: showToast, track: track, goTab: goTab, effectiveCtx: effectiveCtx, runQuery: runQuery, today: today, openEvent: openEvent, toggleTrip: toggleTrip, tripDerived: tripDerived, dests: dests, resolveOrigin: resolveOrigin };
   window.ToSport.app = api;
   boot();
+  (window.requestIdleCallback || function (f) { setTimeout(f, 800); })(loadTickets);
 })();

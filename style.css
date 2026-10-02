@@ -381,3 +381,13 @@ dialog p{margin:0 0 8px}
   .plan-actions .btn{flex:1 1 auto}
   .plan-alt{flex-direction:column}
 }
+
+/* ---------- tickets ---------- */
+.tix-chip{display:inline-block;font-size:13px;color:var(--text-muted);border:1px solid var(--border-subtle);border-radius:999px;padding:1px 10px}
+.tix-chip--price{color:var(--text);border-color:var(--link);font-weight:600}
+.tix-price{margin:0 0 6px;font-size:17px}
+.tix-basis{margin:0 0 8px;padding-inline-start:18px;color:var(--text-muted);font-size:13px}
+.tix-disclosure{margin:8px 0 4px}
+.tix-more summary{cursor:pointer;color:var(--link);font-size:13px;min-height:32px;display:flex;align-items:center}
+.tix-info h3{font-size:14px;margin:8px 0 4px}
+.tix-info ul{margin:0;padding-inline-start:18px;color:var(--text-muted);font-size:13px}

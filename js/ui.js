@@ -193,7 +193,7 @@
     o = o || {};
     return '<li class="ev' + (o.picked ? ' picked' : '') + (o.compact ? ' ev--compact' : '') + '" data-ev="' + ev.id + '">' + timeBlock(ev, o.withDate) +
       '<div class="ev-main"><h4 class="ev-title"><button type="button" class="title-btn" data-open="' + ev.id + '" aria-haspopup="dialog">' + titleHtml(ev) + '</button></h4>' +
-      '<div class="ev-meta">' + M.sportLabelHtml(ev.sportId) + compTagHtml(ev, o.cat) + '<span class="ev-place">' + placeHtml(ev) + '</span></div>' +
+      '<div class="ev-meta">' + M.sportLabelHtml(ev.sportId) + compTagHtml(ev, o.cat) + '<span class="ev-place">' + placeHtml(ev) + '</span>' + (o.ticketChip ? o.ticketChip(ev) : '') + '</div>' +
       (o.extra ? o.extra : '') + '</div><div class="ev-actions">' + addBtn(ev, o.picked) + '</div></li>';
   }
   function groupCardHtml(g, o) {
@@ -210,7 +210,7 @@
   function resultsHtml(days, o) {
     return days.map(function (d) {
       return '<section class="day" data-date="' + d.date + '"><h3>' + esc(M.fmtDateLong(d.date)) + '</h3><ul class="evlist">' + d.items.map(function (it) {
-        return it.type === 'group' ? groupCardHtml(it, o) : eventCardHtml(it.ev, { picked: o.picked && o.picked[it.ev.id], cat: o.cat });
+        return it.type === 'group' ? groupCardHtml(it, o) : eventCardHtml(it.ev, { picked: o.picked && o.picked[it.ev.id], cat: o.cat, ticketChip: o.ticketChip });
       }).join('') + '</ul></section>';
     }).join('');
   }
@@ -245,7 +245,7 @@
       '<h2 id="evTitle">' + titleHtml(ev) + '</h2></div><button type="button" class="dialog-close" data-close aria-label="' + esc(t('ev.close')) + '">' + icon('x') + '</button></div>' +
       '<section aria-labelledby="evWhen"><h3 id="evWhen">' + esc(t('ev.when')) + '</h3><p>' + timeLine + '</p><p class="hint">' + esc(ts.state === 'known' || ts.state === 'unpublished' ? t('ev.timeNote') : t('ev.dateOnly')) + '</p></section>' +
       '<section aria-labelledby="evWhere"><h3 id="evWhere">' + esc(t('ev.where')) + '</h3><p>' + where + '</p></section>' + rows +
-      '<section aria-labelledby="evTix"><h3 id="evTix">' + esc(t('ev.tickets')) + '</h3>' + (o.ticketsHtml || '<p class="hint">' + esc(t('ev.ticketsNone')) + '</p>') + '</section>' +
+      '<section aria-labelledby="evTix"><h3 id="evTix">' + esc(t('ev.tickets')) + '</h3>' + '<div id="evTixBody">' + (o.ticketsHtml || '<p class="hint">' + esc(t('ev.ticketsNone')) + '</p>') + '</div></section>' +
       '<div class="dlg-actions">' + addBtn(ev, o.picked) + official + '</div>';
   }
 
@@ -291,7 +291,7 @@
     return '<div class="panel-head"><div><h3>' + bdi(g.venue || g.cityHe) + '</h3><p>' + (g.venue ? bdi(g.cityHe) + ' · ' : '') + esc(tn('map.panelCount', rows.length)) + (g.approx ? ' · ' + esc(t('map.pinApprox')) : '') + '</p></div>' +
       '<button type="button" class="panel-close" data-act="map-close" aria-label="' + esc(t('map.close')) + '">' + icon('x') + '</button></div>' +
       '<div class="panel-tools"><button type="button" class="btn small" data-act="search-here">' + esc(t('map.searchHere')) + '</button></div>' +
-      '<ul class="evlist" aria-label="' + esc(t('map.list')) + '">' + rows.map(function (f) { return eventCardHtml(f, { picked: o.picked && o.picked[f.id], withDate: true, cat: o.cat }); }).join('') + '</ul>';
+      '<ul class="evlist" aria-label="' + esc(t('map.list')) + '">' + rows.map(function (f) { return eventCardHtml(f, { picked: o.picked && o.picked[f.id], withDate: true, cat: o.cat, ticketChip: o.ticketChip }); }).join('') + '</ul>';
   }
 
   /* ---------- my trip ---------- */
@@ -319,7 +319,7 @@
     var time = ts.state === 'known' ? ts.label : ts.state === 'day' ? t('ev.day', { n: ev.dayNo }) : ts.state === 'unpublished' ? t('ev.timeUnpublished') : M.fmtRange(ev.date, ev.endDate);
     return '<li class="tentry' + (e.locked ? ' locked' : '') + '" data-ev="' + id + '"><div class="tentry-time">' + esc(time) + '</div><div class="tentry-main">' +
       '<button type="button" class="title-btn" data-open="' + id + '" aria-haspopup="dialog">' + titleHtml(ev) + '</button>' +
-      '<div class="ev-meta">' + M.sportLabelHtml(ev.sportId) + compTagHtml(ev, o.cat) + '<span class="ev-place">' + placeHtml(ev) + '</span></div>' + changed + '</div>' +
+      '<div class="ev-meta">' + M.sportLabelHtml(ev.sportId) + compTagHtml(ev, o.cat) + '<span class="ev-place">' + placeHtml(ev) + '</span>' + (o.ticketChip ? o.ticketChip(ev) : '') + '</div>' + changed + '</div>' +
       '<div class="tentry-actions">' + (e.locked ? '' : '<button type="button" class="btn small" data-replace="' + id + '" aria-haspopup="dialog" aria-label="' + esc(t('trip.replaceNamed', { title: ev.title })) + '">' + esc(t('trip.replace')) + '</button>') + '<button type="button" class="btn small" data-lock="' + id + '" aria-pressed="' + !!e.locked + '">' + icon('lock') + esc(e.locked ? t('trip.unlock') : t('trip.lock')) + '</button>' +
       '<button type="button" class="btn small danger" data-remove="' + id + '" aria-label="' + esc(t('trip.removeNamed', { title: ev.title })) + '">' + esc(t('trip.remove')) + '</button></div></li>';
   }
