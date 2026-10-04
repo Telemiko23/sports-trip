@@ -8,7 +8,7 @@ Sections (column "סוג"):
   קואורדינטות      a stadium pin far from its city point - either a real out-of-centre venue or a wrong city point
 
 Columns "ההצעה שלי" / "רמת ביטחון" come from data_gaps_suggestions.json (empty = I did not guess).
-"תיקון שלך" and "הערה שלך" are carried over from the previous data_gaps.csv when the same row is still open,
+The owner columns (אצטדיון שלך / סיכה שלך לאצטדיון / שם עיר שלך / שם קבוצה שלך) are carried over from the previous data_gaps.csv when the same row is still open,
 so filled-in answers are never lost. No network, no API quota. Run missing_info_report.py first (it refreshes the two source CSVs).
 """
 import csv
@@ -19,7 +19,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "data_gaps.csv")
-HEADER = ["סוג", "פריט", "הקשר (תחרות/מדינה)", "מה חסר או לא בטוח", "ערך נוכחי", "ההצעה שלי", "רמת ביטחון בהצעה", "הערה שלי", "תיקון שלך", "הערה שלך"]
+HEADER = ["סוג", "פריט", "הקשר (תחרות/מדינה)", "מה חסר או לא בטוח", "ערך נוכחי", "ההצעה שלי", "רמת ביטחון בהצעה", "הערה שלי", "אצטדיון שלך", "סיכה שלך לאצטדיון", "שם עיר שלך", "שם קבוצה שלך"]
+OWNER_COLS = HEADER[8:]
 
 
 def read_csv(name):
@@ -40,12 +41,14 @@ def main(limit=20.0):
     sys.stdout.reconfigure(encoding="utf-8")
     sug = json.load(open(os.path.join(HERE, "data_gaps_suggestions.json"), encoding="utf-8"))
     prev = {(r["סוג"], r["פריט"]): r for r in read_csv("data_gaps.csv")}
+    acc_path = os.path.join(HERE, "data_gaps_accepted.json")
+    accepted = set(json.load(open(acc_path, encoding="utf-8")).get("coordinates", [])) if os.path.exists(acc_path) else set()
     rows = []
 
     def add(kind, item, ctx, what, current="", key=None, note=""):
         s = sug.get(key or f"{kind}|{item}", {})
         old = prev.get((kind, item), {})
-        rows.append([kind, item, ctx, what, current, s.get("s", ""), s.get("c", ""), s.get("n", "") or note, old.get("תיקון שלך", ""), old.get("הערה שלך", "")])
+        rows.append([kind, item, ctx, what, current, s.get("s", ""), s.get("c", ""), s.get("n", "") or note] + [old.get(c, "") for c in OWNER_COLS])
 
     for r in read_csv("missing_info.csv"):
         what = r["מה חסר"]
@@ -68,6 +71,8 @@ def main(limit=20.0):
     for (city, venue, country), (d, who, la, lo) in sorted(seen.items(), key=lambda kv: -kv[1][0]):
         if d > limit:
             item = f"{city} ({country})"
+            if item in accepted:
+                continue                                       # the owner confirmed this pin is a genuine out-of-centre venue
             add("קואורדינטות", item, f"{venue} · {who}", f"סיכת האצטדיון רחוקה {d:.1f} ק\"מ מנקודת העיר", f"נקודת העיר: {la},{lo}",
                 note="" if f"קואורדינטות|{item}" in sug else "נראה תקין: מתקן ספורט מחוץ למרכז העיר (לא אומת מול מקור)")
 
