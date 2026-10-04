@@ -1,5 +1,8 @@
 {
- "ABAX Stadium|Peterborough": null,
+ "ABAX Stadium|Peterborough": [
+  52.56478063222868,
+  -0.24048334502967852
+ ],
  "AFAS Stadion|Alkmaar": [
   52.6128,
   4.7421
@@ -482,10 +485,13 @@
   -5.328
  ],
  "Estadio Municipal Castalia|Castellon": [
-  39.9961,
-  -0.0386
+  39.9962754559803,
+  -0.038664747417179304
  ],
- "Estadio Municipal El Molinón-Enrique Castro \"Quini\"|Gijon": null,
+ "Estadio Municipal El Molinón-Enrique Castro \"Quini\"|Gijon": [
+  43.536312793067374,
+  -5.637141382231105
+ ],
  "Estadio Municipal El Molinón-Enrique Castro \"Quini\"|Gijón": [
   43.536406,
   -5.636862
@@ -1199,8 +1205,8 @@
   -1.2009
  ],
  "Optics Valley International Tennis Center|Wuhan": [
-  30.475058,
-  114.462828
+  30.47506741449482,
+  114.46272040381557
  ],
  "Orlen Stadion|Płock": [
   52.562,
@@ -1312,8 +1318,8 @@
   4.97269
  ],
  "Qi Zhong Tennis Center|Shanghai": [
-  31.039947,
-  121.359165
+  31.040051055235192,
+  121.35930394616236
  ],
  "RCDE Stadium|Cornella de Llobregat": [
   41.3479,
@@ -2003,7 +2009,10 @@
   52.6887,
   -2.7488
  ],
- "The Crown Ground|Accrington": null,
+ "The Crown Ground|Accrington": [
+  53.76548608188636,
+  -2.37065779342022
+ ],
  "The Den|London": [
   51.486,
   -0.0509
@@ -2217,8 +2226,8 @@
   16.333378
  ],
  "Yas Marina Circuit|Abu Dhabi": [
-  24.4718,
-  54.6058
+  24.477246329633978,
+  54.60640472369575
  ],
  "Yinzhou Tennis Center|Ningbo": [
   29.811424,
@@ -2249,5 +2258,29 @@
  "Łęczna Stadium|Leczna": [
   51.301705,
   22.875548
+ ],
+ "Dreams2Reality Stadium|Atherton, Greater Manchester": [
+  53.52363646688859,
+  -2.4845295063411372
+ ],
+ "Grove Recreation Ground|Halesowen, West Midlands": [
+  52.45475483266017,
+  -2.0568073781444403
+ ],
+ "The Maurice Rebak Stadium|London": [
+  51.60762622278559,
+  -0.17031326468957042
+ ],
+ "Sir Halley Stewart Field|Spalding, Lincolnshire": [
+  52.790295922280606,
+  -0.15190078977946683
+ ],
+ "Scarborough Sports Village|Scarborough, North Yorkshire": [
+  54.269523049054925,
+  -0.41271274368852057
+ ],
+ "Stadion Z'dežele|Celje": [
+  46.24658694352507,
+  15.27094039215022
  ]
 }

@@ -226,6 +226,12 @@ VENUE_OVERRIDE = {
     "Farense": "Estádio de São Luís",
     "Florgrade": "Parque Desportivo do Buçaquinho",
     "Recreativa de Lamelas": "Campo Padre José Tavares",
+    "Atherton Collieries": "Dreams2Reality Stadium",
+    "Halesowen Town": "Grove Recreation Ground",
+    "Wingate & Finchley": "The Maurice Rebak Stadium",
+    "Spalding United": "Sir Halley Stewart Field",
+    "Scarborough Athletic": "Scarborough Sports Village",
+    "Celje": "Stadion Z'dežele",
 }
 
 # non-football events from AllSportDB (build_events.py): the API has no venue field on the free
