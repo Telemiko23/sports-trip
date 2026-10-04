@@ -1,4 +1,5 @@
 {
+ "ABAX Stadium|Peterborough": null,
  "AFAS Stadion|Alkmaar": [
   52.6128,
   4.7421
@@ -143,6 +144,10 @@
   53.5702,
   -0.0465
  ],
+ "Blundell Park|Grimsby": [
+  53.5702,
+  -0.0465
+ ],
  "Bob Lucas Stadium|Weymouth, Dorset": [
   50.620421,
   -2.483795
@@ -194,6 +199,10 @@
  "Broadfield Stadium|Crawley": [
   51.0996,
   -0.1947
+ ],
+ "Broadhall Way|Stevenage": [
+  51.8896,
+  -0.1937
  ],
  "Bronisław Malinowski Central Stadium|Grudziądz": [
   53.489672,
@@ -472,6 +481,11 @@
   35.8856,
   -5.328
  ],
+ "Estadio Municipal Castalia|Castellon": [
+  39.9961,
+  -0.0386
+ ],
+ "Estadio Municipal El Molinón-Enrique Castro \"Quini\"|Gijon": null,
  "Estadio Municipal El Molinón-Enrique Castro \"Quini\"|Gijón": [
   43.536406,
   -5.636862
@@ -778,6 +792,10 @@
   44.7761,
   17.1996
  ],
+ "Gran Canaria|Las Palmas de Gran Canaria": [
+  28.1002,
+  -15.4567
+ ],
  "Groupama Stadium|Lyon": [
   45.7654,
   4.9821
@@ -814,6 +832,10 @@
  "Hill Dickinson Stadium|Liverpool": [
   53.425,
   -3.0027
+ ],
+ "Hillsborough Stadium|Sheffield": [
+  53.4114,
+  -1.5006
  ],
  "Hillsborough|Sheffield": [
   53.4114,
@@ -875,6 +897,10 @@
   52.3143,
   4.9412
  ],
+ "John Smith's Stadium|Huddersfield": [
+  53.6543,
+  -1.7683
+ ],
  "Joseph Marien Stadium|Brussels": [
   50.8179,
   4.3295
@@ -894,6 +920,10 @@
  "Kassam Stadium|Oxford": [
   51.7165,
   -1.2077
+ ],
+ "Keepmoat Stadium|Doncaster": [
+  53.5098,
+  -1.1138
  ],
  "Kenilworth Road|Luton": [
   51.8842,
@@ -1236,6 +1266,10 @@
  "Plenitude Arena|Paris": [
   48.895966,
   2.229599
+ ],
+ "Plough Lane|Wimbledon": [
+  51.4312,
+  -0.1843
  ],
  "Poljud Stadion|Split": [
   43.5195,
@@ -1969,6 +2003,7 @@
   52.6887,
   -2.7488
  ],
+ "The Crown Ground|Accrington": null,
  "The Den|London": [
   51.486,
   -0.0509
@@ -2070,6 +2105,10 @@
   6.54353
  ],
  "Vale Park|Stoke on Trent": [
+  53.05,
+  -2.1927
+ ],
+ "Vale Park|Stoke-On-Trent": [
   53.05,
   -2.1927
  ],
