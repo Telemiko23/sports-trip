@@ -377,7 +377,7 @@ def main():
                 "comp_he": he_comp(label),
                 "country": country,
                 "round": lg.get("round"),
-                "venue": match_venue or VENUE_OVERRIDE.get(home_name) or venue.get("name"),
+                "venue": VENUE_OVERRIDE.get(home_name) or venue.get("name"),
                 "city": city,
                 "cc": row_cc,
             })
@@ -425,11 +425,7 @@ def main():
             venue = fx.get("venue") or {}
             city = (venue.get("city") or "").strip() or None
             row_cc = None
-            match_venue = None
-            nl_key = f"{home_name}|{fx['date'][:10]}"
-            if nl_key in NATION_MATCH_VENUE:
-                match_venue, city, row_cc = NATION_MATCH_VENUE[nl_key]
-            elif home_name in TEAM_CITY_OVERRIDE:
+            if home_name in TEAM_CITY_OVERRIDE:
                 city, row_cc = TEAM_CITY_OVERRIDE[home_name]
             elif city:
                 key_guess = next((k for k in cache if k.startswith(f"{city}|")), None) or \
@@ -503,7 +499,11 @@ def main():
             venue = fx.get("venue") or {}
             city = (venue.get("city") or "").strip() or None
             row_cc = None
-            if home_name in TEAM_CITY_OVERRIDE:
+            match_venue = None
+            nl_key = f"{home_name}|{fx['date'][:10]}"
+            if nl_key in NATION_MATCH_VENUE:
+                match_venue, city, row_cc = NATION_MATCH_VENUE[nl_key]
+            elif home_name in TEAM_CITY_OVERRIDE:
                 city, row_cc = TEAM_CITY_OVERRIDE[home_name]
             elif city:
                 key_guess = next((k for k in cache if k.startswith(f"{city}|")), None) or \
@@ -536,7 +536,7 @@ def main():
                 "comp_he": he_comp(ulabel),
                 "country": CC_TO_OUR_COUNTRY.get(row_cc) or CC_COUNTRY_NAME.get(row_cc) or row_cc or "Europe",
                 "round": lg.get("round"),
-                "venue": VENUE_OVERRIDE.get(home_name) or venue.get("name"),
+                "venue": match_venue or VENUE_OVERRIDE.get(home_name) or venue.get("name"),
                 "city": city,
                 "cc": row_cc,
             })
