@@ -1,5 +1,28 @@
 # Multi-sport architecture
 
+**Update 2026-10-02 (v2, branch `evolution/v2-20261002`) - authoritative implemented notes.** Where this file's older text
+disagrees with this block, this block wins.
+
+* **Sport identity**: `SPORT_REGISTRY` / `sportIdOf` / `sportLabelHtml` now live in `js/model.js` (pure, shared by Node tests and
+  every renderer: list, map panel, plan proposals, trip, detail dialog). Canonical ids: `football`, `tennis`, `darts`, `f1`
+  (category `motorsport`), plus the honest `unknown` fallback - an unmapped code renders as unknown, never as football and never
+  inferred from a competition name. Rows without a `sport` field are legacy football.
+* **Occurrences**: every selectable thing is an *occurrence*. A match keeps its fixture id. A multi-day event expands to one
+  occurrence per day with id `eventId * 100 + dayNo` and `parentId = eventId` (old saved ids keep working). `groupResults`
+  collapses a parent with ≥ 3 days into one group card; each day stays individually addable. Dates are naive venue-local
+  (`dt`), shown as local, never reinterpreted.
+* **Locations**: `lat/lng` = city point; `venue_lat/venue_lng` = verified venue pin. Unknown venue = «מיקום מדויק עדיין לא ידוע»;
+  a city-centre marker is labelled approximate. Multi-city events (United Cup) keep every known location in `locs` with
+  `loc_provisional: true` - the first listed city is **not** treated as the verified location of every day; such occurrences stay
+  discoverable but are never routed by the planner and never receive an occurrence-specific ticket price.
+* **Registry how-to** (unchanged in spirit): add the entry to `SPORT_REGISTRY` in `js/model.js` (he/en label + inline SVG icon),
+  a competition list in the data pipeline, tests in `tests/unit/model.test.js`. New production categories only with a verified
+  granular feed.
+* **Horse racing is not motorsport** and not Equestrian (show jumping): it needs its own registry id/icon if it is ever sourced.
+* **Tickets**: ticket scope per occurrence (`occurrence` / `session` / `parent-event` / `pass`) is part of the offer model
+  (`TICKETS.md`); a tournament-day price is only shown for an exact day/session scope.
+
+
 **Update 2026-09-30**: the title below ("design, not implemented yet") is now only true for the
 *data pipeline* sections (F1/Darts sourcing). The frontend **sport-identity layer** (registry,
 canonical ids, the shared label component) is implemented - see "Sport identity registry -

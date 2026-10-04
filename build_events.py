@@ -169,7 +169,13 @@ def build_rows(raw):
             skipped.append(e["name"])
             continue
         seen.add(e["id"])
-        country, cc, city = spots[0]  # a multi-city event (e.g. United Cup) is placed at its first city
+        country, cc, city = spots[0]  # a multi-city event (e.g. United Cup) is placed at its first city...
+        # ...but that city is only PROVISIONAL for the event as a whole: keep every location the source lists, with
+        # provenance, so the UI can say "location not yet known" instead of presenting the first city as verified
+        locs = []
+        for c_name, c_cc, c_city in spots:
+            if not any(x["city"] == c_city and x["country"] == c_name for x in locs):
+                locs.append({"city": c_city, "country": c_name, "cc": c_cc, "src": "AllSportDB"})
         key = f"{city}|{cc}"
         coords = manual.get(key) or cache.get(key)
         if coords is None and cc and key not in cache:
@@ -194,6 +200,7 @@ def build_rows(raw):
             "country": country, "round": None, "venue": venue, "city": city, "city_he": he_city(city, country),
             "lat": coords[0] if coords else None, "lng": coords[1] if coords else None,
             "venue_lat": vc[0] if vc else None, "venue_lng": vc[1] if vc else None, "web_url": e.get("webUrl"),
+            **({"locs": locs, "loc_provisional": True} if len(locs) > 1 else {}),
             **sessions_for(title, date_from),
         })
     # hand-entered events (darts) - same row shape, plus an exact stadium pin via venues_cache.json

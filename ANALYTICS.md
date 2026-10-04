@@ -179,3 +179,46 @@ those aren't listed here since we didn't add them and don't control their params
 - **Params**: `sport`, `title` (the day's title, e.g. "Azerbaijan Grand Prix - Day 2").
 - **Trigger**: clicking "פירוט" on a multi-day-event day that has a session schedule.
 - **Use**: whether the session breakdown is worth extending to more events.
+
+
+---
+
+## UI v2 (branch `evolution/v2-20261002`, 2026-10-02) - what changed
+
+Every event now also carries **`ui_version: "2"`** (set once in `track()`); v1 events carry none, so the two UIs can be
+compared in GA4 (custom dimension `ui_version`). Local/preview traffic is not sent (`analytics.js` loads GA only when the host
+is not localhost/file), and `track()` never throws into the app. Never sent: free text, URLs, amounts, affiliate parameters,
+credentials, whole trips or personal data. Events are fired from user actions, not from re-renders.
+
+### New events
+
+| Event | Params | Fires when | Use |
+| --- | --- | --- | --- |
+| `context_submit` | `source` (`onboarding`/`edit`/`new-search`/`plan`), `dest_kind` (`city`/`country`/`none`), `date_mode` (`fixed`/`flexible`), `first_visit` | A destination+dates form is submitted (also the plan form) | Do visitors reach results; fixed vs flexible mix. Replaces `onboarding_complete`, `base_city_set`, `date_range_change` |
+| `first_event_added` | `source` (`list`/`map`/`plan`/…) | The first event ever added to an empty trip in this state | Reach-a-useful-result funnel (time-to-first-add is a *future observed* metric) |
+| `proposal_view` | `mode`, `pace`, `lodging`, `results`, `empty` (reason code) | Plan proposals/windows computed after an explicit action | Are proposals produced/empty; why |
+| `proposal_apply` | `mode` (`merge`/`replace`), `n`, `pace` | A proposal is added to / replaces the trip | Replaces `smart_plan_add_all` |
+| `proposal_replace` | `sport` | A slot is swapped inside a preview | Editing of proposals |
+| `window_choose` | `days` | A flexible window is chosen as the fixed dates | Flexible-date usage |
+| `lock_toggle` / `lock_event` | `locked`, `sport` / `locked` | «חובה בטיול» toggled in Plan / My trip | Control usage |
+| `exclude_event` | `sport` | «לא מעניין» | Control usage |
+| `pace_change` / `lodging_change` | `pace` / `lodging` | A preset radio changes | Default validation |
+| `trip_replace` | `sport` | An entry is replaced in My trip | Control usage |
+| `filters_apply` | none | The draft filter sheet is applied | Replaces the three `competition_*` toggles |
+| `sports_filter` | `sports` (ids, comma-separated, or `all`) | A sport chip is toggled | Sport interest |
+| `search_here` | `source` | «חיפוש סביב המקום הזה» on the map | Explicit re-scope from a pin |
+| `export_trip` / `import_trip` | `trip_size` / `mode`, `trip_size` | Backup exported / imported | Recovery usage |
+| `ticket_link_click` | `kind` (`ticket`/`official-tickets`), `provider`, `ticket_state`, `scope`, `sport` | A ticket link is clicked | **A click is not a purchase**; no revenue claims without attribution data |
+| `ticket_data_state` | `state` (`loaded`/`none`/`unavailable`), `priced` | The offers snapshot finishes loading | Ticket layer health (`none` = no snapshot, normal while pricing is off) |
+
+### Kept unchanged
+`add_to_trip`, `remove_from_trip`, `tab_change`, `filters_sheet_open`, `filters_reset`, `view_toggle`, `map_marker_click`,
+`venue_maps_click`, `flight_link_click`, `hotel_link_click`, `origin_airport_selected`, `copy_trip`, `clear_trip`,
+`legal_dialog_open`, `event_details_open` (now fired for every event's detail dialog, `source` param added).
+
+### Superseded in v2 (documented above for history; not fired by the new UI)
+`onboarding_complete`, `onboarding_skip` → `context_submit`; `base_city_set`, `radius_change`, `date_range_change` → `context_submit`
+(radius changes are part of the draft/apply flow: `filters_apply`); `competition_toggle`, `competition_country_toggle`,
+`competition_all_toggle` → `filters_apply` (the competition tree is gone from the default surface); `smart_plan_run`,
+`smart_plan_add_all` → `proposal_view` / `proposal_apply`; `category_collapse_toggle`, `back_to_top_click` → no equivalent
+(controls removed).

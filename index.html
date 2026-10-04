@@ -14,183 +14,50 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BKHDQGMC8T"></script>
-<script src="analytics.js"></script>
 <link rel="stylesheet" href="style.css">
+<script src="analytics.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main" id="skipLink">דלג לתוכן הראשי</a>
 <header class="site-header"><div class="site-header-in">
-  <h1 class="brand">
-    <a class="brand-logo" href="./"><img src="brand/tosport-logo-blue-white.svg" width="166" height="36" alt="ToSport - דף הבית"></a>
-  </h1>
-  <button type="button" class="jump" data-tab="trip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>הטיול שלי (<b class="js-trip-count">0</b>)</button>
+  <h1 class="brand"><a class="brand-logo" href="./"><img src="brand/tosport-logo-blue-white.svg" width="166" height="36" alt="ToSport - דף הבית"></a></h1>
 </div></header>
 
-<main id="onboarding" class="onboarding" hidden aria-label="ברוכים הבאים">
-  <div class="onboarding-card">
-    <h2>גלו אירועי ספורט ביעד שלכם</h2>
-    <p>בחרו יעד ותאריכים, גלו מה קורה באזור והרכיבו את הטיול שלכם.</p>
-    <label class="field"><span>יעד</span>
-      <div class="combo-wrap">
-        <input id="obBase" type="text" autocomplete="off" placeholder="לדוגמה: לונדון">
-        <div class="combo-menu" id="obBaseMenu"></div>
-      </div>
-      <p class="hint" id="obBaseHint"></p>
-    </label>
-    <fieldset class="ob-datemode"><legend>תאריכים</legend>
-      <div class="chips wrap">
-        <label class="chip"><input type="radio" name="obDateMode" value="exact" checked><span>יש לי תאריכים</span></label>
-        <label class="chip"><input type="radio" name="obDateMode" value="flex"><span>התאריכים שלי גמישים</span></label>
-      </div>
-      <div class="row2" id="obDates">
-        <label>מתאריך <input id="obFrom" type="date"></label>
-        <label>עד תאריך <input id="obTo" type="date"></label>
-      </div>
-    </fieldset>
-    <button type="button" class="btn primary" id="obGo">מצאו אירועים</button>
-    <button type="button" class="linkbtn" id="obSkip">עיינו בכל האירועים בלי לבחור יעד</button>
+<nav id="mainNav" class="mainnav" aria-label="ניווט ראשי"></nav>
+
+<main id="main" tabindex="-1">
+  <section id="onboarding" class="onboarding" aria-labelledby="obTitle" hidden></section>
+  <div id="app" class="app" hidden>
+    <section id="view-search" class="view" role="tabpanel" aria-labelledby="tab-search"></section>
+    <section id="view-plan" class="view" role="tabpanel" aria-labelledby="tab-plan" hidden></section>
+    <section id="view-trip" class="view" role="tabpanel" aria-labelledby="tab-trip" hidden></section>
+    <aside id="tripPeek" class="peek" hidden></aside>
   </div>
+  <noscript><p class="empty">האתר דורש JavaScript כדי לחפש אירועים ולהרכיב טיול.</p></noscript>
 </main>
 
-<div class="viewbar">
-  <div class="tabbar" id="tabbar" role="tablist">
-    <button type="button" class="ttab" data-tab="discover" role="tab" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>חיפוש אירועים</button>
-    <button type="button" class="ttab" data-tab="plan" role="tab" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg>תכנון טיול</button>
-  </div>
-</div>
+<footer class="credits" id="credits"></footer>
 
-<div id="app" class="layout" data-tab="discover">
-  <div class="sheet-backdrop" id="filtersBackdrop" hidden></div>
-  <aside id="filters" aria-label="סינון אירועים">
-    <div class="sheet-head">
-      <h2><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h11"/></svg>סינון</h2>
-      <button type="button" class="sheet-close" id="filtersClose" aria-label="סגור סינון">×</button>
-    </div>
-    <label class="field"><span>עיר בסיס</span>
-      <div class="combo-wrap">
-        <input id="base" type="text" autocomplete="off" placeholder="לדוגמה: לונדון">
-        <div class="combo-menu" id="baseMenu"></div>
-      </div>
-      <p class="hint" id="baseHint">בלי עיר בסיס מוצגים אירועים מכל היעדים.</p>
-    </label>
-    <label class="field"><span>רדיוס מהעיר: <output id="radiusOut">150</output> ק״מ</span>
-      <input id="radius" type="range" min="10" max="800" step="10" value="150">
-    </label>
-    <fieldset><legend>תאריכים</legend>
-      <div class="row2">
-        <label>מתאריך <input id="from" type="date"></label>
-        <label>עד תאריך <input id="to" type="date"></label>
-      </div>
-    </fieldset>
-    <fieldset><legend>ימים בשבוע</legend><div id="days" class="chips"></div></fieldset>
-    <details id="compsBox" open><summary>תחרויות</summary>
-      <button type="button" class="linkbtn" id="allComps">הכל / כלום (כל התחרויות)</button>
-      <div id="comps"></div>
-    </details>
-    <div class="sheet-actions">
-      <button type="button" class="btn" id="filtersReset">איפוס סינון</button>
-      <button type="button" class="btn primary" id="filtersApply">הצג <span id="filtersApplyCount"></span> אירועים</button>
-    </div>
-  </aside>
-  <button type="button" class="filter-trigger" id="filterTrigger"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h11"/></svg>סינון<span class="filter-badge" id="filterBadge" hidden></span></button>
-
-  <main id="results" aria-live="polite">
-    <div class="discoverToggle" id="discoverToggle" role="tablist" aria-label="רשימה או מפה">
-      <button type="button" class="dtab" data-mode="list" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>רשימה</button>
-      <button type="button" class="dtab" data-mode="map" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v14L9 18l6 2.5 6-2.5v-14L15 6.5zM9 4v14M15 6.5v14"/></svg>מפה</button>
-    </div>
-    <p id="summary"></p>
-    <p class="hint tz-hint" id="tzHint">השעות המוצגות הן <b>שעון מקומי באתר האירוע</b> (לא שעון ישראל) - כדאי להתחשב בהפרש השעות בתכנון הטיסה.</p>
-    <div id="list"></div>
-    <div id="mapWrap" style="display:none">
-      <div id="map"></div>
-      <section id="mapPanel" class="map-panel" aria-live="polite"></section>
-    </div>
-  </main>
-
-  <section id="smartWrap" style="display:none" aria-label="תכנון טיול" aria-live="polite">
-      <div class="smart-card">
-        <label class="field"><span>ספרו לנו מה אתם מחפשים</span>
-          <input id="smartText" type="text" autocomplete="off" placeholder="למשל: שבוע באנגליה סביב סוף נובמבר">
-        </label>
-        <p class="hint" id="smartUnderstood"></p>
-        <div class="smart-grid">
-          <label class="field"><span id="smartDestLabel">יעד</span><select id="smartCountry"></select>
-            <p class="hint" id="smartActiveDest" hidden></p>
-          </label>
-          <label class="field"><span>חודש</span><select id="smartMonth"></select></label>
-          <label class="field"><span>איזה חלק מהחודש</span><select id="smartPart">
-            <option value="all">כל החודש</option><option value="start">תחילת החודש</option><option value="start-mid">תחילת עד אמצע החודש</option><option value="mid">אמצע החודש</option><option value="mid-end">אמצע עד סוף החודש</option><option value="end">סוף החודש</option></select></label>
-          <label class="field"><span>לכמה זמן</span><select id="smartDays">
-            <option value="weekend">סוף שבוע (שישי–ראשון)</option><option value="3">3 ימים (בלי עוגן לימי השבוע)</option><option value="4">4 ימים</option><option value="5">5 ימים</option>
-            <option value="7">שבוע</option><option value="10">10 ימים</option><option value="14">שבועיים</option><option value="21">3 שבועות</option><option value="30">חודש</option></select></label>
-          <label class="field"><span>מרחק מקסימלי בין ימים</span><select id="smartHop">
-            <option value="60">עד 60 ק״מ (כמעט באותה עיר)</option><option value="150" selected>עד 150 ק״מ</option><option value="300">עד 300 ק״מ</option></select></label>
-        </div>
-        <fieldset><legend>ענפים</legend><div class="chips wrap" id="smartCats"></div></fieldset>
-        <button type="button" class="btn primary smart-go" id="smartGo">הצע לי מסלול</button>
-      </div>
-      <div id="smartResult" aria-live="polite"></div>
-  </section>
-
-  <aside id="trip" aria-label="הטיול שלי">
-    <h2><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-7h14l2 7M5 12v7h14v-7M9 21v-4h6v4"/></svg>הטיול שלי</h2>
-    <div id="tripBody"></div>
-  </aside>
-</div>
-
-<nav class="bottom-nav" id="bottomNav" aria-label="ניווט ראשי">
-  <button type="button" class="bnav-btn" data-tab="discover" aria-selected="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg><span>חיפוש</span></button>
-  <button type="button" class="bnav-btn" data-tab="plan" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><span>תכנון</span></button>
-  <button type="button" class="bnav-btn" data-tab="trip" aria-selected="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>הטיול שלי</span><b class="bnav-badge js-trip-count">0</b></button>
-</nav>
-
-<footer class="credits">
-  נתוני משחקים: <a href="https://www.api-football.com" target="_blank" rel="noopener">API-Football</a> ·
-  מיקומים: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">משתתפי OpenStreetMap</a> ·
-  שדות תעופה: <a href="https://ourairports.com/data/" target="_blank" rel="noopener">OurAirports</a> ·
-  אירועי ספורט נוספים: <a href="https://allsportdb.com" target="_blank" rel="noopener">AllSportDB</a>
-  <div class="credits-row">
-    <button type="button" class="linkbtn" id="legalBtn">מידע משפטי ופרטיות</button>
-    <span class="version"><span id="fresh"></span> · גרסה <span id="appVersion"></span></span>
-  </div>
-</footer>
-
-<dialog id="detailDialog">
-  <button type="button" class="dialog-close" id="detailClose" aria-label="סגור">×</button>
-  <h3 id="detailTitle"></h3>
-  <p id="detailSub"></p>
-  <div id="detailRows"></div>
-  <p class="detail-note" id="detailNote">השעות המוצגות הן לידיעה בלבד ואיננו מתחייבים לדיוקן. לוחות הזמנים עשויים להשתנות, ולכן מומלץ לבדוק באתר הרשמי של התחרות לפני כל תכנון.<span id="detailOfficial"></span></p>
-</dialog>
-
-<dialog id="legalDialog">
-  <button type="button" class="dialog-close" id="legalClose" aria-label="סגור">×</button>
-  <h3>מידע משפטי ופרטיות</h3>
-  <p>אתר אישי לתכנון טיולים, ללא כל זיקה למועדונים, לליגות או לגופי שידור.</p>
-  <p>התאריכים והשעות באתר נלקחים ממקורות חיצוניים ואינם מחייבים. משחקים רבים נקבעים קדימה עם שעה
-    כללית או זמנית ("שעה לא מאושרת"), ולעתים גם התאריך עצמו עשוי להשתנות - בגלל שידורים, מזג אוויר,
-    הגרלות או החלטות של המארגנים. לפני רכישת כרטיסים, טיסות או לינה מומלץ לוודא את הפרטים באתר הרשמי
-    של התחרות או המועדון. האתר אינו אחראי לשינויים, לביטולים או לנזק שנגרם מהסתמכות על המידע המוצג.</p>
-  <p>סמלי הקבוצות והתחרויות המוצגים מיועדים לזיהוי בלבד; כל הזכויות בהם שייכות לבעליהן
-    (המועדונים, הליגות וגופי השידור), ואין בהצגתם כדי לרמז על מתן חסות, אישור או שיתוף
-    פעולה כלשהו.</p>
-  <p>האתר משתמש ב-Google Analytics כדי להבין אילו תכונות שימושיות ולשפר את האתר. זה
-    כרוך בשמירת עוגייה (cookie) בדפדפן ובשליחת נתוני שימוש אנונימיים (לא מזהים אישית)
-    ל-Google.</p>
-  <p>קישורי החיפוש לטיסות פותחים חיפוש רגיל ב-Google Flights, בלי מעורבות של האתר.
-    קישורי הלינה מיועדים בעתיד לכלול קישור שותפים (affiliate) של Booking.com - אם וכשזה
-    יופעל, הזמנה דרכם עשויה לזכות את האתר בעמלה, בלי שינוי במחיר שאתם משלמים.</p>
-</dialog>
-
-<button type="button" id="toTop" class="to-top" aria-label="חזרה לראש העמוד" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<dialog id="evDialog" class="sheet" aria-labelledby="evTitle"></dialog>
+<dialog id="repDialog" class="sheet" aria-labelledby="repTitle"></dialog>
+<dialog id="fdDialog" class="sheet" aria-labelledby="fdTitle"></dialog>
+<dialog id="ctxDialog" class="sheet" aria-labelledby="ctxTitle"></dialog>
+<dialog id="impDialog" class="sheet narrow" aria-labelledby="impTitle"></dialog>
+<dialog id="legalDialog" class="sheet narrow" aria-labelledby="legalTitle"></dialog>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
 
 <script src="brand.js"></script>
 <script src="fixtures.js"></script>
-<script src="airports.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="js/i18n.js"></script>
+<script src="js/model.js"></script>
+<script src="js/store.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/combo.js"></script>
 <script src="planner.js"></script>
+<script src="js/planview.js"></script>
+<script src="js/tickets.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

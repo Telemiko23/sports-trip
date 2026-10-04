@@ -1,0 +1,32 @@
+// Quick local smoke run: loads the app, prints console/page errors, and walks the basic first-visit journey.
+//   node tests/capture/smoke.mjs --url http://localhost:8742
+import { chromium } from '@playwright/test';
+const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i > -1 ? process.argv[i + 1] : d; };
+const URL = arg('url', 'http://localhost:8742');
+const browser = await chromium.launch();
+const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'he-IL', timezoneId: 'Asia/Jerusalem' });
+const page = await ctx.newPage();
+const errs = [];
+page.on('pageerror', (e) => errs.push('PAGEERROR ' + e.message));
+page.on('console', (m) => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); });
+await page.goto(URL);
+console.log('onboarding visible:', await page.locator('#onboarding').isVisible());
+await page.fill('#obDest', 'לונדון');
+await page.keyboard.press('ArrowDown');
+await page.keyboard.press('Enter');
+console.log('dest after select:', await page.inputValue('#obDest'), '| hint:', await page.locator('#obDestHint').innerText());
+await page.fill('#obFrom', '2026-10-09');
+await page.fill('#obTo', '2026-10-11');
+await page.click('#obGo');
+await page.waitForSelector('#list .ev');
+console.log('summary:', await page.locator('#summary').innerText());
+console.log('ctx:', (await page.locator('#ctxBar').innerText()).replace(/\s+/g, ' '));
+await page.locator('#list .add').first().click();
+console.log('trip badge:', await page.locator('[data-trip-count]').innerText());
+await page.screenshot({ path: 'test-results/smoke-search.png' });
+await page.click('#tab-trip');
+await page.waitForSelector('#view-trip .tentry');
+console.log('trip summary:', (await page.locator('.tsummary').innerText()).replace(/\s+/g, ' '));
+await page.screenshot({ path: 'test-results/smoke-trip.png' });
+console.log(errs.length ? errs.join('\n') : 'no errors');
+await browser.close();

@@ -31,7 +31,9 @@ translation/correction file (no need for fresh fixtures from the API), just run
 | File | What it is |
 |---|---|
 | `index.html` | The page skeleton (Hebrew, RTL) - loads the files below. |
-| `planner.js` | The smart planner's logic (rule-based Hebrew text parsing + trip planning, one event a day with sane travel). Pure functions, no DOM. |
+| `planner.js` | The planner engine (v2): rule-based Hebrew text parsing (not an LLM), flexible-date windows, three pace presets, lock/exclude/replace, honest feasibility (no travel-time claims). Pure, deterministic, no DOM. |
+| `js/model.js`, `js/store.js`, `js/ui.js`, `js/i18n.js`, `js/combo.js`, `js/planview.js`, `js/tickets.js` | v2 modules: domain, one state store/reducer, renderers, strings, accessible autocomplete, the Plan tab, ticket states. See `docs/evolution/PRODUCT_NOTES.md`. |
+| `tickets/` | Ticket enrichment (adapter, matching, snapshot builder). Live prices are OFF - see `TICKETS.md`. |
 | `style.css`, `app.js`, `analytics.js` | The site's styles, logic and the GA4 init - split out of `index.html` in v1.4.0 (no inline scripts, so the CSP forbids them). `app.js` reads `fixtures.js`/`airports.js`. |
 | `fixtures.js` | **Auto-generated - don't edit by hand.** Every fixture, with Hebrew fields, location, logo and stadium already attached. |
 
@@ -80,7 +82,7 @@ Spanish clubs the API didn't have a crest for).
 | `airports.csv` | Raw dataset from [OurAirports](https://ourairports.com/data/) - every airport in the world. Includes a `municipality_he` column (Hebrew city translation) added by this project. | Replace with a newer export if you want to refresh the dataset. |
 | `add_hebrew_city_column.py` | Adds/refreshes the `municipality_he` column in `airports.csv`. | Once after every new `airports.csv`, **before** `build_airports.py`. |
 | `build_airports.py` | Filters `airports.csv` (only airports with scheduled commercial service and an IATA code), groups cities with multiple airports, and writes `airports.js`. | After every change to `airports.csv`. |
-| `airports.js` | **Auto-generated** - the list the browser actually reads in the "flight from" field. | - |
+| `airports.js` | **Auto-generated** - the list the browser reads in the "flight from" field (v2 loads it lazily, only when My trip needs it). | - |
 
 ## Planning
 
@@ -117,3 +119,15 @@ missing_locations_report.py` to see what's missing, fix it in `cities_manual.jso
 
 **"I have a new airports.csv"** → `py add_hebrew_city_column.py` → `py
 build_airports.py`.
+
+## Tests (development only - the site itself has no dependencies or build step)
+
+```
+npm install                      # Playwright, Leaflet (for offline map tests), axe - dev tooling only
+npm run test:unit                # Node: model, store, planner, tickets, i18n key coverage
+npm run test:py                  # Python: ticket matching, adapter failure modes, snapshot allowlist
+npx playwright test              # e2e on the deterministic sample feeds (desktop Chrome + Pixel 7)
+PW_ENGINES=all npx playwright test   # + Firefox/WebKit (needs `npx playwright install firefox webkit`)
+node tests/capture/rollback-proof.mjs   # baseline -> v2 -> baseline on one profile (legacy keys byte-identical)
+```
+Details and what was actually run: `docs/evolution/QA_REPORT.md`. Rollback: `ROLLBACK.md`.
