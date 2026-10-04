@@ -15,6 +15,10 @@ disagrees with this block, this block wins.
   a city-centre marker is labelled approximate. Multi-city events (United Cup) keep every known location in `locs` with
   `loc_provisional: true` - the first listed city is **not** treated as the verified location of every day; such occurrences stay
   discoverable but are never routed by the planner and never receive an occurrence-specific ticket price.
+  **Owner decision 2026-10-04 (United Cup):** until the venues are announced the event is placed in **Sydney only**
+  (`overrides.EVENT_SINGLE_CITY`), so it is no longer emitted with `locs`/`loc_provisional`; the venue stays unknown and the card
+  says «מיקום מדויק עדיין לא ידוע, פרטים יימסרו בהמשך». Remove the entry from `EVENT_SINGLE_CITY` when real venues are known.
+  The multi-location rendering stays supported for any other multi-city event.
 * **Registry how-to** (unchanged in spirit): add the entry to `SPORT_REGISTRY` in `js/model.js` (he/en label + inline SVG icon),
   a competition list in the data pipeline, tests in `tests/unit/model.test.js`. New production categories only with a verified
   granular feed.

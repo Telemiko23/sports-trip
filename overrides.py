@@ -349,3 +349,10 @@ NATION_MATCH_VENUE = {
     "Germany|2026-11-16": ("Olympic Stadium Berlin", "Berlin", "de"),
     "Poland|2026-11-17": ("Tarczyński Arena Wrocław", "Wrocław", "pl"),
 }
+
+# Multi-city events placed in ONE city by the owner's decision (competition name -> city), until the real venues are announced.
+# United Cup (2027-01-01..10): "use only Sydney for now, venue unknown, details to follow" (owner, 2026-10-04). With a single
+# city the event is no longer emitted as multi-location/provisional; the card says the exact venue is not yet known.
+EVENT_SINGLE_CITY = {
+    "Tennis United Cup": "Sydney",
+}

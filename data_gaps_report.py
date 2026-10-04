@@ -42,7 +42,8 @@ def main(limit=20.0):
     sug = json.load(open(os.path.join(HERE, "data_gaps_suggestions.json"), encoding="utf-8"))
     prev = {(r["סוג"], r["פריט"]): r for r in read_csv("data_gaps.csv")}
     acc_path = os.path.join(HERE, "data_gaps_accepted.json")
-    accepted = set(json.load(open(acc_path, encoding="utf-8")).get("coordinates", [])) if os.path.exists(acc_path) else set()
+    acc = json.load(open(acc_path, encoding="utf-8")) if os.path.exists(acc_path) else {}
+    accepted, pending = set(acc.get("coordinates", [])), set(acc.get("pending", []))
     rows = []
 
     def add(kind, item, ctx, what, current="", key=None, note=""):
@@ -51,6 +52,8 @@ def main(limit=20.0):
         rows.append([kind, item, ctx, what, current, s.get("s", ""), s.get("c", ""), s.get("n", "") or note] + [old.get(c, "") for c in OWNER_COLS])
 
     for r in read_csv("missing_info.csv"):
+        if r["קבוצה/אירוע"] in pending:
+            continue                                           # known and intentional (e.g. venues not announced yet)
         what = r["מה חסר"]
         kind = "סיכה" if "סיכה" in what else "אצטדיון"
         add(kind, r["קבוצה/אירוע"], f'{r["ענף"]} · {r["תחרות"]} · {r["מדינה"]}', what, r["אצטדיון נוכחי"] or r["עיר נוכחית"], key=f'אצטדיון|{r["קבוצה/אירוע"]}',

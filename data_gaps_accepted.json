@@ -1,4 +1,12 @@
 {
  "_comment": "Coordinate rows the owner confirmed (2026-10-04): the venue pin is correct and genuinely outside the city centre. Castellon is NOT here - its CITY point is still 28.5 km off.",
- "coordinates": ["Abu Dhabi (United Arab Emirates)", "Shanghai (China)", "Wuhan (China)"]
+ "coordinates": [
+  "Abu Dhabi (United Arab Emirates)",
+  "Shanghai (China)",
+  "Wuhan (China)"
+ ],
+ "pending": [
+  "גביע יונייטד"
+ ],
+ "_comment_pending": "Known and intentional: no venue announced yet; the card says 'מיקום מדויק עדיין לא ידוע, פרטים יימסרו בהמשך' (owner, 2026-10-04). Remove the entry when venues are announced."
 }

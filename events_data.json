@@ -134,8 +134,8 @@
    "city_he": "שנגחאי",
    "lat": 31.2313,
    "lng": 121.47,
-   "venue_lat": 31.039947,
-   "venue_lng": 121.359165,
+   "venue_lat": 31.040051055235192,
+   "venue_lng": 121.35930394616236,
    "web_url": "https://en.rolexshanghaimasters.com"
   },
   {
@@ -203,8 +203,8 @@
    "city_he": "ווהאן",
    "lat": 30.5789,
    "lng": 114.2921,
-   "venue_lat": 30.475058,
-   "venue_lng": 114.462828,
+   "venue_lat": 30.47506741449482,
+   "venue_lng": 114.46272040381557,
    "web_url": "https://www.wtatennis.com/tournaments/1075/wuhan/2026"
   },
   {
@@ -1559,8 +1559,8 @@
    "city_he": "אבו דאבי",
    "lat": 24.4538,
    "lng": 54.3774,
-   "venue_lat": 24.4718,
-   "venue_lng": 54.6058,
+   "venue_lat": 24.477246329633978,
+   "venue_lng": 54.60640472369575,
    "web_url": "https://www.formula1.com"
   },
   {
@@ -1720,22 +1720,7 @@
    "lng": 151.2083,
    "venue_lat": null,
    "venue_lng": null,
-   "web_url": "https://www.unitedcup.com",
-   "locs": [
-    {
-     "city": "Sydney",
-     "country": "Australia",
-     "cc": "au",
-     "src": "AllSportDB"
-    },
-    {
-     "city": "Perth",
-     "country": "Australia",
-     "cc": "au",
-     "src": "AllSportDB"
-    }
-   ],
-   "loc_provisional": true
+   "web_url": "https://www.unitedcup.com"
   }
  ],
  "competitions": [

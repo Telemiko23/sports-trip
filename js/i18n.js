@@ -89,7 +89,7 @@
 
       'ev.add': 'הוסף לטיול', 'ev.added': 'בטיול ✓', 'ev.details': 'פרטים',
       'ev.timeUnpublished': 'שעה לא פורסמה', 'ev.allDay': 'כל היום', 'ev.day': 'יום {n}', 'ev.dayOf': 'יום {n} מתוך {m}',
-      'ev.placeUnknown': 'מיקום מדויק עדיין לא ידוע',
+      'ev.placeUnknown': 'מיקום מדויק עדיין לא ידוע, פרטים יימסרו בהמשך',
       'ev.placeCityOnly': 'מיקום מדויק עדיין לא ידוע',
       'ev.provisional': 'מיקום משוער (אירוע רב־עירוני)',
       'ev.groupDays.one': 'יום אחד בטווח', 'ev.groupDays.other': '{n} ימים בטווח',

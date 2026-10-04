@@ -32,7 +32,7 @@ import urllib.parse
 import urllib.request
 
 from he_names import he_event, he_comp, he_city
-from overrides import COUNTRY_FLAG, EVENT_COMP_LOGO, EVENT_VENUE_OVERRIDE
+from overrides import COUNTRY_FLAG, EVENT_COMP_LOGO, EVENT_VENUE_OVERRIDE, EVENT_SINGLE_CITY
 from download_logos import download_flags
 
 BASE = "https://api.allsportdb.com/v3"
@@ -165,6 +165,9 @@ def build_rows(raw):
         spots = [(c["name"], (c.get("code") or "").lower(), l["name"])
                  for c in (e.get("location") or []) for l in (c.get("locations") or [])
                  if l.get("name") and l["name"] not in ("TBA", "Europe")]
+        only = EVENT_SINGLE_CITY.get(e["competition"])
+        if only:                                      # owner decision: one city only (see overrides.EVENT_SINGLE_CITY)
+            spots = [s for s in spots if s[2] == only] or spots[:1]
         if e["id"] in seen or not spots:
             skipped.append(e["name"])
             continue
