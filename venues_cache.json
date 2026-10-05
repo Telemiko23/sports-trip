@@ -390,6 +390,11 @@
   49.75,
   13.3851
  ],
+ "Dreams2Reality Stadium|Atherton": null,
+ "Dreams2Reality Stadium|Atherton, Greater Manchester": [
+  53.52363646688859,
+  -2.4845295063411372
+ ],
  "Eco-Power Stadium|Doncaster": [
   53.5098,
   -1.1138
@@ -805,6 +810,11 @@
  "Groupama Stadium|Lyon": [
   45.7654,
   4.9821
+ ],
+ "Grove Recreation Ground|Halesowen": null,
+ "Grove Recreation Ground|Halesowen, West Midlands": [
+  52.45475483266017,
+  -2.0568073781444403
  ],
  "HASKAMP-Arena|Edewecht": [
   53.091076,
@@ -1438,6 +1448,11 @@
   52.133125,
   0.173775
  ],
+ "Scarborough Sports Village|Scarborough": null,
+ "Scarborough Sports Village|Scarborough, North Yorkshire": [
+  54.269523049054925,
+  -0.41271274368852057
+ ],
  "Schüco Arena|Bielefeld": [
   52.0321,
   8.517152
@@ -1474,6 +1489,10 @@
  "Sinobo Stadium|Prague": [
   50.0676,
   14.4715
+ ],
+ "Sir Halley Stewart Field|Spalding, Lincolnshire": [
+  52.790295922280606,
+  -0.15190078977946683
  ],
  "Sixfields Stadium|Northampton": [
   52.2353,
@@ -1903,6 +1922,10 @@
   51.917,
   4.5204
  ],
+ "Stadion Z'dežele|Celje": [
+  46.24658694352507,
+  15.27094039215022
+ ],
  "Stadion an der Hafenstrasse|Essen": [
   51.4869,
   6.9766
@@ -2036,6 +2059,10 @@
  "The MGroup Stadium|Oxford, Oxfordshire": [
   51.774015,
   -1.226965
+ ],
+ "The Maurice Rebak Stadium|London": [
+  51.60762622278559,
+  -0.17031326468957042
  ],
  "The Meadow|Chesham, Buckinghamshire": [
   51.698949,
@@ -2258,29 +2285,5 @@
  "Łęczna Stadium|Leczna": [
   51.301705,
   22.875548
- ],
- "Dreams2Reality Stadium|Atherton, Greater Manchester": [
-  53.52363646688859,
-  -2.4845295063411372
- ],
- "Grove Recreation Ground|Halesowen, West Midlands": [
-  52.45475483266017,
-  -2.0568073781444403
- ],
- "The Maurice Rebak Stadium|London": [
-  51.60762622278559,
-  -0.17031326468957042
- ],
- "Sir Halley Stewart Field|Spalding, Lincolnshire": [
-  52.790295922280606,
-  -0.15190078977946683
- ],
- "Scarborough Sports Village|Scarborough, North Yorkshire": [
-  54.269523049054925,
-  -0.41271274368852057
- ],
- "Stadion Z'dežele|Celje": [
-  46.24658694352507,
-  15.27094039215022
  ]
 }
