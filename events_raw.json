@@ -1,52 +1,5 @@
 [
  {
-  "id": 20922,
-  "name": "2026 Formula 1 - Bahrain Grand Prix",
-  "year": 2026,
-  "date": "2 - 4 October 2026",
-  "dateFrom": "2026-10-02T00:00:00",
-  "dateTo": "2026-10-04T00:00:00",
-  "sportId": 11,
-  "sport": "Motor Sports",
-  "emoji": null,
-  "competitionId": 65,
-  "competition": "Formula 1",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-Formula-1-Bahrain-Grand-Prix-20922",
-  "webUrl": "https://www.formula1.com",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/Formula1",
-  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23BahrainGP",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-28T12:31:35.952",
-  "location": [
-   {
-    "id": 50,
-    "regionId": null,
-    "name": "Malaysia",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "my",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3495,
-      "name": "Sepang",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
   "id": 19810,
   "name": "2026 Formula 1 - Singapore Grand Prix",
   "year": 2026,
@@ -71,7 +24,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-08T12:01:41.594",
+  "dateModified": "2026-10-05T06:05:31.571",
   "location": [
    {
     "id": 53,
@@ -159,13 +112,13 @@
   "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/Formula1",
-  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%40MexicoGP",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-04-03T11:49:36.293",
+  "dateModified": "2026-09-29T10:35:29.232",
   "location": [
    {
     "id": 47,
@@ -206,13 +159,13 @@
   "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/Formula1",
-  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1",
+  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23BrazilianGP%20OR%20%40InterlagosTrack",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-04-03T11:49:36.293",
+  "dateModified": "2026-10-05T12:39:52.569",
   "location": [
    {
     "id": 2,
@@ -532,7 +485,7 @@
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-ATP-Tour-Rolex-Shanghai-Masters-19766",
   "webUrl": "https://en.rolexshanghaimasters.com",
-  "wikiUrl": "https://en.wikipedia.org/wiki/Shanghai_Masters_(tennis)",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Rolex_Shanghai_Masters_-_Singles#Finals",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/RolexSHMasters",
   "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40SH_RolexMasters%20OR%20%23ShanghaiMasters",
@@ -541,7 +494,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-08T11:52:01.604",
+  "dateModified": "2026-10-04T09:22:23.26",
   "location": [
    {
     "id": 49,
@@ -579,7 +532,7 @@
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-WTA-Tour-Wuhan-Open-19586",
   "webUrl": "https://www.wtatennis.com/tournaments/1075/wuhan/2026",
-  "wikiUrl": "https://en.wikipedia.org/wiki/Wuhan_Open",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Wuhan_Open_-_Singles#Finals",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/wuhanopentennis",
   "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40WuhanOpenTennis%20OR%20%23WuhanOpen",
@@ -588,7 +541,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-15T14:19:34.704",
+  "dateModified": "2026-10-05T06:40:10.775",
   "location": [
    {
     "id": 49,
@@ -672,17 +625,17 @@
   "continentId": 2,
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-WTA-Tour-Toray-Pan-Pacific-Open-Tennis-19588",
-  "webUrl": "https://www.wtatennis.com/tournaments/1056/tokyo/2026",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_WTA_Tour",
+  "webUrl": "http://www.toray-ppo.com/en/tournament",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Pan_Pacific_Open",
   "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/WTA",
-  "twitterUrl": "https://twitter.com/wta",
+  "facebookUrl": "https://www.facebook.com/torayppo",
+  "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40torayppo",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2025-12-03T11:38:25.583",
+  "dateModified": "2026-09-29T12:27:16.123",
   "location": [
    {
     "id": 15,
@@ -719,17 +672,17 @@
   "continentId": 2,
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-ATP-Tour-Swiss-Indoors-19767",
-  "webUrl": "https://www.atptour.com/en/tournaments/basel/328/overview",
+  "webUrl": "https://www.swissindoorsbasel.ch",
   "wikiUrl": "https://en.wikipedia.org/wiki/Swiss_Indoors",
   "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/ATPTour",
+  "facebookUrl": "https://www.facebook.com/swissindoorsbasel",
   "twitterUrl": "https://twitter.com/atptour",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2025-12-19T16:45:32.083",
+  "dateModified": "2026-09-29T12:26:21.912",
   "location": [
    {
     "id": 30,
@@ -766,17 +719,17 @@
   "continentId": 2,
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-ATP-Tour-Erste-Bank-Open-19768",
-  "webUrl": "https://www.atptour.com/en/tournaments/vienna/337/overview",
+  "webUrl": "https://www.erstebank-open.com",
   "wikiUrl": "https://en.wikipedia.org/wiki/Vienna_Open",
   "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/ATPTour",
-  "twitterUrl": "https://twitter.com/atptour",
+  "facebookUrl": "https://www.facebook.com/ErsteBankOpen",
+  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40ErsteBankOpen",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2025-12-19T16:45:32.09",
+  "dateModified": "2026-09-29T12:25:43.193",
   "location": [
    {
     "id": 57,
@@ -813,17 +766,17 @@
   "continentId": 2,
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-ATP-Tour-Rolex-Paris-Masters-19769",
-  "webUrl": "https://www.atptour.com/en/tournaments/paris/352/overview",
+  "webUrl": "https://www.rolexparismasters.com",
   "wikiUrl": "https://en.wikipedia.org/wiki/Paris_Masters",
   "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/ATPTour",
-  "twitterUrl": "https://twitter.com/atptour",
+  "facebookUrl": "https://www.facebook.com/rolexparismasters",
+  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40RolexPMasters%20OR%20%23RolexParisMasters",
   "liveUrl": null,
   "liveUrlPaid": null,
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2025-12-19T16:45:32.1",
+  "dateModified": "2026-10-05T12:57:23.548",
   "location": [
    {
     "id": 10,
@@ -870,7 +823,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-08-28T08:28:08.678",
+  "dateModified": "2026-10-05T10:19:09.421",
   "location": [
    {
     "id": 41,
@@ -1079,6 +1032,1557 @@
      {
       "id": 4212,
       "name": "Perth",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21190,
+  "name": "2027 WTA Tour - Brisbane International",
+  "year": 2027,
+  "date": "3 - 10 January 2027",
+  "dateFrom": "2027-01-03T00:00:00",
+  "dateTo": "2027-01-10T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Brisbane-International-21190",
+  "webUrl": "https://www.wtatennis.com/tournament/800/brisbane/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.042",
+  "location": [
+   {
+    "id": 37,
+    "regionId": null,
+    "name": "Australia",
+    "continent": "Oceania",
+    "continentId": 8,
+    "code": "au",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4211,
+      "name": "Brisbane",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21104,
+  "name": "2027 Grand Slam - Australian Open",
+  "year": 2027,
+  "date": "11 - 31 January 2027",
+  "dateFrom": "2027-01-11T00:00:00",
+  "dateTo": "2027-01-31T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 316,
+  "competition": "Grand Slam",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-Grand-Slam-Australian-Open-21104",
+  "webUrl": "https://ausopen.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_Australian_Open",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/AustralianOpen",
+  "twitterUrl": "https://twitter.com/search?q=%23GrandSlam%20OR%20%40AustralianOpen%20OR%20%23AusOpen",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-29T08:03:38.981",
+  "location": [
+   {
+    "id": 37,
+    "regionId": null,
+    "name": "Australia",
+    "continent": "Oceania",
+    "continentId": 8,
+    "code": "au",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3425,
+      "name": "Melbourne",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21191,
+  "name": "2027 WTA Tour - Adelaide International",
+  "year": 2027,
+  "date": "11 - 16 January 2027",
+  "dateFrom": "2027-01-11T00:00:00",
+  "dateTo": "2027-01-16T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Adelaide-International-21191",
+  "webUrl": "https://www.wtatennis.com/tournament/2014/adelaide/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.046",
+  "location": [
+   {
+    "id": 37,
+    "regionId": null,
+    "name": "Australia",
+    "continent": "Oceania",
+    "continentId": 8,
+    "code": "au",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4210,
+      "name": "Adelaide",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21192,
+  "name": "2027 WTA Tour - Mubadala Abu Dhabi Open",
+  "year": 2027,
+  "date": "31 January - 6 February 2027",
+  "dateFrom": "2027-01-31T00:00:00",
+  "dateTo": "2027-02-06T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Mubadala-Abu-Dhabi-Open-21192",
+  "webUrl": "https://www.wtatennis.com/tournament/2088/abu-dhabi/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.049",
+  "location": [
+   {
+    "id": 33,
+    "regionId": null,
+    "name": "United Arab Emirates",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "ae",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3382,
+      "name": "Abu Dhabi",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21193,
+  "name": "2027 WTA Tour - Qatar TotalEnergies Open",
+  "year": 2027,
+  "date": "7 - 13 February 2027",
+  "dateFrom": "2027-02-07T00:00:00",
+  "dateTo": "2027-02-13T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Qatar-TotalEnergies-Open-21193",
+  "webUrl": "https://www.wtatennis.com/tournament/1003/doha/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.051",
+  "location": [
+   {
+    "id": 23,
+    "regionId": null,
+    "name": "Qatar",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "qa",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3445,
+      "name": "Doha",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21194,
+  "name": "2027 WTA Tour - Dubai Duty Free Tennis Championships",
+  "year": 2027,
+  "date": "14 - 20 February 2027",
+  "dateFrom": "2027-02-14T00:00:00",
+  "dateTo": "2027-02-20T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Dubai-Duty-Free-Tennis-Championships-21194",
+  "webUrl": "https://www.wtatennis.com/tournament/718/dubai/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.053",
+  "location": [
+   {
+    "id": 33,
+    "regionId": null,
+    "name": "United Arab Emirates",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "ae",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3379,
+      "name": "Dubai",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21195,
+  "name": "2027 WTA Tour - Mérida Open",
+  "year": 2027,
+  "date": "22 - 28 February 2027",
+  "dateFrom": "2027-02-22T00:00:00",
+  "dateTo": "2027-02-28T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Mérida-Open-21195",
+  "webUrl": "https://www.wtatennis.com/tournament/2085/merida/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.056",
+  "location": [
+   {
+    "id": 47,
+    "regionId": null,
+    "name": "Mexico",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "mx",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4846,
+      "name": "Mérida",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21196,
+  "name": "2027 WTA Tour - BNP Paribas Open",
+  "year": 2027,
+  "date": "3 - 14 March 2027",
+  "dateFrom": "2027-03-03T00:00:00",
+  "dateTo": "2027-03-14T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-BNP-Paribas-Open-21196",
+  "webUrl": "https://www.wtatennis.com/tournament/609/indian-wells/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.059",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3860,
+      "name": "Indian Wells",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21197,
+  "name": "2027 WTA Tour - Miami Open",
+  "year": 2027,
+  "date": "16 - 28 March 2027",
+  "dateFrom": "2027-03-16T00:00:00",
+  "dateTo": "2027-03-28T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Miami-Open-21197",
+  "webUrl": "https://www.wtatennis.com/tournament/902/miami/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.061",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3715,
+      "name": "Miami",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21198,
+  "name": "2027 WTA Tour - Credit One Charleston Open",
+  "year": 2027,
+  "date": "29 March - 4 April 2027",
+  "dateFrom": "2027-03-29T00:00:00",
+  "dateTo": "2027-04-04T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Credit-One-Charleston-Open-21198",
+  "webUrl": "https://www.wtatennis.com/tournament/804/charleston/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.063",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 6126,
+      "name": "Charleston",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21199,
+  "name": "2027 WTA Tour - Upper Austria Ladies Linz",
+  "year": 2027,
+  "date": "5 - 11 April 2027",
+  "dateFrom": "2027-04-05T00:00:00",
+  "dateTo": "2027-04-11T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Upper-Austria-Ladies-Linz-21199",
+  "webUrl": "https://www.wtatennis.com/tournament/528/linz/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.066",
+  "location": [
+   {
+    "id": 57,
+    "regionId": null,
+    "name": "Austria",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "at",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4427,
+      "name": "Linz",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21200,
+  "name": "2027 WTA Tour - Porsche Tennis Grand Prix",
+  "year": 2027,
+  "date": "12 - 18 April 2027",
+  "dateFrom": "2027-04-12T00:00:00",
+  "dateTo": "2027-04-18T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Porsche-Tennis-Grand-Prix-21200",
+  "webUrl": "https://www.wtatennis.com/tournament/1051/stuttgart/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.069",
+  "location": [
+   {
+    "id": 11,
+    "regionId": null,
+    "name": "Germany",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "de",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3537,
+      "name": "Stuttgart",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21201,
+  "name": "2027 WTA Tour - Mutua Madrid Open",
+  "year": 2027,
+  "date": "20 April - 2 May 2027",
+  "dateFrom": "2027-04-20T00:00:00",
+  "dateTo": "2027-05-02T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Mutua-Madrid-Open-21201",
+  "webUrl": "https://www.wtatennis.com/tournament/1038/madrid/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.071",
+  "location": [
+   {
+    "id": 28,
+    "regionId": null,
+    "name": "Spain",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "es",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3430,
+      "name": "Madrid",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21202,
+  "name": "2027 WTA Tour - Internazionali BNL d'Italia",
+  "year": 2027,
+  "date": "4 - 16 May 2027",
+  "dateFrom": "2027-05-04T00:00:00",
+  "dateTo": "2027-05-16T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Internazionali-BNL-dItalia-21202",
+  "webUrl": "https://www.wtatennis.com/tournament/709/rome/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.073",
+  "location": [
+   {
+    "id": 39,
+    "regionId": null,
+    "name": "Italy",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "it",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3775,
+      "name": "Rome",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21203,
+  "name": "2027 WTA Tour - Internationaux de Strasbourg",
+  "year": 2027,
+  "date": "16 - 22 May 2027",
+  "dateFrom": "2027-05-16T00:00:00",
+  "dateTo": "2027-05-22T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Internationaux-de-Strasbourg-21203",
+  "webUrl": "https://www.wtatennis.com/tournament/406/strasbourg/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.076",
+  "location": [
+   {
+    "id": 10,
+    "regionId": null,
+    "name": "France",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "fr",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3557,
+      "name": "Strasbourg",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21105,
+  "name": "2027 Grand Slam - French Open",
+  "year": 2027,
+  "date": "23 May - 6 June 2027",
+  "dateFrom": "2027-05-23T00:00:00",
+  "dateTo": "2027-06-06T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 316,
+  "competition": "Grand Slam",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-Grand-Slam-French-Open-21105",
+  "webUrl": "https://www.rolandgarros.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_French_Open",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/RolandGarros",
+  "twitterUrl": "https://twitter.com/search?q=%23GrandSlam%20OR%20%40RolandGarros%20OR%20%23RG27",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-29T08:04:17.811",
+  "location": [
+   {
+    "id": 10,
+    "regionId": null,
+    "name": "France",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "fr",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3426,
+      "name": "Paris",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21204,
+  "name": "2027 WTA Tour - The HSBC Championships",
+  "year": 2027,
+  "date": "7 - 13 June 2027",
+  "dateFrom": "2027-06-07T00:00:00",
+  "dateTo": "2027-06-13T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-The-HSBC-Championships-21204",
+  "webUrl": "https://www.wtatennis.com/tournament/1111/london/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.078",
+  "location": [
+   {
+    "id": 34,
+    "regionId": null,
+    "name": "United Kingdom",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "gb",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3423,
+      "name": "London",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21205,
+  "name": "2027 WTA Tour - Berlin Tennis Open",
+  "year": 2027,
+  "date": "14 - 20 June 2027",
+  "dateFrom": "2027-06-14T00:00:00",
+  "dateTo": "2027-06-20T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Berlin-Tennis-Open-21205",
+  "webUrl": "https://www.wtatennis.com/tournament/2012/berlin/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.081",
+  "location": [
+   {
+    "id": 11,
+    "regionId": null,
+    "name": "Germany",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "de",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3447,
+      "name": "Berlin",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21206,
+  "name": "2027 WTA Tour - Bad Homburg Open",
+  "year": 2027,
+  "date": "20 - 26 June 2027",
+  "dateFrom": "2027-06-20T00:00:00",
+  "dateTo": "2027-06-26T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Bad-Homburg-Open-21206",
+  "webUrl": "https://www.wtatennis.com/tournament/2017/bad-homburg/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.083",
+  "location": [
+   {
+    "id": 11,
+    "regionId": null,
+    "name": "Germany",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "de",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 8667,
+      "name": "Bad Homburg",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21106,
+  "name": "2027 Grand Slam - Wimbledon",
+  "year": 2027,
+  "date": "28 June - 11 July 2027",
+  "dateFrom": "2027-06-28T00:00:00",
+  "dateTo": "2027-07-11T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 316,
+  "competition": "Grand Slam",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-Grand-Slam-Wimbledon-21106",
+  "webUrl": "https://www.wimbledon.com",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_Wimbledon_Championships",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/wimbledon",
+  "twitterUrl": "https://twitter.com/search?q=%23GrandSlam%20OR%20%40Wimbledon%20OR%20%23Wimbledon2027",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-29T08:04:46.047",
+  "location": [
+   {
+    "id": 34,
+    "regionId": null,
+    "name": "United Kingdom",
+    "continent": "Europe",
+    "continentId": 3,
+    "code": "gb",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3423,
+      "name": "London",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21207,
+  "name": "2027 WTA Tour - Mubadala DC Open",
+  "year": 2027,
+  "date": "26 July - 1 August 2027",
+  "dateFrom": "2027-07-26T00:00:00",
+  "dateTo": "2027-08-01T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Mubadala-DC-Open-21207",
+  "webUrl": "https://www.wtatennis.com/tournament/1045/washington/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.086",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4507,
+      "name": "Washington",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21208,
+  "name": "2027 WTA Tour - National Bank Open",
+  "year": 2027,
+  "date": "1 - 12 August 2027",
+  "dateFrom": "2027-08-01T00:00:00",
+  "dateTo": "2027-08-12T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-National-Bank-Open-21208",
+  "webUrl": "https://www.wtatennis.com/tournament/806/montreal/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.089",
+  "location": [
+   {
+    "id": 4,
+    "regionId": null,
+    "name": "Canada",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "ca",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3806,
+      "name": "Montreal",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21209,
+  "name": "2027 WTA Tour - Cincinnati Open",
+  "year": 2027,
+  "date": "12 - 22 August 2027",
+  "dateFrom": "2027-08-12T00:00:00",
+  "dateTo": "2027-08-22T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Cincinnati-Open-21209",
+  "webUrl": "https://www.wtatennis.com/tournament/1017/cincinnati/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.091",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3862,
+      "name": "Cincinnati",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21210,
+  "name": "2027 WTA Tour - Abierto GNP Seguros",
+  "year": 2027,
+  "date": "22 - 28 August 2027",
+  "dateFrom": "2027-08-22T00:00:00",
+  "dateTo": "2027-08-28T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Abierto-GNP-Seguros-21210",
+  "webUrl": "https://www.wtatennis.com/tournament/1039/monterrey/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.093",
+  "location": [
+   {
+    "id": 47,
+    "regionId": null,
+    "name": "Mexico",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "mx",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4222,
+      "name": "Monterrey",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21107,
+  "name": "2027 Grand Slam - US Open",
+  "year": 2027,
+  "date": "30 August - 12 September 2027",
+  "dateFrom": "2027-08-30T00:00:00",
+  "dateTo": "2027-09-12T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 316,
+  "competition": "Grand Slam",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-Grand-Slam-US-Open-21107",
+  "webUrl": "https://www.usopen.org",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_US_Open_(tennis)",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/usopentennis",
+  "twitterUrl": "https://twitter.com/search?q=%23GrandSlam%20OR%20%40USOpen",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-09-29T08:05:06.874",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3530,
+      "name": "New York",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21211,
+  "name": "2027 WTA Tour - Guadalajara Open",
+  "year": 2027,
+  "date": "12 - 18 September 2027",
+  "dateFrom": "2027-09-12T00:00:00",
+  "dateTo": "2027-09-18T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Guadalajara-Open-21211",
+  "webUrl": "https://www.wtatennis.com/tournament/2075/guadalajara/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.096",
+  "location": [
+   {
+    "id": 47,
+    "regionId": null,
+    "name": "Mexico",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "mx",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3452,
+      "name": "Guadalajara",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21212,
+  "name": "2027 WTA Tour - Singapore Tennis Open",
+  "year": 2027,
+  "date": "20 - 26 September 2027",
+  "dateFrom": "2027-09-20T00:00:00",
+  "dateTo": "2027-09-26T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Singapore-Tennis-Open-21212",
+  "webUrl": "https://www.wtatennis.com/tournament/1024/seoul/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.098",
+  "location": [
+   {
+    "id": 54,
+    "regionId": null,
+    "name": "South Korea",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "kr",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3594,
+      "name": "Seoul",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21213,
+  "name": "2027 WTA Tour - Korea Open",
+  "year": 2027,
+  "date": "20 - 26 September 2027",
+  "dateFrom": "2027-09-20T00:00:00",
+  "dateTo": "2027-09-26T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Korea-Open-21213",
+  "webUrl": "https://www.wtatennis.com/tournament/1152/singapore/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.101",
+  "location": [
+   {
+    "id": 53,
+    "regionId": null,
+    "name": "Singapore",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "sg",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3774,
+      "name": "Singapore",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21152,
+  "name": "2027 Laver Cup",
+  "year": 2027,
+  "date": "24 - 26 September 2027",
+  "dateFrom": "2027-09-24T00:00:00",
+  "dateTo": "2027-09-26T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 687,
+  "competition": "Laver Cup",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-Laver-Cup-21152",
+  "webUrl": "https://lavercup.com/news/2026/09/30/laver-cup-looks-to-los-angeles-and-the-intuit-dome",
+  "wikiUrl": "https://en.wikipedia.org/wiki/Laver_Cup",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/LaverCup",
+  "twitterUrl": "https://twitter.com/search?q=%40LaverCup%20OR%20%40IntuitDome",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T09:31:24.001",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3712,
+      "name": "Los Angeles",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21214,
+  "name": "2027 WTA Tour - China Open",
+  "year": 2027,
+  "date": "29 September - 10 October 2027",
+  "dateFrom": "2027-09-29T00:00:00",
+  "dateTo": "2027-10-10T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-China-Open-21214",
+  "webUrl": "https://www.wtatennis.com/tournament/1020/beijing/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.103",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3540,
+      "name": "Beijing",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21215,
+  "name": "2027 WTA Tour - Wuhan Open",
+  "year": 2027,
+  "date": "11 - 17 October 2027",
+  "dateFrom": "2027-10-11T00:00:00",
+  "dateTo": "2027-10-17T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Wuhan-Open-21215",
+  "webUrl": "https://www.wtatennis.com/tournament/1075/wuhan/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.105",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3789,
+      "name": "Wuhan",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21216,
+  "name": "2027 WTA Tour - Ningbo Open",
+  "year": 2027,
+  "date": "18 - 24 October 2027",
+  "dateFrom": "2027-10-18T00:00:00",
+  "dateTo": "2027-10-24T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Ningbo-Open-21216",
+  "webUrl": "https://www.wtatennis.com/tournament/2092/ningbo/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.108",
+  "location": [
+   {
+    "id": 49,
+    "regionId": null,
+    "name": "China",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "cn",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 5724,
+      "name": "Ningbo",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21217,
+  "name": "2027 WTA Tour - Toray Pan Pacific Open Tennis",
+  "year": 2027,
+  "date": "25 - 31 October 2027",
+  "dateFrom": "2027-10-25T00:00:00",
+  "dateTo": "2027-10-31T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 295,
+  "competition": "WTA Tour",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Tour-Toray-Pan-Pacific-Open-Tennis-21217",
+  "webUrl": "https://www.wtatennis.com/tournament/1056/tokyo/2027/overview",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2027_WTA_Tour",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/wta",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:27:30.111",
+  "location": [
+   {
+    "id": 15,
+    "regionId": null,
+    "name": "Japan",
+    "continent": "Asia",
+    "continentId": 5,
+    "code": "jp",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 3412,
+      "name": "Tokyo",
       "lat": null,
       "lng": null
      }
