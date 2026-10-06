@@ -233,6 +233,7 @@
   42.3546,
   -7.8533
  ],
+ "Campo Municipal de Urritxe|Amorebieta-Etxano": null,
  "Campo Padre José Tavares|Castro Daire": [
   40.91715,
   -7.93911
@@ -432,6 +433,10 @@
   41.9612,
   2.829
  ],
+ "Estadi Municipal de Reus|Reus": [
+  41.1551,
+  1.0867
+ ],
  "Estadi de la FAF|Encamp": [
   42.5337,
   1.5768
@@ -443,6 +448,10 @@
  "Estadio Antonio Coimbra da Mota|Estoril": [
   38.7159,
   -9.4064
+ ],
+ "Estadio Balear|Palma": [
+  39.5741,
+  2.678
  ],
  "Estadio Carlos Belmonte|Albacete": [
   38.9811,
@@ -457,6 +466,10 @@
   -0.362835
  ],
  "Estadio EFAPEL Cidade de Coimbra|Coimbra": null,
+ "Estadio El Collao|Alcoy": [
+  38.691,
+  -0.4904
+ ],
  "Estadio El Sadar|Pamplona": [
   42.7967,
   -1.6371
@@ -464,6 +477,10 @@
  "Estadio El Sardinero|Santander": [
   43.4763,
   -3.794
+ ],
+ "Estadio La Albuera|Segovia": [
+  40.9411,
+  -4.0995
  ],
  "Estadio La Rosaleda|Malaga": [
   36.7349,
@@ -473,6 +490,7 @@
   36.7349,
   -4.4265
  ],
+ "Estadio Las Llanas|Sestao": null,
  "Estadio Manuel Martínez Valero|Elche": [
   38.267299,
   -0.662618
@@ -1186,6 +1204,10 @@
   -0.3252
  ],
  "Nuevo Carlos Tartiere|Oviedo": null,
+ "Nuevo Colombino|Huelva": [
+  37.2467,
+  -6.9542
+ ],
  "OCBC Arena|Seoul": null,
  "OCBC Arena|Singapore": [
   1.304575,
@@ -2060,6 +2082,10 @@
  "The MGroup Stadium|Oxford, Oxfordshire": [
   51.774015,
   -1.226965
+ ],
+ "The Maurice Rebak Stadium|Finchley": [
+  51.6069,
+  -0.1715
  ],
  "The Maurice Rebak Stadium|London": [
   51.60762622278559,
