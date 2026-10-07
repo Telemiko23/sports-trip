@@ -59,6 +59,10 @@
   53.4309,
   -2.961
  ],
+ "Anoeta Stadium|San Sebastian": [
+  43.3014,
+  -1.9736
+ ],
  "Anoeta|San Sebastian": [
   43.3023,
   -1.9748
@@ -238,6 +242,7 @@
   40.91715,
   -7.93911
  ],
+ "Campo de Futbol Beitikuntzea|Lizasoáin": null,
  "Campo de Futbol de Vallecas|Madrid": [
   40.3918,
   -3.6587
@@ -294,6 +299,10 @@
  "Colchester Community Stadium|Colchester": [
   51.9234,
   0.8976
+ ],
+ "Coliseum Alfonso Pérez|Madrid": [
+  40.3257,
+  -3.7149
  ],
  "Coliseum|Madrid": [
   40.4233,
@@ -407,6 +416,10 @@
  "Eintracht-Stadion|Braunschweig": [
   52.2901,
   10.5215
+ ],
+ "El Sardinero|Santander": [
+  43.4763,
+  -3.794
  ],
  "Elland Road|Leeds": [
   53.764,
@@ -599,11 +612,32 @@
   37.4172,
   -6.0046
  ],
+ "Estadio de Mendizorroza|Victoria-Gasteiz": [
+  42.8374,
+  -2.6909
+ ],
+ "Estadio de Mestalla|Valdivia": null,
  "Estadio de Mestalla|Valencia": [
   39.4748,
   -0.3577
  ],
+ "Estadio de Riazor|La Coruna": [
+  43.3687,
+  -8.4175
+ ],
+ "Estadio de Vallecas|Madrid": [
+  40.3918,
+  -3.6587
+ ],
+ "Estadio de la Cartuja|Seville": [
+  37.4172,
+  -6.0046
+ ],
  "Estadio de la Ceramica|Villarreal": [
+  39.9442,
+  -0.1034
+ ],
+ "Estadio de la Cerámica|Villarreal": [
   39.9442,
   -0.1034
  ],
@@ -622,6 +656,10 @@
  "Estádio Cidade de Barcelos|Barcelos": [
   41.551259,
   -8.622519
+ ],
+ "Estádio Comendador Joaquim de Almeida Freitas|Guimarães": [
+  41.378,
+  -8.355
  ],
  "Estádio Comendador Joaquim de Almeida Freitas|Moreira de Conegos": [
   41.378253,
@@ -1007,6 +1045,10 @@
   35.2835,
   -2.9448
  ],
+ "La Rosaleda|Malaga": [
+  36.7349,
+  -4.4265
+ ],
  "Lamex Stadium|Stevenage": [
   51.8896,
   -0.1937
@@ -1290,6 +1332,10 @@
   41.4507,
   -8.3619
  ],
+ "Partenio-Adriano Lombardi|Avellino": [
+  40.927,
+  14.7926
+ ],
  "Peninsula Stadium|Salford": [
   53.5137,
   -2.2763
@@ -1354,6 +1400,10 @@
   31.040051055235192,
   121.35930394616236
  ],
+ "RCDE Stadium|Cornella": [
+  41.3479,
+  2.0765
+ ],
  "RCDE Stadium|Cornella de Llobregat": [
   41.3479,
   2.0765
@@ -1389,6 +1439,10 @@
  "Ramón Sánchez-Pizjuán Stadium|Sevilla": [
   37.384086,
   -5.970849
+ ],
+ "Ramón Sánchez-Pizjuán Stadium|Seville": [
+  37.3841,
+  -5.9706
  ],
  "Raymond McEnhill Stadium|Salisbury, Wiltshire": [
   51.104284,
@@ -1588,6 +1642,10 @@
   51.8607,
   4.5429
  ],
+ "Spotify Camp Nou|Barcelona": [
+  41.3809,
+  2.1228
+ ],
  "Spotland Stadium|Rochdale": [
   53.6208,
   -2.1799
@@ -1644,6 +1702,10 @@
   50.4328,
   2.815
  ],
+ "Stade Bonal|Montbeliard": [
+  47.5124,
+  6.8112
+ ],
  "Stade Francis Le Basser|Laval": [
   48.0822,
   -0.7548
@@ -1679,6 +1741,14 @@
  "Stade Marcel Tribut|Dunkerque": [
   51.0353,
   2.3898
+ ],
+ "Stade Marcel Tribut|Dunkirk": [
+  51.0353,
+  2.3898
+ ],
+ "Stade Marcel-Picot|Nancy": [
+  48.6957,
+  6.2105
  ],
  "Stade Matmut Atlantique|Bordeaux": [
   44.9161,
