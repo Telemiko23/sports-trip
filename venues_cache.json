@@ -91,6 +91,10 @@
   -23.7018,
   -46.6969
  ],
+ "Avnet Arena|Magdeburg": [
+  52.1249,
+  11.6707
+ ],
  "Avnet-Arena|Magdeburg": [
   52.1249,
   11.6707
@@ -187,6 +191,10 @@
   60.3668,
   5.3574
  ],
+ "Bremer Bruecke Stadium|Osnabruck": [
+  52.2808,
+  8.0713
+ ],
  "Bremer Bruecke Stadium|Osnabrück": [
   52.280911,
   8.071765
@@ -258,6 +266,10 @@
  "Cardiff City Stadium|Cardiff": [
   51.4728,
   -3.203
+ ],
+ "Carlo Castellani|Empoli": [
+  43.7265,
+  10.9547
  ],
  "Carrow Road|Norwich": [
   52.622,
@@ -387,6 +399,10 @@
  "De Zwaaier|Werkendam": [
   51.8087,
   4.9084
+ ],
+ "Deepdale Stadium|Preston": [
+  53.7722,
+  -2.6886
  ],
  "Deepdale|Preston": [
   53.7722,
@@ -730,6 +746,7 @@
   39.34474,
   -8.934792
  ],
+ "Estádio Municipal de Rio Maior|Rio Mayor": null,
  "Estádio Municipal do Fontelo|Viseu": [
   40.659728,
   -7.900192
@@ -815,6 +832,10 @@
   51.292306,
   -0.333136
  ],
+ "Field Mill|Mansfield": [
+  53.1381,
+  -1.2009
+ ],
  "Flamingo Park|London": [
   51.429628,
   0.081621
@@ -823,6 +844,7 @@
   50.0676,
   14.4715
  ],
+ "Fortuna Sittard Stadion|Sitard": null,
  "Fortuna Sittard Stadion|Sittard": [
   50.9923,
   5.8433
@@ -1061,6 +1083,7 @@
   52.366887,
   -0.689778
  ],
+ "Leipzig Red Bull Arena|Leipzig": null,
  "Loftus Road|London": [
   51.5073,
   -0.2306
@@ -1076,6 +1099,10 @@
  "Lotto Park|Anderlecht": [
   50.834,
   4.2979
+ ],
+ "Luigi Ferraris|Genoa": [
+  44.4165,
+  8.9525
  ],
  "Lusail International Circuit|Lusail": [
   25.4897,
@@ -1093,6 +1120,10 @@
   50.8393,
   5.7118
  ],
+ "MEWA Arena|Mainz": [
+  49.9839,
+  8.2245
+ ],
  "MHPArena|Stuttgart": [
   48.7922,
   9.2321
@@ -1109,6 +1140,10 @@
   44.71456,
   10.649644
  ],
+ "Maradona Stadium|Naples": [
+  40.828,
+  14.1929
+ ],
  "Marina Bay Street Circuit|Singapore": [
   1.289,
   103.8613
@@ -1117,6 +1152,7 @@
   53.690064,
   -0.434696
  ],
+ "Marshal Józef Piłsudski Stadium|Krakow": null,
  "Marston Road|Stafford, Staffordshire": [
   52.819229,
   -2.116497
@@ -1146,6 +1182,10 @@
   49.8577,
   8.6724
  ],
+ "Merck-Stadion am Böllenfalltor|Darmstadt": [
+  49.8577,
+  8.6724
+ ],
  "Merkur-Arena|Graz": [
   47.0464,
   15.454
@@ -1162,6 +1202,7 @@
   52.20055,
   4.44181
  ],
+ "Miejski Stadion Pilkarski Rakow|Czestochowa": null,
  "Miejski Stadion Pilkarski Rakow|Częstochowa": [
   50.7768,
   19.1593
@@ -1249,6 +1290,10 @@
  "Nuevo Colombino|Huelva": [
   37.2467,
   -6.9542
+ ],
+ "Nuevo Pepico Amat|Alicante": [
+  38.4675,
+  -0.7961
  ],
  "OCBC Arena|Seoul": null,
  "OCBC Arena|Singapore": [
@@ -1364,6 +1409,10 @@
   54.39,
   18.6403
  ],
+ "Portman Road Stadium|Ipswich": [
+  52.055,
+  1.1453
+ ],
  "Portman Road|Ipswich": [
   52.0573,
   1.1458
@@ -1379,6 +1428,14 @@
  "Prenton Park|Wirral": [
   53.3737,
   -3.0326
+ ],
+ "Prezero Arena|Sinsheim": [
+  49.2381,
+  8.8876
+ ],
+ "Pride Park Stadium|Derby": [
+  52.9149,
+  -1.4473
  ],
  "Pride Park|Derby": [
   52.9165,
@@ -1722,6 +1779,10 @@
   47.324485,
   5.068666
  ],
+ "Stade Geoffroy-Guichard|Saint Etienne": [
+  45.4608,
+  4.3901
+ ],
  "Stade Geoffroy-Guichard|Saint-Ètienne": [
   45.4608,
   4.3901
@@ -1866,6 +1927,10 @@
   44.1433,
   12.2589
  ],
+ "Stadio Druso|Bozen": [
+  46.4921,
+  11.3462
+ ],
  "Stadio Ennio Tardini|Parma": [
   44.7948,
   10.3384
@@ -1955,6 +2020,10 @@
   19.9215
  ],
  "Stadion Dr. Machado de Matos|Felgueiras": null,
+ "Stadion Feijenoord|Rotterdam": [
+  51.8939,
+  4.5232
+ ],
  "Stadion Galgenwaard|Utrecht": [
   52.0784,
   5.1459
@@ -1974,6 +2043,10 @@
  "Stadion Miejski im. Floriana Krygiera|Szczecin": [
   53.4365,
   14.5185
+ ],
+ "Stadion Miejski w Białymstoku|Bialystok": [
+  53.106,
+  23.1493
  ],
  "Stadion Miejski w Gdyni|Gdynia": [
   54.493,
@@ -2030,6 +2103,10 @@
  "Stadion miejski w Katowicach|Katowice": [
   50.2511,
   18.9734
+ ],
+ "Stadion Śląska  Wrocław|Wroclaw": [
+  51.1412,
+  16.9438
  ],
  "Stadion Średzki|Środa Wielkopolska": [
   52.22211,
@@ -2191,6 +2268,10 @@
   -0.0663
  ],
  "Toughsheet Community Stadium|Bolton": [
+  53.5805,
+  -2.5357
+ ],
+ "Toughsheet Community Stadium|Horwich": [
   53.5805,
   -2.5357
  ],
