@@ -27,6 +27,10 @@
   53.4268,
   -1.3627
  ],
+ "Alberto Braglia|Modena": [
+  44.6534,
+  10.9231
+ ],
  "Alexandra Palace|London": [
   51.5943,
   -0.1306
@@ -466,6 +470,7 @@
   41.1551,
   1.0867
  ],
+ "Estadi de la FAF|Andorra": null,
  "Estadi de la FAF|Encamp": [
   42.5337,
   1.5768
@@ -726,6 +731,7 @@
   40.933014,
   -8.249605
  ],
+ "Estádio Municipal Arouca|Aruca": null,
  "Estádio Municipal Cidade de Coimbra|Coimbra": [
   40.20346,
   -8.40745
@@ -799,6 +805,7 @@
   38.70263,
   -9.2075
  ],
+ "Estádio do Rio Ave FC|Condi Town": null,
  "Estádio do Rio Ave FC|Vila do Conde": [
   41.362818,
   -8.739675
@@ -812,6 +819,10 @@
   6.5915
  ],
  "Europa-Park Stadion|Freiburg": [
+  48.0214,
+  7.8298
+ ],
+ "Europa-Park-Stadion|Freiburg": [
   48.0214,
   7.8298
  ],
@@ -840,6 +851,7 @@
   51.429628,
   0.081621
  ],
+ "Florian-Krygier-Stadion|Szczecin": null,
  "Fortuna Arena|Prague": [
   50.0676,
   14.4715
@@ -1215,6 +1227,7 @@
   53.5546,
   9.9678
  ],
+ "Millerntor-Stadion|St. Pauli Burger": null,
  "Molineux Stadium|Wolverhampton": [
   52.5903,
   -2.1304
@@ -1290,6 +1303,10 @@
  "Nuevo Colombino|Huelva": [
   37.2467,
   -6.9542
+ ],
+ "Nuevo Mirandilla|Cadiz": [
+  36.5026,
+  -6.273
  ],
  "Nuevo Pepico Amat|Alicante": [
   38.4675,
@@ -1400,6 +1417,10 @@
  "Plough Lane|Wimbledon": [
   51.4312,
   -0.1843
+ ],
+ "Polish Army Stadium|Warsaw": [
+  52.2205,
+  21.0407
  ],
  "Poljud Stadion|Split": [
   43.5195,
@@ -1690,6 +1711,7 @@
   49.4871,
   10.9989
  ],
+ "Sportpark Schoonenberg|Felsen": null,
  "Sportpark Spanjaardslaan|Haarlem": null,
  "Sportpark Zuid|Groesbeek": [
   51.7681,
@@ -1911,6 +1933,7 @@
   43.45115,
   11.89436
  ],
+ "Stadio Comunale Euganeo|Padua": null,
  "Stadio Comunale|Chiavari": [
   44.3154,
   9.337
@@ -2044,6 +2067,7 @@
   53.4365,
   14.5185
  ],
+ "Stadion Miejski im. Henryka Reymana|Kraków": null,
  "Stadion Miejski w Białymstoku|Bialystok": [
   53.106,
   23.1493
@@ -2303,6 +2327,7 @@
   55.939,
   -3.2323
  ],
+ "UD Almería Stadium|Almeria": null,
  "UD Almería Stadium|Almería": [
   36.840139,
   -2.43508
@@ -2334,6 +2359,10 @@
  "Valley Stadium|Redditch, Worcestershire": [
   52.307581,
   -1.951097
+ ],
+ "Van Donge & De Roo Stadion|Rotterdam": [
+  51.917,
+  4.5204
  ],
  "Vazgen Sargsyan Republican Stadium|Yerevan": [
   40.172,
