@@ -1,52 +1,5 @@
 [
  {
-  "id": 19810,
-  "name": "2026 Formula 1 - Singapore Grand Prix",
-  "year": 2026,
-  "date": "9 - 11 October 2026",
-  "dateFrom": "2026-10-09T00:00:00",
-  "dateTo": "2026-10-11T00:00:00",
-  "sportId": 11,
-  "sport": "Motor Sports",
-  "emoji": null,
-  "competitionId": 65,
-  "competition": "Formula 1",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-Formula-1-Singapore-Grand-Prix-19810",
-  "webUrl": "https://www.formula1.com",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Formula_One_World_Championship#Calendar",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/Formula1",
-  "twitterUrl": "https://twitter.com/search?q=%40F1%20OR%20%23Formula1%20OR%20%23SingaporeGP%20OR%20%40F1NightRace",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-10-05T06:05:31.571",
-  "location": [
-   {
-    "id": 53,
-    "regionId": null,
-    "name": "Singapore",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "sg",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3774,
-      "name": "Singapore",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
   "id": 19811,
   "name": "2026 Formula 1 - United States Grand Prix",
   "year": 2026,
@@ -329,147 +282,6 @@
   ]
  },
  {
-  "id": 19585,
-  "name": "2026 WTA Tour - China Open",
-  "year": 2026,
-  "date": "30 September - 11 October 2026",
-  "dateFrom": "2026-09-30T00:00:00",
-  "dateTo": "2026-10-11T00:00:00",
-  "sportId": 17,
-  "sport": "Tennis",
-  "emoji": null,
-  "competitionId": 295,
-  "competition": "WTA Tour",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-WTA-Tour-China-Open-19585",
-  "webUrl": "https://www.wtatennis.com/tournaments/1020/beijing/2026",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_–_Women's_singles#Finals",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/WTA",
-  "twitterUrl": "https://twitter.com/search?q=%40wta%20OR%20%40ChinaOpen",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-28T11:21:02.759",
-  "location": [
-   {
-    "id": 49,
-    "regionId": null,
-    "name": "China",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "cn",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3540,
-      "name": "Beijing",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
-  "id": 19764,
-  "name": "2026 ATP Tour - Japan Open",
-  "year": 2026,
-  "date": "30 September - 6 October 2026",
-  "dateFrom": "2026-09-30T00:00:00",
-  "dateTo": "2026-10-06T00:00:00",
-  "sportId": 17,
-  "sport": "Tennis",
-  "emoji": null,
-  "competitionId": 260,
-  "competition": "ATP Tour",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-ATP-Tour-Japan-Open-19764",
-  "webUrl": "https://japanopentennis.com/atp/en/",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Japan_Open_Tennis_Championships_–_Singles#Finals",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/japanopentennis/",
-  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40japanopentennis",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-28T11:21:41.015",
-  "location": [
-   {
-    "id": 15,
-    "regionId": null,
-    "name": "Japan",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "jp",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3412,
-      "name": "Tokyo",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
-  "id": 19765,
-  "name": "2026 ATP Tour - China Open",
-  "year": 2026,
-  "date": "30 September - 6 October 2026",
-  "dateFrom": "2026-09-30T00:00:00",
-  "dateTo": "2026-10-06T00:00:00",
-  "sportId": 17,
-  "sport": "Tennis",
-  "emoji": null,
-  "competitionId": 260,
-  "competition": "ATP Tour",
-  "continentId": 2,
-  "continent": "World",
-  "url": "https://allsportdb.com/Events/2026-ATP-Tour-China-Open-19765",
-  "webUrl": "https://www.atptour.com/en/tournaments/beijing/327/overview",
-  "wikiUrl": "https://en.wikipedia.org/wiki/2026_China_Open_–_Men's_singles#Finals",
-  "ticketsUrl": null,
-  "facebookUrl": "https://www.facebook.com/ATPTour",
-  "twitterUrl": "https://twitter.com/search?q=%40atptour%20OR%20%40ChinaOpen",
-  "liveUrl": null,
-  "liveUrlPaid": null,
-  "logoUrl": null,
-  "logoThumbnailUrl": null,
-  "logoSmallUrl": null,
-  "dateModified": "2026-09-28T11:21:18.53",
-  "location": [
-   {
-    "id": 49,
-    "regionId": null,
-    "name": "China",
-    "continent": "Asia",
-    "continentId": 5,
-    "code": "cn",
-    "emoji": null,
-    "flagUrl": null,
-    "locations": [
-     {
-      "id": 3540,
-      "name": "Beijing",
-      "lat": null,
-      "lng": null
-     }
-    ]
-   }
-  ]
- },
- {
   "id": 19766,
   "name": "2026 ATP Tour - Rolex Shanghai Masters",
   "year": 2026,
@@ -579,7 +391,7 @@
   "continent": "World",
   "url": "https://allsportdb.com/Events/2026-WTA-Tour-Ningbo-Open-19587",
   "webUrl": "https://www.wtatennis.com/tournaments/2092/ningbo/2026",
-  "wikiUrl": "https://en.wikipedia.org/wiki/Ningbo_Open",
+  "wikiUrl": "https://en.wikipedia.org/wiki/2026_Ningbo_Open_–_Singles#Finals",
   "ticketsUrl": null,
   "facebookUrl": "https://www.facebook.com/WTA",
   "twitterUrl": "https://twitter.com/wta",
@@ -588,7 +400,7 @@
   "logoUrl": null,
   "logoThumbnailUrl": null,
   "logoSmallUrl": null,
-  "dateModified": "2026-09-22T14:56:47.946",
+  "dateModified": "2026-10-12T14:38:13.465",
   "location": [
    {
     "id": 49,
@@ -2583,6 +2395,53 @@
      {
       "id": 3412,
       "name": "Tokyo",
+      "lat": null,
+      "lng": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21189,
+  "name": "2027 WTA Finals",
+  "year": 2027,
+  "date": "10 - 14 November 2027",
+  "dateFrom": "2027-11-10T00:00:00",
+  "dateTo": "2027-11-14T00:00:00",
+  "sportId": 17,
+  "sport": "Tennis",
+  "emoji": null,
+  "competitionId": 293,
+  "competition": "WTA Finals",
+  "continentId": 2,
+  "continent": "World",
+  "url": "https://allsportdb.com/Events/2027-WTA-Finals-21189",
+  "webUrl": "https://www.wtatennis.com/tournaments/wta-finals",
+  "wikiUrl": "https://en.wikipedia.org/wiki/WTA_Finals",
+  "ticketsUrl": null,
+  "facebookUrl": "https://www.facebook.com/WTA",
+  "twitterUrl": "https://twitter.com/search?q=%40WTA%20OR%20%23WTAFinals",
+  "liveUrl": null,
+  "liveUrlPaid": null,
+  "logoUrl": null,
+  "logoThumbnailUrl": null,
+  "logoSmallUrl": null,
+  "dateModified": "2026-10-04T13:16:28.299",
+  "location": [
+   {
+    "id": 41,
+    "regionId": null,
+    "name": "United States",
+    "continent": "North America",
+    "continentId": 7,
+    "code": "us",
+    "emoji": null,
+    "flagUrl": null,
+    "locations": [
+     {
+      "id": 4703,
+      "name": "Charlotte",
       "lat": null,
       "lng": null
      }
