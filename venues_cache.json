@@ -1370,6 +1370,10 @@
   52.2398,
   21.0454
  ],
+ "PSC Arena|Frosinone": [
+  41.6341,
+  13.322
+ ],
  "PalaCalafiore Stadium|Reggio Calabria": [
   38.143332,
   15.656521
@@ -1390,6 +1394,7 @@
   48.8414,
   2.2531
  ],
+ "Parc des Sports d’Annecy|Avignon": null,
  "Parc des Sports|Annecy": [
   45.9169,
   6.1192
@@ -1810,6 +1815,10 @@
   48.0822,
   -0.7548
  ],
+ "Stade Francis-Le Basser|Laval": [
+  48.0822,
+  -0.7548
+ ],
  "Stade Francis-Le-Blé|Brest": [
   48.403,
   -4.4614
@@ -2153,6 +2162,10 @@
  "Stadion de Goffert|Nijmegen": [
   51.8209,
   5.836
+ ],
+ "Stadion der Freundschaft|Cottbus": [
+  51.7516,
+  14.3456
  ],
  "Stadion im. Ernesta Pohla|Zabrze": [
   50.2963,
