@@ -79,6 +79,7 @@
   43.7255,
   10.4007
  ],
+ "Arena Garibaldi|Pizza": null,
  "Ariake Coliseum|Tokyo": [
   35.636605,
   139.790364
@@ -150,6 +151,10 @@
  "Bilino Polje Stadium|Zenica": [
   44.20588,
   17.907641
+ ],
+ "Bingoal Stadion|The Hague": [
+  52.0627,
+  4.3829
  ],
  "Bloomfield Road|Blackpool": [
   53.8036,
@@ -299,6 +304,7 @@
   53.106,
   23.1493
  ],
+ "Cino e Lillo Del Duca|Ascoli Piceno": null,
  "Circuit of the Americas|Austin": [
   30.1356,
   -97.6366
@@ -364,6 +370,7 @@
   51.225348,
   22.693328
  ],
+ "DW Stadium|Wigan": null,
  "Daio Wasabi Stayen|Sint-Truiden": [
   50.8135,
   5.1661
@@ -881,6 +888,10 @@
   49.4346,
   7.7766
  ],
+ "Fritz-Walter-Stadion|Kaiserslautern": [
+  49.4346,
+  7.7766
+ ],
  "GSP Stadium|Nicosia": [
   35.1145,
   33.3637
@@ -918,6 +929,10 @@
   52.45475483266017,
   -2.0568073781444403
  ],
+ "Gtech Community Stadium|London": [
+  51.4907,
+  -0.289
+ ],
  "HASKAMP-Arena|Edewecht": [
   53.091076,
   8.057843
@@ -935,6 +950,10 @@
   -0.0054
  ],
  "Hein Koning Stadion|Volendam": null,
+ "Heinz-von-Heiden-Arena |Hannover": [
+  52.36,
+  9.731
+ ],
  "Heinz-von-Heiden-Arena|Hannover": [
   52.36,
   9.731
@@ -1186,6 +1205,10 @@
   52.819229,
   -2.116497
  ],
+ "Matchroom Stadium|London": [
+  51.56,
+  -0.0135
+ ],
  "Mattioli Arena|Leicester": [
   52.6439,
   -1.131
@@ -1248,6 +1271,10 @@
  "Molineux Stadium|Wolverhampton": [
   52.5903,
   -2.1304
+ ],
+ "Moor Lane|Salford": [
+  53.5136,
+  -2.2769
  ],
  "Moss Rose|Macclesfield, Cheshire": [
   53.242836,
@@ -1334,6 +1361,7 @@
   1.304575,
   103.876217
  ],
+ "Oakwell Ground|Barnsley": null,
  "Oakwell|Barnsley": [
   53.5522,
   -1.4722
@@ -1695,6 +1723,7 @@
   51.9201,
   4.4337
  ],
+ "Sparta Stadium Het Kasteel|Rotterdam": null,
  "Sportpark De Westmaat|Spakenburg": [
   52.2579,
   5.3779
@@ -1762,6 +1791,10 @@
  "St James Park|Exeter": [
   50.7307,
   -3.5211
+ ],
+ "St James' Park|Newcastle upon Tyne": [
+  54.9755,
+  -1.6219
  ],
  "St James’ Park|Newcastle": [
   54.9755,
@@ -1894,6 +1927,10 @@
  "Stade de France|Saint-Denis": [
   48.9245,
   2.3601
+ ],
+ "Stade de Paris|Saint-Ouen": [
+  48.9061,
+  2.3412
  ],
  "Stade de Roudourou|Guingamp": [
   48.566,
@@ -2031,6 +2068,10 @@
  "Stadio Partenio-Adriano Lombardi|Avellino": [
   40.927,
   14.7926
+ ],
+ "Stadio Pier Luigi Penzo|Venice": [
+  45.4277,
+  12.364
  ],
  "Stadio Pierluigi Penzo|Venice": [
   45.4279,
@@ -2391,6 +2432,11 @@
   52.98599,
   6.54353
  ],
+ "Ursapharm-Arena an der Kaiserlinde|Spiesen-Elversberg": null,
+ "VELTINS-Arena|Gelsenkirchen": [
+  51.5546,
+  7.0676
+ ],
  "Vale Park|Stoke on Trent": [
   53.05,
   -2.1927
@@ -2451,6 +2497,7 @@
   53.5872,
   9.8987
  ],
+ "Volksparkstadion|Hamburger": null,
  "Volkswagen Arena|Wolfsburg": [
   52.4327,
   10.8038
@@ -2483,6 +2530,7 @@
   52.0627,
   4.3829
  ],
+ "Weser-Stadion|Bremen": null,
  "Weserstadion|Bremen": [
   53.0664,
   8.8377
