@@ -59,6 +59,10 @@
   38.0372,
   23.7409
  ],
+ "American Express Stadium|Falmer": [
+  50.8615,
+  -0.0837
+ ],
  "Amex Stadium|Brighton": [
   50.8606,
   -0.0815
@@ -80,6 +84,10 @@
   10.4007
  ],
  "Arena Garibaldi|Pizza": null,
+ "Arena Zabrze|Zabrze": [
+  50.2963,
+  18.7683
+ ],
  "Ariake Coliseum|Tokyo": [
   35.636605,
   139.790364
@@ -128,6 +136,7 @@
   51.358432,
   -1.133924
  ],
+ "BayArena|Bayer Leverkusen": null,
  "BayArena|Leverkusen": [
   51.0381,
   7.0031
@@ -164,6 +173,10 @@
   46.0814,
   13.1997
  ],
+ "Bluenergy Stadium|Udine": [
+  46.0814,
+  13.1997
+ ],
  "Blundell Park|Cleethorpes": [
   53.5702,
   -0.0465
@@ -183,6 +196,10 @@
  "BolognaFiere Arena|Bologna": [
   44.509237,
   11.369438
+ ],
+ "Borussia-Park|Monchengladbach": [
+  51.1746,
+  6.3854
  ],
  "Borussia-Park|Mönchengladbach": [
   51.1746,
@@ -426,6 +443,10 @@
  "Deutsche Bank Park|Frankfurt": [
   50.0686,
   8.6454
+ ],
+ "Dino Manuzzi|Cesena": [
+  44.1404,
+  12.2619
  ],
  "Doosan Arena|Plzen": [
   49.75,
@@ -978,6 +999,7 @@
   53.4114,
   -1.5006
  ],
+ "Hitachi Capital Mobility Stadion|Groningen": null,
  "Holm Park|Sheerness": [
   51.419099,
   0.765016
@@ -1616,6 +1638,10 @@
   53.485607,
   -3.032366
  ],
+ "Rudolf-Harbig Stadion|Dresden": [
+  51.0408,
+  13.748
+ ],
  "Rudolf-Harbig-Stadion|Dresden": [
   51.0408,
   13.748
@@ -1912,6 +1938,10 @@
   50.6127,
   3.1278
  ],
+ "Stade Raymond Kopa|Angers": [
+  47.4606,
+  -0.5307
+ ],
  "Stade Raymond-Kopa|Angers": [
   47.4606,
   -0.5307
@@ -2196,6 +2226,7 @@
   46.24658694352507,
   15.27094039215022
  ],
+ "Stadion Zagłębia Lubin|Lubin": null,
  "Stadion an der Hafenstrasse|Essen": [
   51.4869,
   6.9766
